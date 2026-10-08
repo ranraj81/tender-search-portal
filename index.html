@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tender Search Portal — SOP Search Navigator</title>
+<style>
+  :root {
+    --navy:#0b1220; --blue:#2563eb; --blue-2:#1d4ed8; --cyan:#06b6d4;
+    --light:#f4f6fb; --card:#fff; --green:#059669; --amber:#d97706;
+    --red:#dc2626; --border:#e2e8f0; --muted:#64748b;
+    --shadow:0 1px 3px rgba(15,23,42,.06),0 1px 2px rgba(15,23,42,.04);
+    --shadow-lg:0 12px 32px rgba(15,23,42,.12);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif}
+  html,body{background:var(--light);color:var(--navy);scroll-behavior:smooth}
+  body{padding-bottom:60px}  /* space for footer banner */
+
+  /* ========== HEADER ========== */
+  header{background:linear-gradient(135deg,#0b1220 0%,#111c33 60%,#1e293b 100%);color:#fff;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.15)}
+  .brand{display:flex;align-items:center;gap:.75rem}
+  .brand-logo{width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,var(--blue),var(--cyan));display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1.05rem;color:#fff;box-shadow:0 4px 12px rgba(37,99,235,.4)}
+  .brand-text h1{font-size:1.15rem;font-weight:800;letter-spacing:-.01em}
+  .brand-text h1 span{color:#60a5fa}
+  .brand-text .tag{font-size:.7rem;opacity:.65;letter-spacing:.04em;text-transform:uppercase}
+  .header-stats{display:flex;gap:1.2rem;align-items:center;font-size:.78rem}
+  .header-stats .hs{display:flex;flex-direction:column;align-items:flex-end}
+  .header-stats .hs .v{font-weight:800;font-size:1rem;color:#60a5fa}
+  .header-stats .hs .l{opacity:.6;text-transform:uppercase;letter-spacing:.05em;font-size:.65rem}
+  .header-actions{display:flex;gap:.5rem}
+  .header-actions button{background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.15);padding:.5rem .9rem;border-radius:8px;font-size:.78rem;font-weight:600;cursor:pointer;transition:all .15s}
+  .header-actions button:hover{background:rgba(255,255,255,.2)}
+
+  /* ========== LAYOUT ========== */
+  .container{max-width:1480px;margin:0 auto;padding:1.5rem 2rem 4rem}
+
+  /* ========== HERO ========== */
+  .hero{background:linear-gradient(135deg,#fff 0%,#eef2ff 100%);border:1px solid var(--border);border-radius:18px;padding:1.5rem;margin-bottom:1.2rem;box-shadow:var(--shadow)}
+  .hero h2{font-size:1.3rem;font-weight:800;letter-spacing:-.02em;margin-bottom:.3rem}
+  .hero p{color:var(--muted);font-size:.86rem;margin-bottom:1rem}
+  .search-bar{display:flex;gap:.6rem;align-items:stretch;background:#fff;border:2px solid var(--border);border-radius:12px;padding:.35rem .35rem .35rem 1rem;transition:border-color .15s,box-shadow .15s}
+  .search-bar:focus-within{border-color:var(--blue);box-shadow:0 0 0 4px rgba(37,99,235,.1)}
+  .search-bar .icon{display:flex;align-items:center;font-size:1.1rem;color:var(--muted)}
+  #searchInput{flex:1;border:none;outline:none;font-size:1rem;padding:.7rem .4rem;background:transparent;color:var(--navy)}
+  #searchInput::placeholder{color:#94a3b8}
+  .search-bar .btn-search{background:linear-gradient(135deg,var(--blue),var(--blue-2));color:#fff;border:none;border-radius:9px;padding:0 1.5rem;font-weight:700;font-size:.9rem;cursor:pointer;transition:transform .1s;white-space:nowrap}
+  .search-bar .btn-search:hover{transform:translateY(-1px)}
+  .quick-chips{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.85rem}
+  .chip{background:#fff;border:1px solid var(--border);border-radius:999px;padding:.35rem .85rem;font-size:.75rem;font-weight:600;cursor:pointer;color:#475569;transition:all .15s;position:relative}
+  .chip:hover{background:var(--blue);color:#fff;border-color:var(--blue)}
+  .chip.active{background:var(--blue);color:#fff;border-color:var(--blue)}
+  .chip .del{margin-left:.35rem;opacity:.6;font-weight:900}
+  .chip .del:hover{opacity:1}
+
+  /* ========== KPIS ========== */
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:.9rem;margin-bottom:1.2rem}
+  .kpi{background:var(--card);border-radius:14px;padding:1.1rem 1.2rem;border:1px solid var(--border);box-shadow:var(--shadow);position:relative;overflow:hidden;cursor:pointer;transition:all .2s}
+  .kpi:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg)}
+  .kpi::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px}
+  .kpi.blue::before{background:var(--blue)}
+  .kpi.amber::before{background:var(--amber)}
+  .kpi.red::before{background:var(--red)}
+  .kpi.green::before{background:var(--green)}
+  .kpi .num{font-size:1.9rem;font-weight:800;letter-spacing:-.03em;line-height:1}
+  .kpi.blue .num{color:var(--blue)}.kpi.amber .num{color:var(--amber)}
+  .kpi.red .num{color:var(--red)}.kpi.green .num{color:var(--green)}
+  .kpi .label{font-size:.7rem;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-top:.35rem;font-weight:600}
+  .kpi .sub{font-size:.72rem;color:var(--muted);margin-top:.15rem}
+
+  /* ========== SECTION HEADS ========== */
+  .section-head{display:flex;justify-content:space-between;align-items:center;margin:1.4rem 0 .8rem;flex-wrap:wrap;gap:.6rem}
+  .section-head h3{font-size:.95rem;font-weight:800;letter-spacing:-.01em}
+  .section-head .hint{font-size:.75rem;color:var(--muted)}
+  .section-head.top{margin-top:.3rem}
+
+  /* ========== TENDER CARDS ========== */
+  .tender-list{display:grid;gap:.9rem}
+  .tender{background:var(--card);border-radius:14px;padding:1.15rem 1.3rem;border:1px solid var(--border);box-shadow:var(--shadow);transition:all .2s;position:relative}
+  .tender:hover{box-shadow:var(--shadow-lg);transform:translateY(-1px);border-color:#cbd5e1}
+  .tender-head{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;flex-wrap:wrap}
+  .tender-id{font-family:'SF Mono','Monaco',monospace;font-size:.72rem;color:var(--muted)}
+  .tender-title{font-size:1.02rem;font-weight:700;margin:.25rem 0 0;line-height:1.35;letter-spacing:-.01em}
+  .tender-title mark{background:#fef08a;color:inherit;padding:0 2px;border-radius:3px}
+  .fit-badge{display:flex;flex-direction:column;align-items:center;padding:.5rem .85rem;border-radius:12px;min-width:78px;font-weight:800;flex-shrink:0}
+  .fit-badge .pct{font-size:1.35rem;line-height:1}
+  .fit-badge .lbl{font-size:.6rem;letter-spacing:.05em;text-transform:uppercase;margin-top:2px;opacity:.85}
+  .fit-high{background:linear-gradient(135deg,#d1fae5,#a7f3d0);color:#065f46}
+  .fit-mid{background:linear-gradient(135deg,#dbeafe,#bfdbfe);color:#1e40af}
+  .fit-low{background:linear-gradient(135deg,#fee2e2,#fecaca);color:#991b1b}
+  .tender-meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:.55rem 1.2rem;font-size:.82rem;color:#475569;margin-top:.9rem;padding-top:.85rem;border-top:1px dashed var(--border)}
+  .tender-meta .m{display:flex;flex-direction:column;gap:.1rem}
+  .tender-meta .m .k{font-size:.65rem;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:700}
+  .tender-meta .m .v{color:var(--navy);font-weight:600}
+  .tender-meta .m .v.danger{color:var(--red)}
+  .tender-meta .m .v.warn{color:var(--amber)}
+  .badges{display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.8rem}
+  .badge{font-size:.68rem;font-weight:800;padding:.25rem .6rem;border-radius:999px;display:inline-flex;align-items:center;gap:.3rem;letter-spacing:.02em}
+  .badge-extended{background:#fef3c7;color:#92400e}
+  .badge-emd{background:#ede9fe;color:#5b21b6}
+  .badge-district{background:#e0f2fe;color:#075985}
+  .badge-portal{background:#f1f5f9;color:#334155}
+  .badge-new{background:#dcfce7;color:#166534}
+  .badge-state{background:#dbeafe;color:#1e40af}
+  .badge-custom{background:#fce7f3;color:#9d174d}
+  .badge-keyword{background:#fef9c3;color:#854d0e}
+  .tender-actions{display:flex;gap:.5rem;margin-top:1rem;flex-wrap:wrap}
+  .tender-actions .btn{font-size:.76rem;padding:.45rem .85rem}
+
+  /* ========== EMPTY ========== */
+  .empty{text-align:center;padding:4rem 1rem;color:var(--muted);background:var(--card);border-radius:14px;border:1px dashed var(--border)}
+  .empty .icon{font-size:2.5rem;margin-bottom:.6rem;opacity:.5}
+  .empty h4{color:var(--navy);font-size:1rem;margin-bottom:.3rem}
+  .empty p{font-size:.85rem}
+
+  /* ========== FILTERS ========== */
+  .filter-panel{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1rem 1.2rem;margin-bottom:1.2rem;box-shadow:var(--shadow);display:flex;flex-wrap:wrap;gap:.9rem;align-items:flex-end}
+  .filter-group{display:flex;flex-direction:column;gap:.35rem;min-width:140px;flex:1}
+  .filter-group label{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+  .filter-group select,.filter-group input{padding:.55rem .7rem;border:1px solid var(--border);border-radius:9px;font-size:.85rem;background:#fff;color:var(--navy);outline:none;transition:border .15s;cursor:pointer}
+  .filter-group select:focus,.filter-group input:focus{border-color:var(--blue)}
+  .filter-actions{display:flex;gap:.5rem;align-items:flex-end}
+  .btn{padding:.6rem 1rem;border-radius:9px;border:none;cursor:pointer;font-size:.82rem;font-weight:700;transition:all .15s;display:inline-flex;align-items:center;gap:.35rem;white-space:nowrap}
+  .btn-outline{background:#fff;color:var(--navy);border:1px solid var(--border)}
+  .btn-outline:hover{background:var(--light);border-color:#cbd5e1}
+  .btn-primary{background:var(--blue);color:#fff}
+  .btn-primary:hover{background:var(--blue-2)}
+  .btn-ghost{background:transparent;color:var(--muted)}
+  .btn-ghost:hover{background:var(--light);color:var(--navy)}
+  .btn-danger{background:#fef2f2;color:var(--red);border:1px solid #fecaca}
+  .btn-danger:hover{background:#fee2e2}
+  .btn-green{background:var(--green);color:#fff}
+  .btn-green:hover{background:#047857}
+
+  /* ========== STATE BAR ========== */
+  .state-bar{background:linear-gradient(135deg,#fff 0%,#eef2ff 100%);border:1px solid var(--border);border-radius:16px;padding:1rem 1.2rem;margin-bottom:1.2rem;box-shadow:var(--shadow)}
+  .state-bar-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:.8rem;flex-wrap:wrap;gap:.5rem}
+  .state-bar-header h3{font-size:.85rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+  .state-tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:.5rem}
+  .state-tile{background:#fff;border:1.5px solid var(--border);border-radius:10px;padding:.65rem .75rem;cursor:pointer;transition:all .15s;display:flex;flex-direction:column;gap:.2rem}
+  .state-tile:hover{border-color:var(--blue);transform:translateY(-1px);box-shadow:0 4px 12px rgba(37,99,235,.1)}
+  .state-tile.active{background:var(--blue);border-color:var(--blue);color:#fff}
+  .state-tile.active .st-count{background:rgba(255,255,255,.25);color:#fff}
+  .state-tile.active .st-name{color:#fff}
+  .state-tile.active .st-code{background:rgba(255,255,255,.2);color:#fff}
+  .state-tile .st-head{display:flex;align-items:center;gap:.45rem}
+  .state-tile .st-code{background:#e0f2fe;color:#075985;font-weight:800;font-size:.65rem;padding:.1rem .4rem;border-radius:4px}
+  .state-tile .st-name{font-size:.82rem;font-weight:700;line-height:1.15}
+  .state-tile .st-count{background:#f1f5f9;color:var(--navy);font-weight:800;font-size:.7rem;padding:.15rem .5rem;border-radius:999px;align-self:flex-start;margin-top:.15rem}
+
+  /* ========== SOURCES ========== */
+  .sources{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:.6rem}
+  .source{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:.7rem .9rem;display:flex;justify-content:space-between;align-items:center;gap:.6rem;transition:all .15s;font-size:.82rem}
+  .source:hover{border-color:var(--blue);box-shadow:0 4px 10px rgba(37,99,235,.08)}
+  .source.disabled{opacity:.5}
+  .source-info{flex:1;min-width:0}
+  .source-info .sn{font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .source-info .su{font-size:.68rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .source-info .stags{display:flex;gap:.25rem;margin-top:.2rem;flex-wrap:wrap}
+  .source-info .stags .t{font-size:.6rem;font-weight:700;padding:.1rem .35rem;border-radius:4px;background:#f1f5f9;color:#334155}
+  .source-info .stags .t.state{background:#dbeafe;color:#1e40af}
+  .source-toggle{width:38px;height:22px;border-radius:999px;background:#cbd5e1;position:relative;cursor:pointer;transition:background .2s;flex-shrink:0}
+  .source-toggle::after{content:'';position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:#fff;transition:left .2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+  .source-toggle.on{background:var(--green)}
+  .source-toggle.on::after{left:18px}
+  .source-remove{background:none;border:none;color:var(--muted);cursor:pointer;font-size:1.05rem;padding:.2rem;border-radius:4px;flex-shrink:0}
+  .source-remove:hover{color:var(--red);background:#fef2f2}
+
+  /* ========== MODAL ========== */
+  .modal-backdrop{position:fixed;inset:0;background:rgba(11,18,32,.55);backdrop-filter:blur(3px);z-index:999;display:none;align-items:center;justify-content:center;padding:1rem}
+  .modal-backdrop.open{display:flex}
+  .modal{background:#fff;border-radius:16px;max-width:680px;width:100%;max-height:88vh;overflow-y:auto;box-shadow:0 24px 64px rgba(0,0,0,.3);animation:pop .2s ease-out}
+  @keyframes pop{from{transform:scale(.95);opacity:0}to{transform:scale(1);opacity:1}}
+  .modal-head{padding:1.2rem 1.4rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:#fff;border-radius:16px 16px 0 0;z-index:1}
+  .modal-head h3{font-size:1rem;font-weight:800}
+  .modal-head .close{background:none;border:none;font-size:1.3rem;cursor:pointer;color:var(--muted);padding:.2rem .5rem;border-radius:6px}
+  .modal-head .close:hover{background:var(--light);color:var(--navy)}
+  .modal-body{padding:1.4rem;font-size:.88rem;line-height:1.6;color:#334155}
+  .modal-body h4{font-size:.8rem;text-transform:uppercase;letter-spacing:.05em;color:var(--blue);margin:1rem 0 .4rem}
+  .modal-body h4:first-child{margin-top:0}
+  .modal-body ul{padding-left:1.2rem}
+  .modal-body li{margin-bottom:.3rem}
+  .modal-body .kv{display:grid;grid-template-columns:170px 1fr;gap:.4rem .8rem}
+  .modal-body .kv .k{color:var(--muted);font-weight:600}
+  .form-grid{display:grid;gap:.9rem}
+  .form-field{display:flex;flex-direction:column;gap:.35rem}
+  .form-field label{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+  .form-field input,.form-field select,.form-field textarea{padding:.65rem .8rem;border:1px solid var(--border);border-radius:9px;font-size:.88rem;background:#fff;color:var(--navy);outline:none;font-family:inherit;transition:border .15s}
+  .form-field input:focus,.form-field select:focus,.form-field textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(37,99,235,.1)}
+  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
+  @media(max-width:560px){.form-row{grid-template-columns:1fr}}
+  .form-error{font-size:.75rem;color:var(--red);font-weight:600;display:none;margin-top:.2rem}
+  .form-error.show{display:block}
+  .modal-footer{padding:1rem 1.4rem;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:.5rem;background:#fafbfc;border-radius:0 0 16px 16px}
+
+  /* ========== TOAST ========== */
+  .toast{position:fixed;bottom:80px;right:1.5rem;z-index:1000;background:var(--navy);color:#fff;padding:.85rem 1.2rem;border-radius:10px;font-size:.85rem;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,.25);opacity:0;transform:translateY(20px);transition:all .3s;pointer-events:none;display:flex;align-items:center;gap:.5rem;max-width:360px}
+  .toast.show{opacity:1;transform:translateY(0)}
+
+  /* ========== FOOTER BANNER (ALWAYS VISIBLE) ========== */
+  .footer-banner{
+    position:fixed;bottom:0;left:0;right:0;z-index:500;
+    background:linear-gradient(90deg,#0b1220 0%,#111c33 50%,#1e293b 100%);
+    color:#fff;padding:.7rem 1.5rem;
+    display:flex;justify-content:space-between;align-items:center;
+    font-size:.78rem;font-weight:600;letter-spacing:.01em;
+    box-shadow:0 -4px 16px rgba(0,0,0,.18);
+    border-top:1px solid rgba(255,255,255,.08);
+  }
+  .footer-banner .left{color:#cbd5e1}
+  .footer-banner .right{color:#60a5fa}
+  @media(max-width:640px){
+    .footer-banner{font-size:.65rem;padding:.55rem .8rem;flex-direction:column;gap:.2rem;text-align:center}
+  }
+
+  /* ========== RESPONSIVE ========== */
+  @media(max-width:720px){
+    header{padding:.9rem 1rem}
+    .container{padding:1rem}
+    .header-stats{display:none}
+    .filter-group{min-width:100%}
+    .tender-meta{grid-template-columns:1fr 1fr}
+    .state-tiles{grid-template-columns:repeat(auto-fit,minmax(120px,1fr))}
+  }
+</style>
+</head>
+<body>
+
+<!-- ================= HEADER ================= -->
+<header>
+  <div class="brand">
+    <div class="brand-logo">TS</div>
+    <div class="brand-text">
+      <h1>Tender Search <span>Portal</span></h1>
+      <div class="tag">SOP Search Navigator · 8 States · AI-Powered</div>
+    </div>
+  </div>
+  <div class="header-stats">
+    <div class="hs"><div class="v" id="hLive">0</div><div class="l">Live Tenders</div></div>
+    <div class="hs"><div class="v" id="hSources">0</div><div class="l">Active Sources</div></div>
+    <div class="hs"><div class="v" id="hKeywords">0</div><div class="l">Saved Keywords</div></div>
+  </div>
+  <div class="header-actions">
+    <button onclick="openAddWebsite()">+ Add Website</button>
+    <button onclick="openKeywordManager()">🏷 Keywords</button>
+    <button onclick="openManageSources()">⚙ Sources</button>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- ================= HERO SEARCH ================= -->
+  <div class="hero">
+    <h2>🔍 Search Tenders Across All 8 Southern States</h2>
+    <p>Type any keyword — the portal will search every configured source. Saved keywords auto-populate below. Try: <em>"AMISP"</em>, <em>"smart metering"</em>, <em>"OFC"</em>, <em>"cyber security"</em>.</p>
+    <div class="search-bar">
+      <span class="icon">🔎</span>
+      <input type="text" id="searchInput" placeholder="Search tenders: AMISP, OFC, servers, smart metering…" autocomplete="off">
+      <button class="btn-search" onclick="runSearch()">Search</button>
+    </div>
+    <div class="quick-chips" id="quickChips"></div>
+  </div>
+
+  <!-- ================= KPI TILES ================= -->
+  <div class="kpis">
+    <div class="kpi blue" onclick="kpiClick('all')">
+      <div class="num" id="kpiTotal">0</div>
+      <div class="label">Total Active Tenders</div>
+      <div class="sub" id="kpiTotalSub">across all states</div>
+    </div>
+    <div class="kpi amber" onclick="kpiClick('closing')">
+      <div class="num" id="kpiClosing">0</div>
+      <div class="label">Closing in 7 Days</div>
+      <div class="sub">urgent attention</div>
+    </div>
+    <div class="kpi red" onclick="kpiClick('emd')">
+      <div class="num" id="kpiEmd">0</div>
+      <div class="label">High EMD Tenders</div>
+      <div class="sub">≥ ₹3 Lakh</div>
+    </div>
+    <div class="kpi green" onclick="kpiClick('fit')">
+      <div class="num" id="kpiFit">0</div>
+      <div class="label">High AI Fit (≥75%)</div>
+      <div class="sub">strategic relevance</div>
+    </div>
+  </div>
+
+  <!-- ================= RESULTS ================= -->
+  <div class="section-head top">
+    <h3>📋 Tender Opportunities <span id="resultCount" style="color:var(--muted);font-weight:600;font-size:.85rem"></span></h3>
+    <span class="hint" id="sortHint"></span>
+  </div>
+  <div class="tender-list" id="tenderList"></div>
+  <div class="empty" id="emptyState" style="display:none">
+    <div class="icon">🔍</div>
+    <h4>No tenders match your search</h4>
+    <p>Try a different keyword, or add a new source from the header.</p>
+  </div>
+
+  <!-- ================= FILTERS ================= -->
+  <div class="section-head">
+    <h3>🎯 Filters &amp; Sort</h3>
+    <span class="hint">Refine results</span>
+  </div>
+  <div class="filter-panel">
+    <div class="filter-group">
+      <label>State / UT</label>
+      <select id="stateFilter"><option value="">All Southern States</option></select>
+    </div>
+    <div class="filter-group">
+      <label>Portal</label>
+      <select id="portalFilter"><option value="">All Portals</option></select>
+    </div>
+    <div class="filter-group">
+      <label>Department</label>
+      <select id="deptFilter"><option value="">All Departments</option></select>
+    </div>
+    <div class="filter-group">
+      <label>AI Fit</label>
+      <select id="fitFilter">
+        <option value="">All Scores</option>
+        <option value="high">High (≥75%)</option>
+        <option value="mid">Medium (50–74%)</option>
+        <option value="low">Low (&lt;50%)</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label>EMD Range</label>
+      <select id="emdFilter">
+        <option value="">Any EMD</option>
+        <option value="low">Under ₹1 L</option>
+        <option value="mid">₹1 L – ₹5 L</option>
+        <option value="high">Above ₹5 L</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label>Sort By</label>
+      <select id="sortFilter">
+        <option value="fit">AI Fit (High→Low)</option>
+        <option value="closing">Closing (Soonest)</option>
+        <option value="emd">EMD (High→Low)</option>
+        <option value="boq">BoQ (High→Low)</option>
+        <option value="recent">Recently Published</option>
+      </select>
+    </div>
+    <div class="filter-actions">
+      <button class="btn btn-outline" onclick="resetFilters()">↺ Reset</button>
+      <button class="btn btn-primary" onclick="exportCSV()">⬇ Export CSV</button>
+    </div>
+  </div>
+
+  <!-- ================= STATE TILES ================= -->
+  <div class="state-bar">
+    <div class="state-bar-header">
+      <h3>🌏 Select State / UT</h3>
+      <span style="font-size:.72rem;color:var(--muted)">Click to filter · Click again to clear</span>
+    </div>
+    <div class="state-tiles" id="stateTiles"></div>
+  </div>
+
+  <!-- ================= SOURCES ================= -->
+  <div class="section-head">
+    <h3>🌐 Tender Sources <span id="sourceCount" style="color:var(--muted);font-weight:600;font-size:.85rem"></span></h3>
+    <span class="hint">Toggle to include/exclude · <a href="javascript:openAddWebsite()" style="color:var(--blue);text-decoration:none;font-weight:700">+ Add</a></span>
+  </div>
+  <div class="sources" id="sourceList"></div>
+
+</div>
+
+<!-- ================= MODAL ================= -->
+<div class="modal-backdrop" id="modalBackdrop" onclick="if(event.target===this)closeModal()">
+  <div class="modal" id="modalContent"></div>
+</div>
+
+<!-- ================= TOAST ================= -->
+<div class="toast" id="toast"></div>
+
+<!-- ================= FOOTER BANNER (ALWAYS VISIBLE) ================= -->
+<div class="footer-banner">
+  <span class="left">Copyright 2026: RailTel Corporation of India Limited</span>
+  <span class="right">Built and Designed by - Rajneesh Ranjan</span>
+</div>
+
+<script>
+/* ================================================================
+   CONFIG
+   ================================================================ */
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzq3oiSC1hPdWYG2RPk9IkPJgVmOp04nTSTmplc8NjnZKPJ0NoY-ZXLnn71cuDshchFTA/exec';  // ← paste your Google Apps Script Web App URL
+const USE_LIVE_DATA = APPS_SCRIPT_URL.length > 0;
+
+const STATES = [
+  { code:'AP', name:'Andhra Pradesh' }, { code:'TS', name:'Telangana' },
+  { code:'TN', name:'Tamil Nadu' },     { code:'KA', name:'Karnataka' },
+  { code:'KL', name:'Kerala' },         { code:'PY', name:'Puducherry' },
+  { code:'AN', name:'Andaman & Nicobar'},{ code:'LD', name:'Lakshadweep' }
+];
+
+const DEFAULT_SOURCES = [
+  { id:'cppp',    name:'CPPP (Central Public Procurement Portal)', url:'https://eprocure.gov.in',    stateCode:'ALL', type:'Central',   enabled:true,  official:true },
+  { id:'gem',     name:'GeM (Government e-Marketplace)',           url:'https://gem.gov.in',         stateCode:'ALL', type:'Central',   enabled:true,  official:true },
+  { id:'etenders',name:'E-tenders Portal',                         url:'https://etenders.gov.in',    stateCode:'ALL', type:'Central',   enabled:true,  official:true },
+  { id:'enivida', name:'eNivida',                                  url:'https://enivida.com',        stateCode:'ALL', type:'Aggregator',enabled:true,  official:false },
+  { id:'ap',  name:'AP e-Procurement',              url:'https://tender.apeprocurement.gov.in', stateCode:'AP', type:'State', enabled:true, official:true },
+  { id:'ts',  name:'Telangana e-Procurement',       url:'https://tender.telangana.gov.in',      stateCode:'TS', type:'State', enabled:true, official:true },
+  { id:'tn',  name:'TN e-Procurement (TNTenders)',  url:'https://tntenders.gov.in',             stateCode:'TN', type:'State', enabled:true, official:true },
+  { id:'ka',  name:'Karnataka e-Procurement',       url:'https://eproc.karnataka.gov.in',       stateCode:'KA', type:'State', enabled:true, official:true },
+  { id:'kl',  name:'Kerala e-Procurement',          url:'https://etenders.kerala.gov.in',       stateCode:'KL', type:'State', enabled:true, official:true },
+  { id:'py',  name:'Puducherry e-Procurement',      url:'https://tenders.py.gov.in',            stateCode:'PY', type:'State', enabled:true, official:true },
+  { id:'an',  name:'A&N Islands e-Procurement',     url:'https://tenders.andaman.gov.in',       stateCode:'AN', type:'State', enabled:true, official:true },
+  { id:'ld',  name:'Lakshadweep e-Procurement',     url:'https://tenders.lakshadweep.gov.in',   stateCode:'LD', type:'State', enabled:true, official:true }
+];
+
+/* ---- Demo dataset (auto-replaced by live Apps Script data if configured) ---- */
+const DEMO_TENDERS = [
+  { id:"2026_EB_711587_1", title:"Appointment of AMISP for Smart Prepaid Metering to All LT consumers except Government Buildings, Agri and Hut in Chennai Metropolitan Area covering 2 circles of TNPDCL viz., Chennai South-1 and Chennai South-2 (Package-3) under RDSS", stateCode:"TN", district:"Chennai", portal:"TN e-Procurement (TNTenders)", department:"TNEB Limited | TANGEDCO | CE-IT and RAPDRP", emd:500000, boq:50000000, published:"2026-10-07", closing:"2026-11-27", fit:88, extended:false, corrigendum:null, tags:["amisp","smart metering","prepaid","rdss","tangedco"] },
+  { id:"2026_EB_711549_1", title:"Appointment of AMISP for Smart Distribution Transformer Metering in all Districts of Tamil Nadu except T-Nagar in Chennai (Package-1) under RDSS", stateCode:"TN", district:"Chennai", portal:"TN e-Procurement (TNTenders)", department:"TNEB Limited | TANGEDCO | CE-IT and RAPDRP", emd:500000, boq:50000000, published:"2026-10-07", closing:"2026-11-27", fit:86, extended:false, corrigendum:null, tags:["amisp","smart metering","dt metering","rdss","tangedco"] },
+  { id:"2026_EB_711571_1", title:"Appointment of AMISP for Smart Prepaid Metering to all LT consumers except Govt Buildings, Agri and Hut in Chn Metropolitan Area covering 3 circles of TNPDCL viz., Chn Central except TNagar, ChnNorth, ChnWest including Avadi Municipal Corp (Pkg-2) RDSS", stateCode:"TN", district:"Chennai", portal:"TN e-Procurement (TNTenders)", department:"TNEB Limited | TANGEDCO | CE-IT and RAPDRP", emd:500000, boq:50000000, published:"2026-10-07", closing:"2026-11-27", fit:85, extended:false, corrigendum:null, tags:["amisp","smart metering","prepaid","rdss","tangedco"] },
+  { id:"2026_TN_682714_2", title:"Annual Maintenance of OFC Network — Southern Railway Zone", stateCode:"TN", district:"Coimbatore", portal:"CPPP", department:"Southern Railway", emd:120000, boq:2400000, published:"2026-09-20", closing:"2026-10-02", fit:88, extended:false, corrigendum:null, tags:["ofc","network","maintenance"] },
+  { id:"2026_TN_682717_5", title:"Cloud Hosting Services for State Portal", stateCode:"TN", district:"Chennai", portal:"eNivida", department:"IT Department", emd:300000, boq:6000000, published:"2026-09-18", closing:"2026-10-04", fit:91, extended:false, corrigendum:null, tags:["cloud","hosting","portal"] },
+  { id:"2026_TN_682728_16", title:"Cyber Security Audit & Penetration Testing", stateCode:"TN", district:"Chennai", portal:"GeM", department:"TNeGA", emd:250000, boq:5000000, published:"2026-09-21", closing:"2026-10-07", fit:89, extended:false, corrigendum:null, tags:["cyber","security","audit"] },
+  { id:"2026_AP_770101_1", title:"Supply of Network Equipment for AP State Data Center", stateCode:"AP", district:"Amaravati", portal:"AP e-Procurement", department:"AP Technology Services", emd:520000, boq:10400000, published:"2026-09-16", closing:"2026-10-06", fit:90, extended:false, corrigendum:null, tags:["network","datacenter"] },
+  { id:"2026_AP_770102_2", title:"OFC Laying for AP Fiber Grid Phase IV", stateCode:"AP", district:"Visakhapatnam", portal:"AP e-Procurement", department:"AP Fibernet", emd:750000, boq:15000000, published:"2026-09-12", closing:"2026-10-03", fit:93, extended:true, corrigendum:"C1", tags:["ofc","fiber","network"] },
+  { id:"2026_TS_880201_1", title:"Data Center Expansion for TS Government Cloud", stateCode:"TS", district:"Hyderabad", portal:"Telangana e-Procurement", department:"TS IT Dept", emd:950000, boq:19000000, published:"2026-09-11", closing:"2026-10-02", fit:92, extended:true, corrigendum:"C2", tags:["datacenter","cloud"] },
+  { id:"2026_TS_880202_2", title:"OFC Network for T-Fiber Rural Connectivity", stateCode:"TS", district:"Warangal", portal:"Telangana e-Procurement", department:"T-Fiber", emd:680000, boq:13600000, published:"2026-09-14", closing:"2026-10-05", fit:89, extended:false, corrigendum:null, tags:["ofc","fiber","rural"] },
+  { id:"2026_KA_990301_1", title:"Cloud Infrastructure for Karnataka State Data Center", stateCode:"KA", district:"Bengaluru", portal:"Karnataka e-Procurement", department:"Karnataka IT Dept", emd:850000, boq:17000000, published:"2026-09-13", closing:"2026-10-04", fit:90, extended:false, corrigendum:null, tags:["cloud","datacenter"] },
+  { id:"2026_KA_990302_2", title:"OFC Network for Bengaluru Smart City", stateCode:"KA", district:"Bengaluru", portal:"Karnataka e-Procurement", department:"BBMP", emd:620000, boq:12400000, published:"2026-09-17", closing:"2026-10-06", fit:88, extended:true, corrigendum:"C1", tags:["ofc","network","smartcity"] },
+  { id:"2026_KL_660401_1", title:"Cloud Hosting for Kerala State Portal", stateCode:"KL", district:"Thiruvananthapuram", portal:"Kerala e-Procurement", department:"Kerala IT Mission", emd:420000, boq:8400000, published:"2026-09-14", closing:"2026-10-03", fit:91, extended:false, corrigendum:null, tags:["cloud","hosting"] },
+  { id:"2026_KL_660402_2", title:"OFC Network for Kerala Fibre Optic Network (KFON)", stateCode:"KL", district:"Kochi", portal:"Kerala e-Procurement", department:"KFON", emd:880000, boq:17600000, published:"2026-09-10", closing:"2026-10-01", fit:94, extended:true, corrigendum:"C2", tags:["ofc","fiber","kfon"] },
+  { id:"2026_PY_550501_1", title:"Supply of Network Equipment for Puducherry Secretariat", stateCode:"PY", district:"Puducherry", portal:"Puducherry e-Procurement", department:"Puducherry IT Dept", emd:180000, boq:3600000, published:"2026-09-17", closing:"2026-10-05", fit:84, extended:false, corrigendum:null, tags:["network","equipment"] },
+  { id:"2026_AN_440601_1", title:"Satellite Connectivity for A&N Islands", stateCode:"AN", district:"Port Blair", portal:"A&N Islands e-Procurement", department:"A&N Administration", emd:480000, boq:9600000, published:"2026-09-16", closing:"2026-10-07", fit:87, extended:false, corrigendum:null, tags:["satellite","connectivity"] },
+  { id:"2026_LD_330701_1", title:"Submarine OFC Connectivity for Lakshadweep", stateCode:"LD", district:"Kavaratti", portal:"Lakshadweep e-Procurement", department:"Lakshadweep Administration", emd:1100000, boq:22000000, published:"2026-09-12", closing:"2026-10-04", fit:93, extended:false, corrigendum:null, tags:["ofc","submarine"] }
+];
+
+const DEFAULT_KEYWORDS = [
+  "AMISP", "smart metering", "OFC", "servers", "cyber security",
+  "cloud", "CCTV", "ERP", "data centre", "network switches",
+  "RDSS", "TANGEDCO", "BharatNet"
+];
+
+/* ================================================================
+   PERSISTENCE KEYS
+   ================================================================ */
+const K_SOURCES  = 'tsp_sources_v1';
+const K_KEYWORDS = 'tsp_keywords_v1';
+const K_TENDERS  = 'tsp_tenders_v1';
+
+/* ================================================================
+   STATE
+   ================================================================ */
+const state = {
+  query: '',
+  stateCode: '',
+  portal: '',
+  department: '',
+  fit: '',
+  emd: '',
+  sort: 'fit',
+  sources: load(K_SOURCES, DEFAULT_SOURCES),
+  keywords: load(K_KEYWORDS, DEFAULT_KEYWORDS),
+  tenders: load(K_TENDERS, DEMO_TENDERS)
+};
+
+function load(key, fallback) {
+  try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : [...fallback]; }
+  catch { return [...fallback]; }
+}
+function save(key, value) {
+  try { localStorage.setItem(key, JSON.stringify(value)); } catch {}
+}
+
+/* ================================================================
+   UTILITIES
+   ================================================================ */
+const $ = id => document.getElementById(id);
+const fmt = n => n>=1e7?`₹${(n/1e7).toFixed(2)} Cr`:n>=1e5?`₹${(n/1e5).toFixed(2)} L`:n>=1000?`₹${(n/1000).toFixed(0)}K`:`₹${n}`;
+const daysUntil = d => Math.ceil((new Date(d+'T23:59:59') - new Date())/(864e5));
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const stateName = c => (STATES.find(s=>s.code===c)||{}).name || c;
+
+function highlight(text, q) {
+  if (!q) return esc(text);
+  const terms = q.split(/\s+/).filter(t => t.length>1);
+  let html = esc(text);
+  terms.forEach(t => {
+    const re = new RegExp(`(${t.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`,'gi');
+    html = html.replace(re,'<mark>$1</mark>');
+  });
+  return html;
+}
+
+function toast(msg, icon='✓') {
+  const t = $('toast');
+  t.innerHTML = `<span>${icon}</span><span>${msg}</span>`;
+  t.classList.add('show');
+  clearTimeout(t._tm);
+  t._tm = setTimeout(()=>t.classList.remove('show'),2600);
+}
+
+function scrollToResults() {
+  const el = $('tenderList');
+  if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.pageYOffset - 110, behavior:'smooth' });
+}
+
+/* ================================================================
+   LIVE DATA LOAD (if Apps Script configured)
+   ================================================================ */
+async function loadLiveData() {
+  if (!USE_LIVE_DATA) return;
+  try {
+    const r = await fetch(APPS_SCRIPT_URL);
+    const rows = await r.json();
+    if (!Array.isArray(rows) || !rows.length) return;
+    state.tenders = rows
+      .filter(t => !['railtel','rail tel'].some(k =>
+        (t.title+' '+t.department+' '+t.portal).toLowerCase().includes(k)))
+      .map(t => ({
+        id: t.id, title: t.title, stateCode: t.stateCode,
+        district: t.district, portal: t.portal, department: t.department,
+        emd: Number(t.emd)||0, boq: Number(t.boq)||0,
+        published: t.published, closing: t.closing,
+        fit: Number(t.fit)||60, extended: t.extended==='Yes',
+        corrigendum: t.corrigendum||null,
+        tags: typeof t.tags==='string' ? t.tags.split(',').map(s=>s.trim()).filter(Boolean) : (t.tags||[])
+      }));
+    save(K_TENDERS, state.tenders);
+    toast(`Loaded ${state.tenders.length} live tenders`, '☁');
+    renderAll();
+  } catch (e) { console.warn('Live data fetch failed:', e); }
+}
+
+/* ================================================================
+   SEARCH / FILTER
+   ================================================================ */
+function isSourceEnabled(portalName) {
+  const s = state.sources.find(x => x.name === portalName);
+  return s ? s.enabled : true;
+}
+
+function getFiltered() {
+  const q = state.query.toLowerCase().trim();
+  const kw = q ? q.split(/\s+/).filter(t => t.length>1 && !['in','of','the','and','for','under','to','all','high','emd','closing','days','soon'].includes(t)) : [];
+  const flags = {
+    highEmd: /high\s+emd/.test(q),
+    closingSoon: /closing\s+(3|7)\s+days|closing\s+soon/.test(q),
+    extended: /\bextended\b|\bcorrigendum\b/.test(q)
+  };
+
+  let list = state.tenders.filter(t => {
+    if (!isSourceEnabled(t.portal)) return false;
+    if (kw.length) {
+      const hay = [t.title,t.department,t.district,t.portal,t.id,stateName(t.stateCode),...(t.tags||[])].join(' ').toLowerCase();
+      if (!kw.every(k => hay.includes(k))) return false;
+    }
+    if (state.stateCode && t.stateCode !== state.stateCode) return false;
+    if (state.portal && t.portal !== state.portal) return false;
+    if (state.department && t.department !== state.department) return false;
+    if (state.fit==='high' && t.fit<75) return false;
+    if (state.fit==='mid' && (t.fit<50||t.fit>=75)) return false;
+    if (state.fit==='low' && t.fit>=50) return false;
+    if (state.emd==='low' && t.emd>=100000) return false;
+    if (state.emd==='mid' && (t.emd<100000||t.emd>500000)) return false;
+    if (state.emd==='high' && t.emd<=500000) return false;
+    if (flags.highEmd && t.emd<300000) return false;
+    if (flags.closingSoon && daysUntil(t.closing)>7) return false;
+    if (flags.extended && !t.extended) return false;
+    return true;
+  });
+
+  const s = state.sort;
+  if (s==='fit') list.sort((a,b)=>b.fit-a.fit);
+  else if (s==='closing') list.sort((a,b)=>new Date(a.closing)-new Date(b.closing));
+  else if (s==='emd') list.sort((a,b)=>b.emd-a.emd);
+  else if (s==='boq') list.sort((a,b)=>b.boq-a.boq);
+  else if (s==='recent') list.sort((a,b)=>new Date(b.published)-new Date(a.published));
+
+  return list;
+}
+
+/* ================================================================
+   RENDER
+   ================================================================ */
+function renderChips() {
+  $('quickChips').innerHTML = state.keywords.map(k => `
+    <span class="chip ${state.query===k?'active':''}" data-k="${esc(k)}">
+      ${esc(k)}
+      <span class="del" onclick="event.stopPropagation();removeKeyword('${esc(k).replace(/'/g,"\\'")}')" title="Remove keyword">×</span>
+    </span>
+  `).join('');
+
+  document.querySelectorAll('#quickChips .chip').forEach(c => {
+    c.addEventListener('click', () => {
+      const k = c.dataset.k;
+      $('searchInput').value = k;
+      state.query = k;
+      render();
+      scrollToResults();
+    });
+  });
+}
+
+function renderStateTiles() {
+  const counts = {};
+  state.tenders.filter(t => isSourceEnabled(t.portal)).forEach(t => counts[t.stateCode]=(counts[t.stateCode]||0)+1);
+  $('stateTiles').innerHTML = STATES.map(s => `
+    <div class="state-tile ${state.stateCode===s.code?'active':''}" onclick="toggleState('${s.code}')">
+      <div class="st-head"><span class="st-code">${s.code}</span><span class="st-name">${esc(s.name)}</span></div>
+      <span class="st-count">${counts[s.code]||0} tenders</span>
+    </div>
+  `).join('');
+}
+
+function toggleState(code) {
+  state.stateCode = state.stateCode===code ? '' : code;
+  $('stateFilter').value = state.stateCode;
+  renderStateTiles(); render(); scrollToResults();
+}
+
+function renderSources() {
+  const enabled = state.sources.filter(s=>s.enabled).length;
+  $('sourceCount').textContent = `(${enabled} of ${state.sources.length} active)`;
+  $('hSources').textContent = enabled;
+
+  const sorted = [...state.sources].sort((a,b)=>{
+    if (a.enabled!==b.enabled) return a.enabled ? -1 : 1;
+    if (a.stateCode!==b.stateCode) {
+      if (a.stateCode==='ALL') return -1;
+      if (b.stateCode==='ALL') return 1;
+      return a.stateCode.localeCompare(b.stateCode);
+    }
+    return a.name.localeCompare(b.name);
+  });
+
+  $('sourceList').innerHTML = sorted.map(s => `
+    <div class="source ${s.enabled?'':'disabled'}">
+      <div class="source-info">
+        <div class="sn">${esc(s.name)}</div>
+        <div class="su">${esc(s.url)}</div>
+        <div class="stags">
+          <span class="t ${s.stateCode!=='ALL'?'state':''}">${s.stateCode==='ALL'?'Multi-State':s.stateCode}</span>
+          <span class="t">${esc(s.type)}</span>
+          ${s.official?'<span class="t" style="background:#dcfce7;color:#166534">Official</span>':'<span class="t" style="background:#fef3c7;color:#92400e">Aggregator</span>'}
+          ${s.custom?'<span class="t" style="background:#fce7f3;color:#9d174d">Custom</span>':''}
+        </div>
+      </div>
+      <div class="source-toggle ${s.enabled?'on':''}" onclick="toggleSource('${s.id}')"></div>
+      ${s.custom?`<button class="source-remove" onclick="removeSource('${s.id}')">✕</button>`:''}
+    </div>
+  `).join('');
+}
+
+function toggleSource(id) {
+  const s = state.sources.find(x=>x.id===id); if (!s) return;
+  s.enabled = !s.enabled;
+  save(K_SOURCES, state.sources);
+  renderSources(); renderStateTiles(); render();
+  toast(`${s.name} ${s.enabled?'enabled':'disabled'}`, s.enabled?'✓':'⊘');
+}
+
+function removeSource(id) {
+  const s = state.sources.find(x=>x.id===id); if (!s) return;
+  if (!confirm(`Remove source "${s.name}"?`)) return;
+  state.sources = state.sources.filter(x=>x.id!==id);
+  save(K_SOURCES, state.sources);
+  renderSources(); renderStateTiles(); renderFilterOptions(); render();
+  toast(`Removed ${s.name}`, '🗑');
+}
+
+function render() {
+  const list = getFiltered();
+  const total = state.tenders.filter(t=>isSourceEnabled(t.portal)).length;
+
+  $('kpiTotal').textContent = list.length;
+  $('kpiTotalSub').textContent = list.length===total ? 'matching all sources' : `of ${total} available`;
+  $('kpiClosing').textContent = list.filter(t=>{const d=daysUntil(t.closing);return d>=0&&d<=7;}).length;
+  $('kpiEmd').textContent = list.filter(t=>t.emd>=300000).length;
+  $('kpiFit').textContent = list.filter(t=>t.fit>=75).length;
+  $('hLive').textContent = total;
+  $('hKeywords').textContent = state.keywords.length;
+
+  $('resultCount').textContent = `(${list.length})`;
+  const sortLabels = { fit:'AI Fit ↓', closing:'Closing soonest', emd:'EMD ↓', boq:'BoQ ↓', recent:'Most recent' };
+  $('sortHint').textContent = 'Sorted by: ' + sortLabels[state.sort];
+
+  const container = $('tenderList'), empty = $('emptyState');
+  if (list.length===0) { container.innerHTML=''; empty.style.display='block'; return; }
+  empty.style.display='none';
+
+  container.innerHTML = list.map(t => {
+    const days = daysUntil(t.closing);
+    const cls = days<0?'danger':days<=3?'danger':days<=7?'warn':'';
+    const lbl = days<0?'Closed':days===0?'Closes today':`${days} day${days===1?'':'s'} left`;
+    const fitCls = t.fit>=75?'fit-high':t.fit>=50?'fit-mid':'fit-low';
+    const fitLbl = t.fit>=75?'High Fit':t.fit>=50?'Medium':'Low';
+    const isNew = (new Date()-new Date(t.published))/(864e5) <= 7;
+    const isCustom = !DEFAULT_SOURCES.some(s=>s.name===t.portal);
+    const matchedKw = state.keywords.filter(k => (t.title+' '+(t.tags||[]).join(' ')).toLowerCase().includes(k.toLowerCase())).slice(0,3);
+
+    return `
+      <div class="tender">
+        <div class="tender-head">
+          <div style="flex:1;min-width:250px">
+            <div class="tender-id">ID: ${esc(t.id)}</div>
+            <div class="tender-title">${highlight(t.title, state.query)}</div>
+          </div>
+          <div class="fit-badge ${fitCls}"><div class="pct">${t.fit}%</div><div class="lbl">${fitLbl}</div></div>
+        </div>
+        <div class="tender-meta">
+          <div class="m"><span class="k">State</span><span class="v">🌏 ${esc(stateName(t.stateCode))}</span></div>
+          <div class="m"><span class="k">District</span><span class="v">📍 ${esc(t.district||'—')}</span></div>
+          <div class="m"><span class="k">Department</span><span class="v">${esc(t.department||'—')}</span></div>
+          <div class="m"><span class="k">Portal</span><span class="v">🌐 ${esc(t.portal)}</span></div>
+          <div class="m"><span class="k">EMD</span><span class="v">${fmt(t.emd)}</span></div>
+          <div class="m"><span class="k">BoQ Value</span><span class="v">${fmt(t.boq)}</span></div>
+          <div class="m"><span class="k">Published</span><span class="v">${esc(t.published||'—')}</span></div>
+          <div class="m"><span class="k">Closing</span><span class="v ${cls}">${esc(t.closing||'—')} · ${lbl}</span></div>
+        </div>
+        <div class="badges">
+          ${t.extended?`<span class="badge badge-extended">⏱ EXTENDED ${esc(t.corrigendum||'')}</span>`:''}
+          ${t.emd>=300000?'<span class="badge badge-emd">💎 High EMD</span>':''}
+          ${isNew?'<span class="badge badge-new">✦ NEW</span>':''}
+          <span class="badge badge-state">🌏 ${esc(stateName(t.stateCode))}</span>
+          ${t.district?`<span class="badge badge-district">📍 ${esc(t.district)}</span>`:''}
+          <span class="badge badge-portal">🌐 ${esc(t.portal)}</span>
+          ${isCustom?'<span class="badge badge-custom">✦ Custom Source</span>':''}
+          ${matchedKw.map(k=>`<span class="badge badge-keyword">🏷 ${esc(k)}</span>`).join('')}
+        </div>
+        <div class="tender-actions">
+          <button class="btn btn-primary" onclick="openDoc('${t.id}')">↗ Go to Document</button>
+          <button class="btn btn-outline" onclick="deepResearch('${t.id}')">🔍 Deep Research</button>
+          <button class="btn btn-outline" onclick="aiSummary('${t.id}')">📄 AI Summary</button>
+          <button class="btn btn-ghost" onclick="copyTender('${t.id}')">⧉ Copy ID</button>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function renderFilterOptions() {
+  const ss = $('stateFilter');
+  ss.innerHTML = '<option value="">All Southern States</option>' + STATES.map(s=>`<option value="${s.code}">${esc(s.name)}</option>`).join('');
+  ss.value = state.stateCode;
+
+  const enabledPortals = state.sources.filter(s=>s.enabled).map(s=>s.name);
+  const portals = [...new Set(state.tenders.map(t=>t.portal))].filter(p=>enabledPortals.includes(p)).sort();
+  const ps = $('portalFilter');
+  ps.innerHTML = '<option value="">All Portals</option>' + portals.map(p=>`<option value="${esc(p)}">${esc(p)}</option>`).join('');
+  ps.value = state.portal;
+
+  const depts = [...new Set(state.tenders.map(t=>t.department).filter(Boolean))].sort();
+  const ds = $('deptFilter');
+  ds.innerHTML = '<option value="">All Departments</option>' + depts.map(d=>`<option value="${esc(d)}">${esc(d)}</option>`).join('');
+  ds.value = state.department;
+}
+
+/* ================================================================
+   ACTIONS
+   ================================================================ */
+function runSearch() { state.query = $('searchInput').value; render(); scrollToResults(); }
+
+function resetFilters() {
+  Object.assign(state, { query:'', stateCode:'', portal:'', department:'', fit:'', emd:'', sort:'fit' });
+  ['searchInput'].forEach(id => $(id).value='');
+  ['stateFilter','portalFilter','deptFilter','fitFilter','emdFilter'].forEach(id => $(id).value='');
+  $('sortFilter').value='fit';
+  renderStateTiles(); render();
+  toast('Filters reset','↺'); scrollToResults();
+}
+
+function kpiClick(type) {
+  resetFilters();
+  if (type==='closing') { state.query='closing soon'; $('searchInput').value=state.query; }
+  else if (type==='emd') { state.fit='high'; $('fitFilter').value='high'; state.emd='high'; $('emdFilter').value='high'; }
+  else if (type==='fit') { state.fit='high'; $('fitFilter').value='high'; }
+  render(); toast(`Filtered by ${type}`,'⚡'); scrollToResults();
+}
+
+function openDoc(id) {
+  const t = state.tenders.find(x=>x.id===id); if (!t) return;
+  const s = state.sources.find(x=>x.name===t.portal);
+  const url = (t.url && t.url.startsWith('http')) ? t.url : (s?s.url:'about:blank');
+  toast(`Opening source for ${id}…`,'↗');
+  setTimeout(()=>window.open(url,'_blank'), 350);
+}
+
+function deepResearch(id) {
+  const t = state.tenders.find(x=>x.id===id); if (!t) return;
+  const days = daysUntil(t.closing);
+  openModal(`
+    <div class="modal-head"><h3>🔍 AI Deep Research — ${esc(t.id)}</h3><button class="close" onclick="closeModal()">✕</button></div>
+    <div class="modal-body">
+      <h4>Executive Summary</h4>
+      <p>${esc(t.title)} issued by <strong>${esc(t.department||'—')}</strong> via <strong>${esc(t.portal)}</strong> in <strong>${esc(stateName(t.stateCode))}</strong>. Strategic fit: <strong>${t.fit}%</strong>.</p>
+      <h4>Key Parameters</h4>
+      <div class="kv">
+        <span class="k">Tender ID</span><span>${esc(t.id)}</span>
+        <span class="k">State / UT</span><span>${esc(stateName(t.stateCode))}</span>
+        <span class="k">District</span><span>${esc(t.district||'—')}</span>
+        <span class="k">EMD</span><span>${fmt(t.emd)}</span>
+        <span class="k">BoQ</span><span>${fmt(t.boq)}</span>
+        <span class="k">Published</span><span>${esc(t.published||'—')}</span>
+        <span class="k">Closing</span><span>${esc(t.closing)} (${days} days left)</span>
+        ${t.extended?`<span class="k">Corrigendum</span><span>${esc(t.corrigendum||'')} — Extended</span>`:''}
+      </div>
+      <h4>AI Assessment</h4>
+      <ul>
+        <li><strong>Strategic fit:</strong> ${t.fit}% — ${t.fit>=75?'High priority':t.fit>=50?'Moderate priority':'Low priority'}</li>
+        <li><strong>Competition risk:</strong> ${t.emd>=500000?'Moderate — high EMD filters bidders':'High — low EMD attracts many'}</li>
+        <li><strong>Preparation window:</strong> ${days} days ${days<5?'⚠ Urgent':days<10?'Adequate':'Comfortable'}</li>
+        <li><strong>Recommendation:</strong> ${t.fit>=75&&days>=5?'Proceed with bid preparation':t.fit>=75?'Fast-track bid — deadline critical':'Evaluate feasibility'}</li>
+      </ul>
+      <h4>Next Steps</h4>
+      <ul>
+        <li>Download full tender document from ${esc(t.portal)}</li>
+        <li>Verify eligibility criteria & qualification requirements</li>
+        <li>Assess EMD & performance security</li>
+        <li>Prepare technical & financial bid submissions</li>
+      </ul>
+    </div>`);
+}
+
+function aiSummary(id) {
+  const t = state.tenders.find(x=>x.id===id); if (!t) return;
+  const days = daysUntil(t.closing);
+  openModal(`
+    <div class="modal-head"><h3>📄 AI 1-Page Summary — ${esc(t.id)}</h3><button class="close" onclick="closeModal()">✕</button></div>
+    <div class="modal-body">
+      <h4>What is being procured</h4><p>${esc(t.title)}</p>
+      <h4>Who is issuing</h4><p><strong>${esc(t.department||'—')}</strong> through <strong>${esc(t.portal)}</strong> in ${esc(t.district||'—')}, ${esc(stateName(t.stateCode))}.</p>
+      <h4>Commercials at a glance</h4>
+      <ul>
+        <li>EMD: <strong>${fmt(t.emd)}</strong></li>
+        <li>BoQ value: <strong>${fmt(t.boq)}</strong></li>
+        <li>Published: ${esc(t.published||'—')}</li>
+        <li>Closing: <strong>${esc(t.closing)}</strong> — ${days} day${days===1?'':'s'} remaining</li>
+      </ul>
+      <h4>Eligibility highlights (AI-extracted)</h4>
+      <ul>
+        <li>Prior experience in similar ${esc((t.tags||[])[0]||'technology')} projects</li>
+        <li>Minimum turnover & net worth as per tender document</li>
+        <li>Valid registration on ${esc(t.portal)}</li>
+        <li>State-specific registration for ${esc(stateName(t.stateCode))}</li>
+      </ul>
+      <h4>AI Recommendation</h4>
+      <p>${t.fit>=75?'✅ <strong>High fit</strong> — recommend bid participation.':t.fit>=50?'⚠️ <strong>Moderate fit</strong> — evaluate resources first.':'❌ <strong>Low fit</strong> — consider skipping.'}</p>
+    </div>`);
+}
+
+function copyTender(id) {
+  const t = state.tenders.find(x=>x.id===id); if (!t) return;
+  const txt = `${t.title}\nID: ${t.id}\nState: ${stateName(t.stateCode)}\nDept: ${t.department}\nEMD: ${fmt(t.emd)}\nClosing: ${t.closing}`;
+  navigator.clipboard?.writeText(txt).then(()=>toast('Tender details copied','⧉'));
+}
+
+/* ================================================================
+   KEYWORD MANAGER
+   ================================================================ */
+function openKeywordManager() {
+  openModal(`
+    <div class="modal-head"><h3>🏷 Saved Keywords (${state.keywords.length})</h3><button class="close" onclick="closeModal()">✕</button></div>
+    <div class="modal-body">
+      <p style="margin-bottom:.8rem;color:var(--muted);font-size:.84rem">These keywords are searched across all enabled portals. Click any chip on the dashboard to run a search instantly.</p>
+      <div style="display:flex;gap:.4rem;margin-bottom:.9rem">
+        <input type="text" id="newKeyword" placeholder="Add a new keyword…" style="flex:1;padding:.6rem .8rem;border:1px solid var(--border);border-radius:8px;font-size:.88rem" onkeydown="if(event.key==='Enter')addKeyword()">
+        <button class="btn btn-primary" onclick="addKeyword()">+ Add</button>
+      </div>
+      <div id="keywordList"></div>
+      <h4 style="margin-top:1.4rem">Bulk Actions</h4>
+      <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.5rem">
+        <button class="btn btn-outline" onclick="resetKeywords()">↺ Reset to Defaults</button>
+        <button class="btn btn-danger" onclick="clearKeywords()">🗑 Clear All</button>
+      </div>
+    </div>`);
+  renderKeywordList();
+}
+
+function renderKeywordList() {
+  const el = $('keywordList'); if (!el) return;
+  if (!state.keywords.length) { el.innerHTML = '<p style="color:var(--muted);font-size:.85rem;text-align:center;padding:1rem">No saved keywords yet.</p>'; return; }
+  el.innerHTML = `<div style="display:flex;flex-wrap:wrap;gap:.4rem">${state.keywords.map(k => `
+    <span class="chip" style="background:#f1f5f9">${esc(k)}
+      <span class="del" onclick="removeKeyword('${esc(k).replace(/'/g,"\\'")}')">×</span>
+    </span>`).join('')}</div>`;
+}
+
+function addKeyword() {
+  const v = $('newKeyword').value.trim(); if (!v) return;
+  if (state.keywords.includes(v)) { toast('Keyword already exists','⚠'); return; }
+  state.keywords.push(v);
+  save(K_KEYWORDS, state.keywords);
+  $('newKeyword').value = '';
+  renderKeywordList(); renderChips(); render();
+  toast(`Added keyword: ${v}`,'✓');
+}
+
+function removeKeyword(k) {
+  state.keywords = state.keywords.filter(x=>x!==k);
+  save(K_KEYWORDS, state.keywords);
+  renderKeywordList(); renderChips(); render();
+  toast(`Removed keyword: ${k}`,'🗑');
+}
+
+function resetKeywords() {
+  if (!confirm('Reset keywords to defaults?')) return;
+  state.keywords = [...DEFAULT_KEYWORDS];
+  save(K_KEYWORDS, state.keywords);
+  renderKeywordList(); renderChips(); render();
+  toast('Keywords reset to defaults','↺');
+}
+
+function clearKeywords() {
+  if (!confirm('Remove all saved keywords?')) return;
+  state.keywords = [];
+  save(K_KEYWORDS, state.keywords);
+  renderKeywordList(); renderChips(); render();
+  toast('All keywords cleared','🗑');
+}
+
+/* ================================================================
+   ADD WEBSITE MODAL
+   ================================================================ */
+function openAddWebsite() {
+  openModal(`
+    <div class="modal-head"><h3>➕ Add Tender Website / Source</h3><button class="close" onclick="closeModal()">✕</button></div>
+    <div class="modal-body">
+      <p style="margin-bottom:1rem;color:var(--muted);font-size:.84rem">Add any government or private tender portal. The Python crawler will fetch it on the next cycle and sync results to the dashboard.</p>
+      <div class="form-grid">
+        <div class="form-field">
+          <label>Source Name *</label>
+          <input type="text" id="newSrcName" placeholder="e.g. Kerala State Electronics Development Corp">
+          <span class="form-error" id="errName">Source name is required</span>
+        </div>
+        <div class="form-field">
+          <label>Website URL *</label>
+          <input type="url" id="newSrcUrl" placeholder="https://example.gov.in/tenders">
+          <span class="form-error" id="errUrl">A valid URL (https://...) is required</span>
+        </div>
+        <div class="form-row">
+          <div class="form-field">
+            <label>State / UT</label>
+            <select id="newSrcState">
+              <option value="ALL">Multi-State / Central</option>
+              ${STATES.map(s=>`<option value="${s.code}">${esc(s.name)}</option>`).join('')}
+            </select>
+          </div>
+          <div class="form-field">
+            <label>Source Type</label>
+            <select id="newSrcType">
+              <option>State</option><option>Central</option><option>Aggregator</option>
+              <option>PSU</option><option>Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-field">
+          <label>Notes (optional)</label>
+          <textarea id="newSrcNotes" rows="2" placeholder="e.g. Requires login, focus on IT tenders"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveNewSource()">+ Add Source</button>
+    </div>`);
+  setTimeout(()=>$('newSrcName')?.focus(), 100);
+}
+
+function saveNewSource() {
+  const name = $('newSrcName').value.trim();
+  const url = $('newSrcUrl').value.trim();
+  const stateCode = $('newSrcState').value;
+  const type = $('newSrcType').value;
+  const notes = $('newSrcNotes').value.trim();
+
+  let hasErr = false;
+  $('errName').classList.remove('show'); $('errUrl').classList.remove('show');
+  if (!name) { $('errName').classList.add('show'); hasErr = true; }
+  if (!url || !/^https?:\/\/.+/.test(url)) { $('errUrl').classList.add('show'); hasErr = true; }
+  if (hasErr) return;
+  if (state.sources.some(s=>s.url.toLowerCase()===url.toLowerCase())) { toast('URL already added','⚠'); return; }
+
+  const id = 'custom_'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+  state.sources.push({ id, name, url, stateCode, type, enabled:true, official:false, custom:true, notes });
+  save(K_SOURCES, state.sources);
+  renderSources(); renderStateTiles(); renderFilterOptions(); render();
+  closeModal();
+  toast(`Added source: ${name}`,'✓');
+}
+
+/* ================================================================
+   MANAGE SOURCES MODAL
+   ================================================================ */
+function openManageSources() {
+  const enabled = state.sources.filter(s=>s.enabled).length;
+  const custom = state.sources.filter(s=>s.custom).length;
+  openModal(`
+    <div class="modal-head"><h3>⚙ Manage Sources (${state.sources.length} total)</h3><button class="close" onclick="closeModal()">✕</button></div>
+    <div class="modal-body">
+      <div class="kv" style="margin-bottom:1rem">
+        <span class="k">Total sources</span><span>${state.sources.length}</span>
+        <span class="k">Enabled</span><span>${enabled}</span>
+        <span class="k">Custom added</span><span>${custom}</span>
+      </div>
+      <h4>Bulk Actions</h4>
+      <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin:.5rem 0 1rem">
+        <button class="btn btn-green" onclick="enableAll()">✓ Enable All</button>
+        <button class="btn btn-outline" onclick="disableAll()">⊘ Disable All</button>
+        <button class="btn btn-danger" onclick="resetSources()">↺ Reset to Defaults</button>
+      </div>
+      <h4>Excluded Publishers</h4>
+      <p style="font-size:.82rem;color:var(--muted)">Tenders published by <strong>RailTel</strong> are automatically excluded from results, KPIs, and exports.</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal()">Close</button>
+      <button class="btn btn-primary" onclick="closeModal();openAddWebsite()">+ Add New Source</button>
+    </div>`);
+}
+
+function enableAll() { state.sources.forEach(s=>s.enabled=true); save(K_SOURCES,state.sources); renderSources(); renderStateTiles(); renderFilterOptions(); render(); toast('All sources enabled','✓'); }
+function disableAll() { state.sources.forEach(s=>s.enabled=false); save(K_SOURCES,state.sources); renderSources(); renderStateTiles(); renderFilterOptions(); render(); toast('All sources disabled','⊘'); }
+function resetSources() {
+  if (!confirm('Reset sources to defaults? Custom sources will be removed.')) return;
+  state.sources = DEFAULT_SOURCES.map(s=>({...s}));
+  save(K_SOURCES, state.sources);
+  renderSources(); renderStateTiles(); renderFilterOptions(); render();
+  toast('Sources reset','↺');
+}
+
+/* ================================================================
+   MODAL HELPERS
+   ================================================================ */
+function openModal(html) { $('modalContent').innerHTML = html; $('modalBackdrop').classList.add('open'); document.body.style.overflow='hidden'; }
+function closeModal() { $('modalBackdrop').classList.remove('open'); document.body.style.overflow=''; }
+document.addEventListener('keydown', e => { if (e.key==='Escape') closeModal(); });
+
+/* ================================================================
+   CSV EXPORT
+   ================================================================ */
+function exportCSV() {
+  const list = getFiltered();
+  if (!list.length) { toast('No data to export','⚠'); return; }
+  const headers = ['ID','Title','State','District','Department','Portal','EMD','BoQ','Published','Closing','Fit %','Extended','Corrigendum','Tags'];
+  const rows = list.map(t => [
+    t.id, `"${t.title.replace(/"/g,'""')}"`, stateName(t.stateCode), t.district||'',
+    `"${(t.department||'').replace(/"/g,'""')}"`, t.portal,
+    t.emd, t.boq, t.published||'', t.closing||'', t.fit,
+    t.extended?'Yes':'No', t.corrigendum||'', `"${(t.tags||[]).join(', ')}"`
+  ]);
+  const csv = [headers.join(','), ...rows.map(r=>r.join(','))].join('\n');
+  const blob = new Blob([csv], { type:'text/csv;charset=utf-8;' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `tender-search-portal-${new Date().toISOString().slice(0,10)}.csv`;
+  a.click(); URL.revokeObjectURL(a.href);
+  toast(`Exported ${list.length} tenders`,'⬇');
+}
+
+/* ================================================================
+   EVENT BINDINGS
+   ================================================================ */
+$('searchInput').addEventListener('input', e => { state.query = e.target.value; render(); });
+$('searchInput').addEventListener('keydown', e => { if (e.key==='Enter') runSearch(); });
+['stateFilter','portalFilter','deptFilter','fitFilter','emdFilter','sortFilter'].forEach(id => {
+  $(id).addEventListener('change', e => {
+    const map = { stateFilter:'stateCode', portalFilter:'portal', deptFilter:'department', fitFilter:'fit', emdFilter:'emd', sortFilter:'sort' };
+    state[map[id]] = e.target.value;
+    if (id==='stateFilter') renderStateTiles();
+    render(); scrollToResults();
+  });
+});
+
+/* ================================================================
+   INIT
+   ================================================================ */
+function renderAll() {
+  renderChips(); renderStateTiles(); renderSources(); renderFilterOptions(); render();
+}
+renderAll();
+loadLiveData();
+</script>
+</body>
+</html>
