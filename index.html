@@ -3,1076 +3,1760 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tender Search Portal — SOP Search Navigator</title>
+<title>RailTel Tender Search Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --navy:#0b1220; --blue:#2563eb; --blue-2:#1d4ed8; --cyan:#06b6d4;
-    --light:#f4f6fb; --card:#fff; --green:#059669; --amber:#d97706;
-    --red:#dc2626; --border:#e2e8f0; --muted:#64748b;
-    --shadow:0 1px 3px rgba(15,23,42,.06),0 1px 2px rgba(15,23,42,.04);
-    --shadow-lg:0 12px 32px rgba(15,23,42,.12);
-  }
-  *{box-sizing:border-box;margin:0;padding:0;font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif}
-  html,body{background:var(--light);color:var(--navy);scroll-behavior:smooth}
-  body{padding-bottom:60px}  /* space for footer banner */
+:root{
+  --navy:#0a0e1a; --blue:#2563eb; --blue-2:#1e40af; --cyan:#06b6d4; --violet:#7c3aed;
+  --bg:#f6f7fb; --card:#fff; --line:#e5e7eb; --line-2:#eef1f6;
+  --txt:#0f172a; --muted:#64748b; --dim:#94a3b8;
+  --green:#059669; --amber:#d97706; --red:#dc2626;
+  --shadow-sm:0 1px 2px rgba(15,23,42,.04),0 1px 3px rgba(15,23,42,.06);
+  --shadow-md:0 4px 12px rgba(15,23,42,.06),0 2px 4px rgba(15,23,42,.04);
+  --shadow-lg:0 20px 40px -12px rgba(15,23,42,.18);
+  --r:14px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--txt);
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  -webkit-font-smoothing:antialiased}
+body{padding-bottom:56px}
+a{color:var(--blue);text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+input,select,textarea{font-family:inherit}
 
-  /* ========== HEADER ========== */
-  header{background:linear-gradient(135deg,#0b1220 0%,#111c33 60%,#1e293b 100%);color:#fff;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.15)}
-  .brand{display:flex;align-items:center;gap:.75rem}
-  .brand-logo{width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,var(--blue),var(--cyan));display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1.05rem;color:#fff;box-shadow:0 4px 12px rgba(37,99,235,.4)}
-  .brand-text h1{font-size:1.15rem;font-weight:800;letter-spacing:-.01em}
-  .brand-text h1 span{color:#60a5fa}
-  .brand-text .tag{font-size:.7rem;opacity:.65;letter-spacing:.04em;text-transform:uppercase}
-  .header-stats{display:flex;gap:1.2rem;align-items:center;font-size:.78rem}
-  .header-stats .hs{display:flex;flex-direction:column;align-items:flex-end}
-  .header-stats .hs .v{font-weight:800;font-size:1rem;color:#60a5fa}
-  .header-stats .hs .l{opacity:.6;text-transform:uppercase;letter-spacing:.05em;font-size:.65rem}
-  .header-actions{display:flex;gap:.5rem}
-  .header-actions button{background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.15);padding:.5rem .9rem;border-radius:8px;font-size:.78rem;font-weight:600;cursor:pointer;transition:all .15s}
-  .header-actions button:hover{background:rgba(255,255,255,.2)}
+/* TOPBAR */
+.topbar{position:sticky;top:0;z-index:90;background:rgba(10,14,26,.92);
+  backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,.06);
+  color:#fff;padding:.85rem 1.5rem}
+.topbar-in{max-width:1480px;margin:0 auto;display:flex;align-items:center;
+  gap:1.25rem;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:.75rem;min-width:0}
+.brand-logo{width:38px;height:38px;border-radius:10px;flex-shrink:0;background:#fff;
+  display:flex;align-items:center;justify-content:center;padding:4px;
+  box-shadow:0 2px 8px rgba(0,0,0,.3)}
+.brand-logo img{width:100%;height:100%;object-fit:contain}
+.brand-text{display:flex;flex-direction:column;line-height:1.1;min-width:0}
+.brand-text b{font-size:1rem;font-weight:800;letter-spacing:-.01em;white-space:nowrap}
+.brand-text b span{color:#60a5fa}
+.brand-text small{font-size:.62rem;text-transform:uppercase;letter-spacing:.14em;
+  color:#94a3b8;font-weight:600;margin-top:.15rem}
+.topbar-stats{display:flex;gap:1.5rem;margin-left:auto;align-items:center}
+.tb-stat{display:flex;flex-direction:column;align-items:flex-end;line-height:1.1}
+.tb-stat .v{font-size:1.05rem;font-weight:800;color:#60a5fa;font-variant-numeric:tabular-nums}
+.tb-stat .l{font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;
+  color:#64748b;font-weight:600;margin-top:.15rem}
+.topbar-actions{display:flex;gap:.4rem;flex-wrap:wrap}
+.tb-btn{background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.12);
+  padding:.5rem .9rem;border-radius:8px;font-size:.78rem;font-weight:600;
+  display:inline-flex;align-items:center;gap:.4rem;transition:all .15s;white-space:nowrap}
+.tb-btn:hover{background:rgba(255,255,255,.16);border-color:rgba(255,255,255,.24)}
+.tb-btn.primary{background:var(--blue);border-color:var(--blue)}
+.tb-btn.primary:hover{background:var(--blue-2)}
 
-  /* ========== LAYOUT ========== */
-  .container{max-width:1480px;margin:0 auto;padding:1.5rem 2rem 4rem}
+.wrap{max-width:1480px;margin:0 auto;padding:1.5rem 1.5rem 4rem}
 
-  /* ========== HERO ========== */
-  .hero{background:linear-gradient(135deg,#fff 0%,#eef2ff 100%);border:1px solid var(--border);border-radius:18px;padding:1.5rem;margin-bottom:1.2rem;box-shadow:var(--shadow)}
-  .hero h2{font-size:1.3rem;font-weight:800;letter-spacing:-.02em;margin-bottom:.3rem}
-  .hero p{color:var(--muted);font-size:.86rem;margin-bottom:1rem}
-  .search-bar{display:flex;gap:.6rem;align-items:stretch;background:#fff;border:2px solid var(--border);border-radius:12px;padding:.35rem .35rem .35rem 1rem;transition:border-color .15s,box-shadow .15s}
-  .search-bar:focus-within{border-color:var(--blue);box-shadow:0 0 0 4px rgba(37,99,235,.1)}
-  .search-bar .icon{display:flex;align-items:center;font-size:1.1rem;color:var(--muted)}
-  #searchInput{flex:1;border:none;outline:none;font-size:1rem;padding:.7rem .4rem;background:transparent;color:var(--navy)}
-  #searchInput::placeholder{color:#94a3b8}
-  .search-bar .btn-search{background:linear-gradient(135deg,var(--blue),var(--blue-2));color:#fff;border:none;border-radius:9px;padding:0 1.5rem;font-weight:700;font-size:.9rem;cursor:pointer;transition:transform .1s;white-space:nowrap}
-  .search-bar .btn-search:hover{transform:translateY(-1px)}
-  .quick-chips{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.85rem}
-  .chip{background:#fff;border:1px solid var(--border);border-radius:999px;padding:.35rem .85rem;font-size:.75rem;font-weight:600;cursor:pointer;color:#475569;transition:all .15s;position:relative}
-  .chip:hover{background:var(--blue);color:#fff;border-color:var(--blue)}
-  .chip.active{background:var(--blue);color:#fff;border-color:var(--blue)}
-  .chip .del{margin-left:.35rem;opacity:.6;font-weight:900}
-  .chip .del:hover{opacity:1}
+/* SEARCH */
+.searchblock{background:var(--card);border:1px solid var(--line);
+  border-radius:var(--r);padding:1.5rem 1.5rem 1.25rem;box-shadow:var(--shadow-sm);
+  margin-bottom:1.25rem;position:relative;overflow:hidden}
+.searchblock::before{content:'';position:absolute;inset:0 0 auto 0;height:3px;
+  background:linear-gradient(90deg,var(--blue),var(--cyan) 45%,var(--violet))}
+.searchblock h2{font-size:1.15rem;font-weight:800;letter-spacing:-.02em;
+  margin-bottom:.3rem;display:flex;align-items:center;gap:.55rem}
+.searchblock h2 .dot{width:8px;height:8px;border-radius:50%;background:var(--green);
+  box-shadow:0 0 0 3px rgba(5,150,105,.18);animation:pulse 2s infinite}
+@keyframes pulse{50%{box-shadow:0 0 0 6px rgba(5,150,105,0)}}
+.searchblock p{color:var(--muted);font-size:.84rem;margin-bottom:1rem;line-height:1.5}
+.searchrow{display:flex;gap:.5rem;align-items:stretch;background:#f8fafc;
+  border:1.5px solid var(--line);border-radius:12px;padding:.3rem .3rem .3rem .9rem;
+  transition:all .15s}
+.searchrow:focus-within{border-color:var(--blue);background:#fff;
+  box-shadow:0 0 0 4px rgba(37,99,235,.08)}
+.searchrow svg{width:18px;height:18px;color:var(--dim);align-self:center;flex-shrink:0}
+#q{flex:1;border:none;outline:none;background:transparent;font-size:.95rem;
+  padding:.75rem .4rem;color:var(--txt);min-width:0}
+#q::placeholder{color:var(--dim)}
+.searchrow .go{background:var(--navy);color:#fff;border-radius:9px;padding:0 1.4rem;
+  font-weight:700;font-size:.85rem;transition:all .15s;white-space:nowrap}
+.searchrow .go:hover{background:var(--blue)}
+.chips{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.9rem}
+.chip{display:inline-flex;align-items:center;gap:.35rem;background:#f1f5f9;
+  border:1px solid transparent;border-radius:999px;padding:.35rem .75rem;
+  font-size:.75rem;font-weight:600;color:#475569;transition:all .15s;cursor:pointer}
+.chip:hover{background:#e2e8f0;color:var(--txt)}
+.chip.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+.chip .x{opacity:.5;font-weight:800;font-size:.85rem;line-height:1;
+  padding:0 .1rem;border-radius:50%;transition:all .15s}
+.chip .x:hover{opacity:1;color:var(--red)}
+.chip.active .x:hover{color:#fca5a5}
+.chip-add{background:#fff;border:1.5px dashed var(--line);color:var(--muted);font-weight:700}
+.chip-add:hover{border-color:var(--blue);color:var(--blue);background:#eff6ff}
 
-  /* ========== KPIS ========== */
-  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:.9rem;margin-bottom:1.2rem}
-  .kpi{background:var(--card);border-radius:14px;padding:1.1rem 1.2rem;border:1px solid var(--border);box-shadow:var(--shadow);position:relative;overflow:hidden;cursor:pointer;transition:all .2s}
-  .kpi:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg)}
-  .kpi::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px}
-  .kpi.blue::before{background:var(--blue)}
-  .kpi.amber::before{background:var(--amber)}
-  .kpi.red::before{background:var(--red)}
-  .kpi.green::before{background:var(--green)}
-  .kpi .num{font-size:1.9rem;font-weight:800;letter-spacing:-.03em;line-height:1}
-  .kpi.blue .num{color:var(--blue)}.kpi.amber .num{color:var(--amber)}
-  .kpi.red .num{color:var(--red)}.kpi.green .num{color:var(--green)}
-  .kpi .label{font-size:.7rem;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-top:.35rem;font-weight:600}
-  .kpi .sub{font-size:.72rem;color:var(--muted);margin-top:.15rem}
+/* KPI */
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:.85rem;margin-bottom:1.25rem}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  padding:1rem 1.1rem;box-shadow:var(--shadow-sm);cursor:pointer;transition:all .18s}
+.kpi:hover{transform:translateY(-2px);box-shadow:var(--shadow-md);border-color:#cbd5e1}
+.kpi .k-top{display:flex;justify-content:space-between;align-items:flex-start;
+  margin-bottom:.55rem}
+.kpi .k-icon{width:32px;height:32px;border-radius:8px;display:flex;
+  align-items:center;justify-content:center;font-size:.95rem;font-weight:800}
+.kpi.blue .k-icon{background:#eff6ff;color:var(--blue)}
+.kpi.amber .k-icon{background:#fffbeb;color:var(--amber)}
+.kpi.red .k-icon{background:#fef2f2;color:var(--red)}
+.kpi.green .k-icon{background:#ecfdf5;color:var(--green)}
+.kpi .k-num{font-size:1.9rem;font-weight:800;letter-spacing:-.03em;line-height:1;
+  font-variant-numeric:tabular-nums}
+.kpi .k-lbl{font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;
+  color:var(--muted);font-weight:700;margin-top:.4rem}
+.kpi .k-sub{font-size:.72rem;color:var(--dim);margin-top:.15rem}
 
-  /* ========== SECTION HEADS ========== */
-  .section-head{display:flex;justify-content:space-between;align-items:center;margin:1.4rem 0 .8rem;flex-wrap:wrap;gap:.6rem}
-  .section-head h3{font-size:.95rem;font-weight:800;letter-spacing:-.01em}
-  .section-head .hint{font-size:.75rem;color:var(--muted)}
-  .section-head.top{margin-top:.3rem}
+/* SECTION HEAD */
+.sh{display:flex;justify-content:space-between;align-items:center;
+  margin:1.5rem 0 .85rem;flex-wrap:wrap;gap:.5rem}
+.sh h3{font-size:.95rem;font-weight:800;letter-spacing:-.01em;display:flex;
+  align-items:center;gap:.5rem}
+.sh h3 .count{background:#f1f5f9;color:var(--muted);font-size:.72rem;
+  font-weight:700;padding:.15rem .5rem;border-radius:999px}
+.sh .hint{font-size:.74rem;color:var(--dim);font-weight:500}
 
-  /* ========== TENDER CARDS ========== */
-  .tender-list{display:grid;gap:.9rem}
-  .tender{background:var(--card);border-radius:14px;padding:1.15rem 1.3rem;border:1px solid var(--border);box-shadow:var(--shadow);transition:all .2s;position:relative}
-  .tender:hover{box-shadow:var(--shadow-lg);transform:translateY(-1px);border-color:#cbd5e1}
-  .tender-head{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;flex-wrap:wrap}
-  .tender-id{font-family:'SF Mono','Monaco',monospace;font-size:.72rem;color:var(--muted)}
-  .tender-title{font-size:1.02rem;font-weight:700;margin:.25rem 0 0;line-height:1.35;letter-spacing:-.01em}
-  .tender-title mark{background:#fef08a;color:inherit;padding:0 2px;border-radius:3px}
-  .fit-badge{display:flex;flex-direction:column;align-items:center;padding:.5rem .85rem;border-radius:12px;min-width:78px;font-weight:800;flex-shrink:0}
-  .fit-badge .pct{font-size:1.35rem;line-height:1}
-  .fit-badge .lbl{font-size:.6rem;letter-spacing:.05em;text-transform:uppercase;margin-top:2px;opacity:.85}
-  .fit-high{background:linear-gradient(135deg,#d1fae5,#a7f3d0);color:#065f46}
-  .fit-mid{background:linear-gradient(135deg,#dbeafe,#bfdbfe);color:#1e40af}
-  .fit-low{background:linear-gradient(135deg,#fee2e2,#fecaca);color:#991b1b}
-  .tender-meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:.55rem 1.2rem;font-size:.82rem;color:#475569;margin-top:.9rem;padding-top:.85rem;border-top:1px dashed var(--border)}
-  .tender-meta .m{display:flex;flex-direction:column;gap:.1rem}
-  .tender-meta .m .k{font-size:.65rem;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:700}
-  .tender-meta .m .v{color:var(--navy);font-weight:600}
-  .tender-meta .m .v.danger{color:var(--red)}
-  .tender-meta .m .v.warn{color:var(--amber)}
-  .badges{display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.8rem}
-  .badge{font-size:.68rem;font-weight:800;padding:.25rem .6rem;border-radius:999px;display:inline-flex;align-items:center;gap:.3rem;letter-spacing:.02em}
-  .badge-extended{background:#fef3c7;color:#92400e}
-  .badge-emd{background:#ede9fe;color:#5b21b6}
-  .badge-district{background:#e0f2fe;color:#075985}
-  .badge-portal{background:#f1f5f9;color:#334155}
-  .badge-new{background:#dcfce7;color:#166534}
-  .badge-state{background:#dbeafe;color:#1e40af}
-  .badge-custom{background:#fce7f3;color:#9d174d}
-  .badge-keyword{background:#fef9c3;color:#854d0e}
-  .tender-actions{display:flex;gap:.5rem;margin-top:1rem;flex-wrap:wrap}
-  .tender-actions .btn{font-size:.76rem;padding:.45rem .85rem}
+/* STATES */
+.states{background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  padding:1rem 1.1rem;margin-bottom:1.25rem;box-shadow:var(--shadow-sm)}
+.state-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:.5rem}
+.stile{background:#f8fafc;border:1.5px solid transparent;border-radius:10px;
+  padding:.7rem .75rem;cursor:pointer;transition:all .15s;display:flex;
+  flex-direction:column;gap:.3rem;text-align:left}
+.stile:hover{background:#fff;border-color:var(--line);transform:translateY(-1px);
+  box-shadow:var(--shadow-sm)}
+.stile.active{background:var(--navy);border-color:var(--navy)}
+.stile.active .sn,.stile.active .sc{color:#fff}
+.stile.active .code{background:rgba(255,255,255,.15);color:#fff}
+.stile .sn{font-size:.8rem;font-weight:700;color:var(--txt);line-height:1.15}
+.stile .code{background:#e0f2fe;color:#0369a1;font-weight:800;font-size:.6rem;
+  padding:.1rem .35rem;border-radius:4px;align-self:flex-start;
+  letter-spacing:.04em;font-family:'JetBrains Mono',monospace}
+.stile .sc{font-size:.68rem;color:var(--muted);font-weight:600;
+  font-variant-numeric:tabular-nums}
 
-  /* ========== EMPTY ========== */
-  .empty{text-align:center;padding:4rem 1rem;color:var(--muted);background:var(--card);border-radius:14px;border:1px dashed var(--border)}
-  .empty .icon{font-size:2.5rem;margin-bottom:.6rem;opacity:.5}
-  .empty h4{color:var(--navy);font-size:1rem;margin-bottom:.3rem}
-  .empty p{font-size:.85rem}
+/* FILTERS */
+.filters{background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  padding:1rem 1.1rem;box-shadow:var(--shadow-sm);display:flex;flex-wrap:wrap;
+  gap:.75rem;align-items:flex-end;margin-bottom:1.25rem}
+.fg{display:flex;flex-direction:column;gap:.3rem;flex:1;min-width:135px}
+.fg label{font-size:.62rem;font-weight:700;text-transform:uppercase;
+  letter-spacing:.08em;color:var(--muted)}
+.fg select,.fg input{padding:.55rem .7rem;border:1.5px solid var(--line);
+  border-radius:8px;font-size:.82rem;background:#fff;color:var(--txt);
+  outline:none;transition:border .15s;width:100%}
+.fg select:focus,.fg input:focus{border-color:var(--blue);
+  box-shadow:0 0 0 3px rgba(37,99,235,.08)}
+.facts{display:flex;gap:.4rem;align-items:flex-end}
 
-  /* ========== FILTERS ========== */
-  .filter-panel{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1rem 1.2rem;margin-bottom:1.2rem;box-shadow:var(--shadow);display:flex;flex-wrap:wrap;gap:.9rem;align-items:flex-end}
-  .filter-group{display:flex;flex-direction:column;gap:.35rem;min-width:140px;flex:1}
-  .filter-group label{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
-  .filter-group select,.filter-group input{padding:.55rem .7rem;border:1px solid var(--border);border-radius:9px;font-size:.85rem;background:#fff;color:var(--navy);outline:none;transition:border .15s;cursor:pointer}
-  .filter-group select:focus,.filter-group input:focus{border-color:var(--blue)}
-  .filter-actions{display:flex;gap:.5rem;align-items:flex-end}
-  .btn{padding:.6rem 1rem;border-radius:9px;border:none;cursor:pointer;font-size:.82rem;font-weight:700;transition:all .15s;display:inline-flex;align-items:center;gap:.35rem;white-space:nowrap}
-  .btn-outline{background:#fff;color:var(--navy);border:1px solid var(--border)}
-  .btn-outline:hover{background:var(--light);border-color:#cbd5e1}
-  .btn-primary{background:var(--blue);color:#fff}
-  .btn-primary:hover{background:var(--blue-2)}
-  .btn-ghost{background:transparent;color:var(--muted)}
-  .btn-ghost:hover{background:var(--light);color:var(--navy)}
-  .btn-danger{background:#fef2f2;color:var(--red);border:1px solid #fecaca}
-  .btn-danger:hover{background:#fee2e2}
-  .btn-green{background:var(--green);color:#fff}
-  .btn-green:hover{background:#047857}
+/* CARDS */
+.cards{display:flex;flex-direction:column;gap:.85rem}
+.tcard{background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  padding:1.15rem 1.25rem;box-shadow:var(--shadow-sm);transition:all .18s;
+  position:relative}
+.tcard:hover{box-shadow:var(--shadow-md);border-color:#cbd5e1}
+.tcard::before{content:'';position:absolute;left:0;top:14px;bottom:14px;width:3px;
+  border-radius:0 3px 3px 0;background:transparent;transition:background .15s}
+.tcard:hover::before{background:var(--blue)}
+.tcard.new::before{background:var(--green)}
+.tcard-head{display:flex;justify-content:space-between;gap:1rem;align-items:flex-start;
+  flex-wrap:wrap}
+.tcard-head .left{flex:1;min-width:260px}
+.tmeta-id{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--dim);
+  font-weight:600;margin-bottom:.3rem;display:flex;align-items:center;
+  gap:.5rem;flex-wrap:wrap}
+.tmeta-id .pin{background:#f1f5f9;color:#334155;font-size:.62rem;
+  padding:.1rem .45rem;border-radius:4px;font-family:Inter,sans-serif;
+  font-weight:700;letter-spacing:.03em}
+.ttitle{font-size:1rem;font-weight:700;line-height:1.4;letter-spacing:-.01em}
+.ttitle mark{background:#fef08a;color:inherit;padding:0 2px;border-radius:3px}
+.fit{display:flex;flex-direction:column;align-items:center;padding:.55rem .85rem;
+  border-radius:12px;min-width:74px;flex-shrink:0}
+.fit .p{font-size:1.3rem;font-weight:800;line-height:1;font-variant-numeric:tabular-nums}
+.fit .l{font-size:.58rem;letter-spacing:.08em;text-transform:uppercase;
+  margin-top:3px;font-weight:700;opacity:.85}
+.fit.h{background:linear-gradient(135deg,#d1fae5,#a7f3d0);color:#065f46}
+.fit.m{background:linear-gradient(135deg,#dbeafe,#bfdbfe);color:#1e40af}
+.fit.l{background:linear-gradient(135deg,#fee2e2,#fecaca);color:#991b1b}
+.tgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));
+  gap:.5rem 1.25rem;font-size:.8rem;margin-top:.9rem;padding-top:.85rem;
+  border-top:1px dashed var(--line-2)}
+.tgrid .f{display:flex;flex-direction:column;gap:.12rem;min-width:0}
+.tgrid .f .k{font-size:.6rem;text-transform:uppercase;letter-spacing:.08em;
+  color:var(--dim);font-weight:700}
+.tgrid .f .v{color:var(--txt);font-weight:600;white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis}
+.tgrid .f .v.warn{color:var(--amber)}
+.tgrid .f .v.danger{color:var(--red)}
+.tbadges{display:flex;gap:.35rem;flex-wrap:wrap;margin-top:.8rem}
+.tb{font-size:.66rem;font-weight:700;padding:.22rem .55rem;border-radius:999px;
+  display:inline-flex;align-items:center;gap:.28rem}
+.tb.ext{background:#fef3c7;color:#92400e}
+.tb.emd{background:#ede9fe;color:#5b21b6}
+.tb.new{background:#dcfce7;color:#166534}
+.tb.state{background:#dbeafe;color:#1e40af}
+.tb.kw{background:#fef9c3;color:#854d0e}
+.tb.custom{background:#fce7f3;color:#9d174d}
+.tb.portal{background:#f1f5f9;color:#334155}
+.tacts{display:flex;gap:.4rem;margin-top:1rem;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:.35rem;padding:.5rem .85rem;
+  border-radius:8px;font-size:.76rem;font-weight:700;transition:all .15s;
+  border:1px solid transparent;white-space:nowrap}
+.btn.primary{background:var(--navy);color:#fff}
+.btn.primary:hover{background:var(--blue)}
+.btn.ghost{background:#f8fafc;color:var(--txt);border-color:var(--line)}
+.btn.ghost:hover{background:#fff;border-color:#cbd5e1}
+.btn.text{background:transparent;color:var(--muted)}
+.btn.text:hover{background:#f1f5f9;color:var(--txt)}
 
-  /* ========== STATE BAR ========== */
-  .state-bar{background:linear-gradient(135deg,#fff 0%,#eef2ff 100%);border:1px solid var(--border);border-radius:16px;padding:1rem 1.2rem;margin-bottom:1.2rem;box-shadow:var(--shadow)}
-  .state-bar-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:.8rem;flex-wrap:wrap;gap:.5rem}
-  .state-bar-header h3{font-size:.85rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
-  .state-tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:.5rem}
-  .state-tile{background:#fff;border:1.5px solid var(--border);border-radius:10px;padding:.65rem .75rem;cursor:pointer;transition:all .15s;display:flex;flex-direction:column;gap:.2rem}
-  .state-tile:hover{border-color:var(--blue);transform:translateY(-1px);box-shadow:0 4px 12px rgba(37,99,235,.1)}
-  .state-tile.active{background:var(--blue);border-color:var(--blue);color:#fff}
-  .state-tile.active .st-count{background:rgba(255,255,255,.25);color:#fff}
-  .state-tile.active .st-name{color:#fff}
-  .state-tile.active .st-code{background:rgba(255,255,255,.2);color:#fff}
-  .state-tile .st-head{display:flex;align-items:center;gap:.45rem}
-  .state-tile .st-code{background:#e0f2fe;color:#075985;font-weight:800;font-size:.65rem;padding:.1rem .4rem;border-radius:4px}
-  .state-tile .st-name{font-size:.82rem;font-weight:700;line-height:1.15}
-  .state-tile .st-count{background:#f1f5f9;color:var(--navy);font-weight:800;font-size:.7rem;padding:.15rem .5rem;border-radius:999px;align-self:flex-start;margin-top:.15rem}
+/* EMPTY */
+.empty{background:var(--card);border:1px dashed var(--line);border-radius:var(--r);
+  padding:3.5rem 1rem;text-align:center}
+.empty .ico{font-size:2.2rem;opacity:.35;margin-bottom:.6rem}
+.empty h4{font-size:.95rem;font-weight:700;margin-bottom:.3rem}
+.empty p{font-size:.82rem;color:var(--muted);max-width:520px;margin:0 auto;line-height:1.5}
+.empty code{background:#f1f5f9;padding:.1rem .35rem;border-radius:4px;
+  font-family:'JetBrains Mono',monospace;font-size:.78rem}
 
-  /* ========== SOURCES ========== */
-  .sources{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:.6rem}
-  .source{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:.7rem .9rem;display:flex;justify-content:space-between;align-items:center;gap:.6rem;transition:all .15s;font-size:.82rem}
-  .source:hover{border-color:var(--blue);box-shadow:0 4px 10px rgba(37,99,235,.08)}
-  .source.disabled{opacity:.5}
-  .source-info{flex:1;min-width:0}
-  .source-info .sn{font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .source-info .su{font-size:.68rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .source-info .stags{display:flex;gap:.25rem;margin-top:.2rem;flex-wrap:wrap}
-  .source-info .stags .t{font-size:.6rem;font-weight:700;padding:.1rem .35rem;border-radius:4px;background:#f1f5f9;color:#334155}
-  .source-info .stags .t.state{background:#dbeafe;color:#1e40af}
-  .source-toggle{width:38px;height:22px;border-radius:999px;background:#cbd5e1;position:relative;cursor:pointer;transition:background .2s;flex-shrink:0}
-  .source-toggle::after{content:'';position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:#fff;transition:left .2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
-  .source-toggle.on{background:var(--green)}
-  .source-toggle.on::after{left:18px}
-  .source-remove{background:none;border:none;color:var(--muted);cursor:pointer;font-size:1.05rem;padding:.2rem;border-radius:4px;flex-shrink:0}
-  .source-remove:hover{color:var(--red);background:#fef2f2}
+/* SOURCES */
+.srcs{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:.6rem}
+.src{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:.75rem .9rem;display:flex;justify-content:space-between;
+  align-items:center;gap:.6rem;transition:all .15s;font-size:.82rem}
+.src:hover{border-color:#cbd5e1;box-shadow:var(--shadow-sm)}
+.src.off{opacity:.45}
+.src.flash{animation:srcFlash 1.6s ease-out;border-color:var(--blue)}
+@keyframes srcFlash{
+  0%{background:#eff6ff;box-shadow:0 0 0 4px rgba(37,99,235,.15)}
+  100%{background:var(--card);box-shadow:none}
+}
+.src .si{flex:1;min-width:0}
+.src .si .sn{font-weight:700;white-space:nowrap;overflow:hidden;
+  text-overflow:ellipsis;font-size:.82rem}
+.src .si .su{font-size:.66rem;color:var(--dim);white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis;margin-top:.1rem}
+.src .si .st{display:flex;gap:.25rem;margin-top:.35rem;flex-wrap:wrap}
+.src .si .st .t{font-size:.58rem;font-weight:700;padding:.1rem .35rem;
+  border-radius:4px;background:#f1f5f9;color:#334155}
+.src .si .st .t.st{background:#dbeafe;color:#1e40af}
+.src .si .st .t.of{background:#dcfce7;color:#166534}
+.src .si .st .t.ag{background:#fef3c7;color:#92400e}
+.src .si .st .t.cu{background:#fce7f3;color:#9d174d}
+.src .si .st .t.pd{background:#fef3c7;color:#92400e}
+.toggle{width:36px;height:20px;border-radius:999px;background:#cbd5e1;
+  position:relative;cursor:pointer;transition:background .2s;flex-shrink:0}
+.toggle::after{content:'';position:absolute;top:2px;left:2px;width:16px;
+  height:16px;border-radius:50%;background:#fff;transition:left .2s;
+  box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.toggle.on{background:var(--green)}
+.toggle.on::after{left:18px}
+.src .rm{color:var(--dim);font-size:1rem;padding:.2rem;border-radius:4px;flex-shrink:0}
+.src .rm:hover{color:var(--red);background:#fef2f2}
 
-  /* ========== MODAL ========== */
-  .modal-backdrop{position:fixed;inset:0;background:rgba(11,18,32,.55);backdrop-filter:blur(3px);z-index:999;display:none;align-items:center;justify-content:center;padding:1rem}
-  .modal-backdrop.open{display:flex}
-  .modal{background:#fff;border-radius:16px;max-width:680px;width:100%;max-height:88vh;overflow-y:auto;box-shadow:0 24px 64px rgba(0,0,0,.3);animation:pop .2s ease-out}
-  @keyframes pop{from{transform:scale(.95);opacity:0}to{transform:scale(1);opacity:1}}
-  .modal-head{padding:1.2rem 1.4rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:#fff;border-radius:16px 16px 0 0;z-index:1}
-  .modal-head h3{font-size:1rem;font-weight:800}
-  .modal-head .close{background:none;border:none;font-size:1.3rem;cursor:pointer;color:var(--muted);padding:.2rem .5rem;border-radius:6px}
-  .modal-head .close:hover{background:var(--light);color:var(--navy)}
-  .modal-body{padding:1.4rem;font-size:.88rem;line-height:1.6;color:#334155}
-  .modal-body h4{font-size:.8rem;text-transform:uppercase;letter-spacing:.05em;color:var(--blue);margin:1rem 0 .4rem}
-  .modal-body h4:first-child{margin-top:0}
-  .modal-body ul{padding-left:1.2rem}
-  .modal-body li{margin-bottom:.3rem}
-  .modal-body .kv{display:grid;grid-template-columns:170px 1fr;gap:.4rem .8rem}
-  .modal-body .kv .k{color:var(--muted);font-weight:600}
-  .form-grid{display:grid;gap:.9rem}
-  .form-field{display:flex;flex-direction:column;gap:.35rem}
-  .form-field label{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
-  .form-field input,.form-field select,.form-field textarea{padding:.65rem .8rem;border:1px solid var(--border);border-radius:9px;font-size:.88rem;background:#fff;color:var(--navy);outline:none;font-family:inherit;transition:border .15s}
-  .form-field input:focus,.form-field select:focus,.form-field textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(37,99,235,.1)}
-  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
-  @media(max-width:560px){.form-row{grid-template-columns:1fr}}
-  .form-error{font-size:.75rem;color:var(--red);font-weight:600;display:none;margin-top:.2rem}
-  .form-error.show{display:block}
-  .modal-footer{padding:1rem 1.4rem;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:.5rem;background:#fafbfc;border-radius:0 0 16px 16px}
+/* MODAL */
+.mbk{position:fixed;inset:0;background:rgba(10,14,26,.55);backdrop-filter:blur(4px);
+  z-index:999;display:none;align-items:center;justify-content:center;padding:1rem}
+.mbk.open{display:flex}
+.modal{background:#fff;border-radius:16px;max-width:640px;width:100%;
+  max-height:88vh;overflow-y:auto;box-shadow:0 24px 64px rgba(0,0,0,.3);
+  animation:pop .18s ease-out}
+@keyframes pop{from{transform:scale(.96);opacity:0}to{transform:scale(1);opacity:1}}
+.mhead{padding:1.1rem 1.35rem;border-bottom:1px solid var(--line);display:flex;
+  justify-content:space-between;align-items:center;position:sticky;top:0;
+  background:#fff;border-radius:16px 16px 0 0;z-index:1}
+.mhead h3{font-size:.98rem;font-weight:800;display:flex;align-items:center;gap:.45rem}
+.mhead .x{font-size:1.25rem;color:var(--dim);padding:.2rem .5rem;
+  border-radius:6px;line-height:1}
+.mhead .x:hover{background:#f1f5f9;color:var(--txt)}
+.mbody{padding:1.25rem 1.35rem;font-size:.87rem;line-height:1.6;color:#334155}
+.mbody h4{font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;
+  color:var(--blue);margin:1.1rem 0 .45rem;font-weight:800}
+.mbody h4:first-child{margin-top:0}
+.mbody ul{padding-left:1.15rem}
+.mbody li{margin-bottom:.3rem}
+.kv{display:grid;grid-template-columns:160px 1fr;gap:.45rem .8rem;font-size:.83rem}
+.kv .k{color:var(--muted);font-weight:600}
+.mfoot{padding:.9rem 1.35rem;border-top:1px solid var(--line);display:flex;
+  justify-content:flex-end;gap:.5rem;background:#fafbfc;border-radius:0 0 16px 16px}
+.fgrid{display:grid;gap:.85rem}
+.ff{display:flex;flex-direction:column;gap:.3rem}
+.ff label{font-size:.68rem;font-weight:700;text-transform:uppercase;
+  letter-spacing:.06em;color:var(--muted)}
+.ff input,.ff select,.ff textarea{padding:.6rem .75rem;border:1.5px solid var(--line);
+  border-radius:8px;font-size:.85rem;background:#fff;color:var(--txt);
+  outline:none;transition:border .15s}
+.ff input:focus,.ff select:focus,.ff textarea:focus{border-color:var(--blue);
+  box-shadow:0 0 0 3px rgba(37,99,235,.08)}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+@media(max-width:560px){.frow{grid-template-columns:1fr}}
+.ferr{font-size:.72rem;color:var(--red);font-weight:600;display:none}
+.ferr.show{display:block}
+.kwlist{display:flex;flex-wrap:wrap;gap:.4rem}
 
-  /* ========== TOAST ========== */
-  .toast{position:fixed;bottom:80px;right:1.5rem;z-index:1000;background:var(--navy);color:#fff;padding:.85rem 1.2rem;border-radius:10px;font-size:.85rem;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,.25);opacity:0;transform:translateY(20px);transition:all .3s;pointer-events:none;display:flex;align-items:center;gap:.5rem;max-width:360px}
-  .toast.show{opacity:1;transform:translateY(0)}
+/* TOAST */
+.toast{position:fixed;bottom:72px;right:1.5rem;z-index:1000;background:var(--navy);
+  color:#fff;padding:.8rem 1.1rem;border-radius:10px;font-size:.83rem;font-weight:600;
+  box-shadow:0 12px 32px rgba(0,0,0,.25);opacity:0;transform:translateY(16px);
+  transition:all .25s;pointer-events:none;display:flex;align-items:center;
+  gap:.5rem;max-width:340px}
+.toast.show{opacity:1;transform:translateY(0)}
 
-  /* ========== FOOTER BANNER (ALWAYS VISIBLE) ========== */
-  .footer-banner{
-    position:fixed;bottom:0;left:0;right:0;z-index:500;
-    background:linear-gradient(90deg,#0b1220 0%,#111c33 50%,#1e293b 100%);
-    color:#fff;padding:.7rem 1.5rem;
-    display:flex;justify-content:space-between;align-items:center;
-    font-size:.78rem;font-weight:600;letter-spacing:.01em;
-    box-shadow:0 -4px 16px rgba(0,0,0,.18);
-    border-top:1px solid rgba(255,255,255,.08);
-  }
-  .footer-banner .left{color:#cbd5e1}
-  .footer-banner .right{color:#60a5fa}
-  @media(max-width:640px){
-    .footer-banner{font-size:.65rem;padding:.55rem .8rem;flex-direction:column;gap:.2rem;text-align:center}
-  }
+/* FOOTER */
+.foot{position:fixed;bottom:0;left:0;right:0;z-index:80;
+  background:linear-gradient(90deg,#0a0e1a 0%,#111827 50%,#1a2236 100%);
+  color:#94a3b8;padding:.7rem 1.5rem;display:flex;justify-content:space-between;
+  align-items:center;font-size:.72rem;font-weight:600;letter-spacing:.01em;
+  border-top:1px solid rgba(255,255,255,.06)}
+.foot .r{color:#60a5fa}
+@media(max-width:640px){.foot{font-size:.62rem;padding:.5rem .8rem;
+  flex-direction:column;gap:.15rem}}
 
-  /* ========== RESPONSIVE ========== */
-  @media(max-width:720px){
-    header{padding:.9rem 1rem}
-    .container{padding:1rem}
-    .header-stats{display:none}
-    .filter-group{min-width:100%}
-    .tender-meta{grid-template-columns:1fr 1fr}
-    .state-tiles{grid-template-columns:repeat(auto-fit,minmax(120px,1fr))}
-  }
+@media(max-width:820px){
+  .kpis{grid-template-columns:repeat(2,1fr)}
+  .topbar-stats{display:none}
+  .tgrid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:560px){
+  .wrap{padding:1rem}
+  .kpis{grid-template-columns:1fr 1fr}
+  .kpi .k-num{font-size:1.5rem}
+  .searchrow .go{padding:0 1rem;font-size:.8rem}
+  .tgrid{grid-template-columns:1fr}
+}
+/* ═══ THEME v2 — RailTel brand redesign (overrides only; markup/JS untouched) ═══ */
+:root{
+  --navy:#07182b; --blue:#0b8fd0; --blue-2:#0a6fa3; --cyan:#29b6f0; --violet:#0b4f7c;
+  --bg:#eef3f8; --card:#fff; --line:#dbe4ee; --line-2:#e8eef5;
+  --txt:#0b1b2b; --muted:#587089; --dim:#8aa0b5;
+  --green:#0a9b6b; --amber:#d98a0b; --red:#d6372f;
+  --shadow-sm:0 1px 2px rgba(7,24,43,.05);
+  --shadow-md:0 8px 20px -8px rgba(7,24,43,.18);
+  --shadow-lg:0 28px 50px -16px rgba(7,24,43,.35);
+  --r:12px;
+  --display:'Plus Jakarta Sans','Inter',sans-serif;
+}
+html,body{background:var(--bg);
+  background-image:radial-gradient(900px 340px at 85% -80px,rgba(41,182,240,.14),transparent 70%)}
+::selection{background:rgba(11,143,208,.22)}
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+h2,h3,h4,.k-num,.tb-stat .v,.brand-text b{font-family:var(--display)}
+
+/* HEADER — light, logo-forward */
+.topbar{background:rgba(255,255,255,.94);color:var(--txt);
+  border-bottom:1px solid var(--line);box-shadow:0 1px 0 rgba(255,255,255,.8) inset,0 6px 18px -14px rgba(7,24,43,.35)}
+.brand-logo{width:46px;height:46px;border-radius:0;padding:0;background:none;box-shadow:none}
+.brand-text b{font-size:1.08rem;font-weight:800;color:var(--navy)}
+.brand-text b span{color:var(--blue)}
+.brand-text small{color:var(--muted);letter-spacing:.16em}
+.topbar-stats{gap:.5rem}
+.tb-stat{align-items:center;background:var(--bg);border:1px solid var(--line);
+  border-radius:10px;padding:.4rem .85rem;min-width:84px}
+.tb-stat .v{color:var(--blue-2);font-size:1.05rem}
+.tb-stat .l{color:var(--muted)}
+.tb-btn{background:#fff;color:var(--navy);border:1px solid var(--line);border-radius:10px}
+.tb-btn:hover{background:var(--bg);border-color:#b9c9da}
+.tb-btn.primary{background:var(--blue);border-color:var(--blue);color:#fff;
+  box-shadow:0 6px 14px -6px rgba(11,143,208,.7)}
+.tb-btn.primary:hover{background:var(--blue-2)}
+
+/* HERO SEARCH */
+.searchblock{border:none;border-radius:18px;padding:2rem 2rem 1.5rem;color:#fff;
+  background:
+    radial-gradient(520px 220px at 100% 0,rgba(41,182,240,.55),transparent 70%),
+    linear-gradient(135deg,#07182b 0%,#0a3556 55%,#0b6fa8 100%);
+  box-shadow:var(--shadow-md)}
+.searchblock::before{display:none}
+.searchblock h2{color:#fff;font-size:1.5rem;font-weight:800;letter-spacing:-.025em}
+.searchblock h2 .dot{background:#4ade80;box-shadow:0 0 0 3px rgba(74,222,128,.25)}
+.searchblock p{color:#bcd3e6;font-size:.88rem;max-width:62ch}
+.searchblock p b{color:#fff}
+.searchrow{background:#fff;border:2px solid transparent;border-radius:14px;
+  padding:.35rem .35rem .35rem 1rem;box-shadow:0 14px 30px -14px rgba(0,0,0,.55)}
+.searchrow:focus-within{border-color:var(--cyan);box-shadow:0 0 0 5px rgba(41,182,240,.28),0 14px 30px -14px rgba(0,0,0,.55)}
+.searchrow svg{color:var(--blue)}
+#q{font-size:1.02rem;padding:.9rem .5rem}
+.searchrow .go{background:var(--blue);border-radius:10px;padding:0 1.8rem;font-size:.9rem}
+.searchrow .go:hover{background:var(--navy)}
+.chip{background:rgba(255,255,255,.12);color:#e6f2fb;border:1px solid rgba(255,255,255,.18)}
+.chip:hover{background:rgba(255,255,255,.22);color:#fff}
+.chip.active{background:#fff;color:var(--navy);border-color:#fff}
+.chip.active .x:hover{color:var(--red)}
+.chip-add{background:transparent;border:1.5px dashed rgba(255,255,255,.4);color:#d6e8f5}
+.chip-add:hover{background:rgba(255,255,255,.12);border-color:#fff;color:#fff}
+
+/* KPI */
+.kpi{border-radius:var(--r);border-top:3px solid var(--blue);padding:1rem 1.15rem}
+.kpi.amber{border-top-color:var(--amber)} .kpi.red{border-top-color:var(--red)} .kpi.green{border-top-color:var(--green)}
+.kpi .k-icon{border-radius:10px}
+.kpi.blue .k-icon{background:#e5f4fb} .kpi.amber .k-icon{background:#fdf3de}
+.kpi.red .k-icon{background:#fdebea} .kpi.green .k-icon{background:#e2f6ee}
+.kpi .k-num{font-size:2.1rem}
+.kpi:hover{border-color:var(--line);transform:translateY(-3px)}
+
+/* SECTION HEADS */
+.sh h3{font-size:1.02rem;color:var(--navy)}
+.sh h3 .count{background:#dff0fa;color:var(--blue-2)}
+
+/* STATES — compact tiles */
+.states{border-radius:var(--r);border-color:var(--line)}
+.stile{border-radius:10px;border:1px solid var(--line);background:#fff;transition:all .15s}
+.stile:hover{border-color:var(--blue);background:#f2faff;transform:translateY(-1px)}
+.stile.active{background:var(--blue);border-color:var(--blue);box-shadow:0 8px 16px -8px rgba(11,143,208,.8)}
+
+/* FILTERS */
+.filters{border-radius:var(--r);background:#fff}
+.fg select,.fg input,.ff input,.ff select,.ff textarea{border-radius:9px;border:1px solid var(--line);background:#fbfdff}
+.fg select:focus,.fg input:focus,.ff input:focus,.ff select:focus,.ff textarea:focus{
+  border-color:var(--blue);box-shadow:0 0 0 3px rgba(11,143,208,.15);outline:none}
+
+/* TENDER CARDS — status stripe + stronger titles */
+.tcard{border-radius:var(--r);border:1px solid var(--line);border-left:5px solid var(--blue);
+  background:#fff;box-shadow:var(--shadow-sm);transition:box-shadow .18s,transform .18s}
+.tcard::before,.tcard:hover::before,.tcard.new::before{display:none}
+.tcard:hover{box-shadow:var(--shadow-md);transform:translateY(-2px);border-color:#c3d3e3;border-left-color:var(--blue)}
+.tcard.new{border-left-color:var(--green)}
+.ttitle{font-family:var(--display);font-size:1.02rem;font-weight:700;line-height:1.45;
+  letter-spacing:-.01em;color:var(--navy)}
+.ttitle mark{background:#fff0a8;color:inherit;border-radius:3px;padding:0 2px}
+.tmeta-id{font-family:'JetBrains Mono',monospace}
+.tgrid .f .k{letter-spacing:.08em}
+.tgrid .f .v{font-variant-numeric:tabular-nums}
+.tb{border-radius:6px}
+.tb.state{background:#e5f4fb;color:var(--blue-2)}
+.tb.kw{background:#e7f6ef;color:#087a55}
+
+/* BUTTONS */
+.btn{border-radius:9px;font-weight:700}
+.btn.primary{background:var(--blue);color:#fff}
+.btn.primary:hover{background:var(--blue-2)}
+.btn.ghost{border:1px solid var(--line);background:#fff}
+.btn.ghost:hover{border-color:var(--blue);color:var(--blue-2)}
+
+/* SOURCES / MODALS / TOAST */
+.src{border-radius:var(--r);border:1px solid var(--line)}
+.src:hover{border-color:var(--blue)}
+.toggle.on{background:var(--blue)}
+.mbk{background:rgba(7,24,43,.55);backdrop-filter:blur(4px)}
+.modal{border-radius:16px;box-shadow:var(--shadow-lg)}
+.mhead{background:linear-gradient(135deg,#07182b,#0a3556);color:#fff;border-radius:16px 16px 0 0;border-bottom:none}
+.mhead h3{color:#fff}
+.mhead .x{color:#cfe3f3}
+.toast{background:var(--navy);border-radius:12px;border-left:4px solid var(--cyan)}
+.empty{border:2px dashed var(--line);border-radius:var(--r);background:#fff}
+.foot{color:var(--muted)}
+
+
+/* tweaks: bigger logo, compact state grid */
+.brand-logo{width:auto;height:60px}
+.brand-logo img{width:auto;height:100%}
+.topbar{padding:.5rem 1.5rem}
+.state-grid{grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:.4rem}
+.stile{padding:.5rem .6rem}
+.stile .sn{font-size:.76rem;line-height:1.25}
+.stile .sc{font-size:.66rem}
+@media (max-width:760px){
+  .searchblock{padding:1.4rem 1.1rem 1.1rem;border-radius:14px}
+  .searchblock h2{font-size:1.2rem}
+  .topbar-stats{width:100%;order:3;justify-content:space-between}
+  .tb-stat{flex:1;min-width:0}
+}
+
+/* ── Tabs, State/UT view, banner, popup panes ── */
+.tabs{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:72px;z-index:80}
+.tabs-in{max-width:1480px;margin:0 auto;padding:0 1.5rem;display:flex;gap:.25rem}
+.tab{padding:.85rem 1.1rem;font-weight:700;font-size:.88rem;color:var(--muted);
+  border-bottom:3px solid transparent;margin-bottom:-1px;display:inline-flex;align-items:center;gap:.5rem;transition:all .15s}
+.tab:hover{color:var(--navy)}
+.tab.active{color:var(--blue-2);border-bottom-color:var(--blue)}
+.tbadge{background:var(--bg);color:var(--muted);border:1px solid var(--line);font-size:.68rem;
+  font-weight:800;padding:.1rem .5rem;border-radius:999px}
+.tbadge.on{background:var(--blue);border-color:var(--blue);color:#fff}
+
+.stview{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:1.4rem 1.5rem;box-shadow:var(--shadow-sm)}
+.stview-head{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;flex-wrap:wrap;margin-bottom:.9rem}
+.stview-head h2{font-size:1.3rem;font-weight:800;color:var(--navy);letter-spacing:-.02em}
+.stview-head p{color:var(--muted);font-size:.85rem;margin-top:.25rem;max-width:56ch}
+.stview-actions{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center}
+#stSearch{border:1px solid var(--line);border-radius:9px;padding:.55rem .8rem;font-size:.85rem;min-width:200px;background:#fbfdff}
+#stSearch:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(11,143,208,.15);outline:none}
+.stinfo{font-size:.82rem;color:var(--muted);margin-bottom:1rem}
+.stinfo b{color:var(--blue-2);font-size:1rem}
+.st-grp{margin-bottom:1.4rem}
+.st-grp h4{font-size:.78rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.6rem;
+  display:flex;align-items:center;gap:.5rem}
+.st-grp h4 .count{background:#dff0fa;color:var(--blue-2);border-radius:999px;padding:.05rem .5rem;font-size:.68rem}
+.st-none{color:var(--muted);padding:1.5rem;text-align:center}
+.stview .state-grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
+.stview .stile{text-align:left;padding:.7rem .8rem;position:relative}
+.stview .stile.active::after{content:'✓';position:absolute;top:.45rem;right:.6rem;font-weight:800;color:#fff}
+
+.stbanner{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;background:#fff;border:1px solid var(--line);
+  border-left:4px solid var(--blue);border-radius:var(--r);padding:.65rem 1rem;margin-bottom:1.25rem;box-shadow:var(--shadow-sm)}
+.stbanner .lbl{font-size:.68rem;text-transform:uppercase;letter-spacing:.1em;font-weight:800;color:var(--muted);margin-right:.2rem}
+.sb-chip{background:#e5f4fb;color:var(--blue-2);font-weight:700;font-size:.78rem;border-radius:999px;
+  padding:.28rem .35rem .28rem .75rem;display:inline-flex;align-items:center;gap:.3rem}
+.sb-chip button{width:18px;height:18px;border-radius:50%;font-size:.65rem;font-weight:800;color:var(--blue-2)}
+.sb-chip button:hover{background:var(--red);color:#fff}
+.sb-link{font-size:.78rem;font-weight:700;color:var(--blue-2);padding:.25rem .5rem;border-radius:6px}
+.sb-link:hover{background:var(--bg)}
+.sb-link:first-of-type{margin-left:auto}
+
+.mtabs{display:flex;gap:.25rem;padding:.6rem 1.35rem 0;border-bottom:1px solid var(--line);background:#fafcfe}
+.mtabs button{padding:.65rem .9rem;font-weight:700;font-size:.82rem;color:var(--muted);border-bottom:3px solid transparent;margin-bottom:-1px}
+.mtabs button.on{color:var(--blue-2);border-bottom-color:var(--blue)}
+.mtabs .count{background:var(--bg);border-radius:999px;padding:.05rem .45rem;font-size:.7rem;margin-left:.2rem}
+.srcbar{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.6rem}
+.srcnote{font-size:.8rem;color:var(--muted);margin-bottom:.8rem}
+.srcs.in-modal{grid-template-columns:1fr;max-height:46vh;overflow:auto;padding-right:.2rem}
+
+@media (max-width:760px){
+  .tabs{top:auto;position:static}
+  .tabs-in{padding:0 .8rem}
+  .stview{padding:1rem}
+  #stSearch{min-width:0;flex:1}
+}
+.chip-more{background:rgba(255,255,255,.22)!important;color:#fff!important;font-weight:800}
+.kwonly{display:inline-flex;align-items:center;gap:.4rem;font-weight:700;color:var(--navy);cursor:pointer;margin-right:.9rem;font-size:.78rem}
+.kwonly input{accent-color:var(--blue);width:15px;height:15px}
+.kwonly span{color:var(--muted);font-weight:600}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
 
-<!-- ================= HEADER ================= -->
-<header>
-  <div class="brand">
-    <div class="brand-logo">TS</div>
-    <div class="brand-text">
-      <h1>Tender Search <span>Portal</span></h1>
-      <div class="tag">SOP Search Navigator · 8 States · AI-Powered</div>
+<div class="topbar">
+  <div class="topbar-in">
+    <div class="brand">
+      <div class="brand-logo">
+        <img src="railtel-logo.png" alt="RailTel"
+             onerror="this.style.display='none';this.parentElement.innerHTML='<b style=&quot;color:#0b1220;font-weight:900;font-size:.9rem&quot;>RT</b>'">
+      </div>
+      <div class="brand-text">
+        <b>RailTel <span>Tender Search</span></b>
+        <small>Live Crawl</small>
+      </div>
+    </div>
+    <div class="topbar-stats">
+      <div class="tb-stat"><div class="v" id="hLive">0</div><div class="l">Live Tenders</div></div>
+      <div class="tb-stat" id="statSrc" title="View sources" style="cursor:pointer"><div class="v" id="hSources">0</div><div class="l">Active Sources</div></div>
+      <div class="tb-stat"><div class="v" id="hKw">0</div><div class="l">Keywords</div></div>
+    </div>
+    <div class="topbar-actions">
+      <button class="tb-btn primary" id="btnAddSrc">＋ Add Source</button>
+      <button class="tb-btn" id="btnKw">Keywords</button>
     </div>
   </div>
-  <div class="header-stats">
-    <div class="hs"><div class="v" id="hLive">0</div><div class="l">Live Tenders</div></div>
-    <div class="hs"><div class="v" id="hSources">0</div><div class="l">Active Sources</div></div>
-    <div class="hs"><div class="v" id="hKeywords">0</div><div class="l">Saved Keywords</div></div>
-  </div>
-  <div class="header-actions">
-    <button onclick="openAddWebsite()">+ Add Website</button>
-    <button onclick="openKeywordManager()">🏷 Keywords</button>
-    <button onclick="openManageSources()">⚙ Sources</button>
-  </div>
-</header>
+</div>
 
-<div class="container">
+<nav class="tabs"><div class="tabs-in">
+  <button class="tab active" data-tab="Dash">Dashboard</button>
+  <button class="tab" data-tab="States">State / UT <span class="tbadge" id="tabStBadge">All</span></button>
+</div></nav>
 
-  <!-- ================= HERO SEARCH ================= -->
-  <div class="hero">
-    <h2>🔍 Search Tenders Across All 8 Southern States</h2>
-    <p>Type any keyword — the portal will search every configured source. Saved keywords auto-populate below. Try: <em>"AMISP"</em>, <em>"smart metering"</em>, <em>"OFC"</em>, <em>"cyber security"</em>.</p>
-    <div class="search-bar">
-      <span class="icon">🔎</span>
-      <input type="text" id="searchInput" placeholder="Search tenders: AMISP, OFC, servers, smart metering…" autocomplete="off">
-      <button class="btn-search" onclick="runSearch()">Search</button>
+<div class="wrap">
+<div id="viewDash">
+
+  <div class="searchblock">
+    <h2><span class="dot"></span> Search across every configured portal</h2>
+    <p>Multi-word queries are treated as <b>phrases</b> (all words must appear together). Saved keywords below run instantly.</p>
+    <div class="searchrow">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input type="text" id="q" placeholder="Try: Leased Line, MPLS VPN, Cloud Hosting, SOC, HMIS, AMISP…" autocomplete="off">
+      <button class="go" id="btnGo">Search</button>
     </div>
-    <div class="quick-chips" id="quickChips"></div>
+    <div class="chips" id="chips"></div>
   </div>
 
-  <!-- ================= KPI TILES ================= -->
+  <div class="stbanner" id="stateBanner" style="display:none"></div>
+
   <div class="kpis">
-    <div class="kpi blue" onclick="kpiClick('all')">
-      <div class="num" id="kpiTotal">0</div>
-      <div class="label">Total Active Tenders</div>
-      <div class="sub" id="kpiTotalSub">across all states</div>
+    <div class="kpi blue" data-kpi="all">
+      <div class="k-top"><div class="k-icon">∑</div></div>
+      <div class="k-num" id="kpiTotal">0</div>
+      <div class="k-lbl">Active Tenders</div>
+      <div class="k-sub" id="kpiTotalSub">across all sources</div>
     </div>
-    <div class="kpi amber" onclick="kpiClick('closing')">
-      <div class="num" id="kpiClosing">0</div>
-      <div class="label">Closing in 7 Days</div>
-      <div class="sub">urgent attention</div>
+    <div class="kpi amber" data-kpi="closing">
+      <div class="k-top"><div class="k-icon">⏱</div></div>
+      <div class="k-num" id="kpiClosing">0</div>
+      <div class="k-lbl">Closing ≤ 7 Days</div>
+      <div class="k-sub">urgent attention</div>
     </div>
-    <div class="kpi red" onclick="kpiClick('emd')">
-      <div class="num" id="kpiEmd">0</div>
-      <div class="label">High EMD Tenders</div>
-      <div class="sub">≥ ₹3 Lakh</div>
+    <div class="kpi red" data-kpi="emd">
+      <div class="k-top"><div class="k-icon">₹</div></div>
+      <div class="k-num" id="kpiEmd">0</div>
+      <div class="k-lbl">High EMD ≥ ₹3 L</div>
+      <div class="k-sub">capital intensive</div>
     </div>
-    <div class="kpi green" onclick="kpiClick('fit')">
-      <div class="num" id="kpiFit">0</div>
-      <div class="label">High AI Fit (≥75%)</div>
-      <div class="sub">strategic relevance</div>
+    <div class="kpi green" data-kpi="fit">
+      <div class="k-top"><div class="k-icon">✓</div></div>
+      <div class="k-num" id="kpiFit">0</div>
+      <div class="k-lbl">High Fit ≥ 75%</div>
+      <div class="k-sub">strategic match</div>
     </div>
   </div>
 
-  <!-- ================= RESULTS ================= -->
-  <div class="section-head top">
-    <h3>📋 Tender Opportunities <span id="resultCount" style="color:var(--muted);font-weight:600;font-size:.85rem"></span></h3>
-    <span class="hint" id="sortHint"></span>
+  <div class="sh">
+    <h3>Refine <span class="count" id="resultCount">0</span></h3>
+    <span class="hint"><label class="kwonly"><input type="checkbox" id="kwOnly"> Only keyword matches <span id="kwHidden"></span></label><span id="sortHint"></span></span>
   </div>
-  <div class="tender-list" id="tenderList"></div>
-  <div class="empty" id="emptyState" style="display:none">
-    <div class="icon">🔍</div>
-    <h4>No tenders match your search</h4>
-    <p>Try a different keyword, or add a new source from the header.</p>
-  </div>
-
-  <!-- ================= FILTERS ================= -->
-  <div class="section-head">
-    <h3>🎯 Filters &amp; Sort</h3>
-    <span class="hint">Refine results</span>
-  </div>
-  <div class="filter-panel">
-    <div class="filter-group">
-      <label>State / UT</label>
-      <select id="stateFilter"><option value="">All Southern States</option></select>
-    </div>
-    <div class="filter-group">
-      <label>Portal</label>
-      <select id="portalFilter"><option value="">All Portals</option></select>
-    </div>
-    <div class="filter-group">
-      <label>Department</label>
-      <select id="deptFilter"><option value="">All Departments</option></select>
-    </div>
-    <div class="filter-group">
-      <label>AI Fit</label>
-      <select id="fitFilter">
-        <option value="">All Scores</option>
-        <option value="high">High (≥75%)</option>
-        <option value="mid">Medium (50–74%)</option>
-        <option value="low">Low (&lt;50%)</option>
-      </select>
-    </div>
-    <div class="filter-group">
-      <label>EMD Range</label>
-      <select id="emdFilter">
-        <option value="">Any EMD</option>
+  <div class="filters">
+    <div class="fg" style="display:none"><label>State</label>
+      <select id="fState"><option value="">All States</option></select></div>
+    <div class="fg"><label>Portal</label>
+      <select id="fPortal"><option value="">All Portals</option></select></div>
+    <div class="fg"><label>Department</label>
+      <select id="fDept"><option value="">All Departments</option></select></div>
+    <div class="fg"><label>AI Fit</label>
+      <select id="fFit">
+        <option value="">Any</option>
+        <option value="h">High (≥75%)</option>
+        <option value="m">Medium (50–74%)</option>
+        <option value="l">Low (&lt;50%)</option>
+      </select></div>
+    <div class="fg"><label>EMD</label>
+      <select id="fEmd">
+        <option value="">Any</option>
         <option value="low">Under ₹1 L</option>
         <option value="mid">₹1 L – ₹5 L</option>
         <option value="high">Above ₹5 L</option>
-      </select>
-    </div>
-    <div class="filter-group">
-      <label>Sort By</label>
-      <select id="sortFilter">
-        <option value="fit">AI Fit (High→Low)</option>
-        <option value="closing">Closing (Soonest)</option>
-        <option value="emd">EMD (High→Low)</option>
-        <option value="boq">BoQ (High→Low)</option>
-        <option value="recent">Recently Published</option>
-      </select>
-    </div>
-    <div class="filter-actions">
-      <button class="btn btn-outline" onclick="resetFilters()">↺ Reset</button>
-      <button class="btn btn-primary" onclick="exportCSV()">⬇ Export CSV</button>
+      </select></div>
+    <div class="fg"><label>Sort</label>
+      <select id="fSort">
+        <option value="fit">Fit (high → low)</option>
+        <option value="closing">Closing (soonest)</option>
+        <option value="emd">EMD (high → low)</option>
+        <option value="boq">BoQ (high → low)</option>
+        <option value="recent">Recently published</option>
+      </select></div>
+    <div class="facts">
+      <button class="btn ghost" id="btnReset">↺ Reset</button>
+      <button class="btn primary" id="btnExport">⬇ CSV</button>
     </div>
   </div>
 
-  <!-- ================= STATE TILES ================= -->
-  <div class="state-bar">
-    <div class="state-bar-header">
-      <h3>🌏 Select State / UT</h3>
-      <span style="font-size:.72rem;color:var(--muted)">Click to filter · Click again to clear</span>
+  <div class="cards" id="cards"></div>
+  <div class="empty" id="empty" style="display:none"></div>
+
+</div><!-- /viewDash -->
+
+<div id="viewStates" style="display:none">
+  <div class="stview">
+    <div class="stview-head">
+      <div>
+        <h2>Select State / UT</h2>
+        <p>Pick one or more states or union territories. The dashboard will show tenders only from your selection.</p>
+      </div>
+      <div class="stview-actions">
+        <input type="text" id="stSearch" placeholder="Search state or code…" autocomplete="off">
+        <button class="btn ghost" id="stAll">Select all</button>
+        <button class="btn ghost" id="stClear">Clear</button>
+        <button class="btn primary" id="stGo">View tenders →</button>
+      </div>
     </div>
-    <div class="state-tiles" id="stateTiles"></div>
+    <div class="stinfo"><b id="stateCount">0</b> <span id="stSelInfo"></span></div>
+    <div id="stateGrid"></div>
   </div>
-
-  <!-- ================= SOURCES ================= -->
-  <div class="section-head">
-    <h3>🌐 Tender Sources <span id="sourceCount" style="color:var(--muted);font-weight:600;font-size:.85rem"></span></h3>
-    <span class="hint">Toggle to include/exclude · <a href="javascript:openAddWebsite()" style="color:var(--blue);text-decoration:none;font-weight:700">+ Add</a></span>
-  </div>
-  <div class="sources" id="sourceList"></div>
-
 </div>
 
-<!-- ================= MODAL ================= -->
-<div class="modal-backdrop" id="modalBackdrop" onclick="if(event.target===this)closeModal()">
-  <div class="modal" id="modalContent"></div>
-</div>
+</div><!-- /wrap -->
 
-<!-- ================= TOAST ================= -->
+<div class="mbk" id="mbk"><div class="modal" id="modal"></div></div>
 <div class="toast" id="toast"></div>
 
-<!-- ================= FOOTER BANNER (ALWAYS VISIBLE) ================= -->
-<div class="footer-banner">
-  <span class="left">Copyright 2026: RailTel Corporation of India Limited</span>
-  <span class="right">Built and Designed by - Rajneesh Ranjan</span>
+<div class="foot">
+  <span>Copyright 2026 · RailTel Corporation of India Limited</span>
+  <span class="r">Built and Designed by — Rajneesh Ranjan</span>
 </div>
 
 <script>
-/* ================================================================
+/* ═══════════════════════════════════════════════════════════════
    CONFIG
-   ================================================================ */
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzq3oiSC1hPdWYG2RPk9IkPJgVmOp04nTSTmplc8NjnZKPJ0NoY-ZXLnn71cuDshchFTA/exec';  // ← paste your Google Apps Script Web App URL
-const USE_LIVE_DATA = APPS_SCRIPT_URL.length > 0;
+   ═══════════════════════════════════════════════════════════════ */
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzIdTTKa44DQu4olsYHQRI97zc9AcvD7w4hbW0JJJZ5jCpZNFXjGo2gppIUqzVQ2sMzGQ/exec';           // ← optional Apps Script web app
+const USE_LIVE = APPS_SCRIPT_URL.length > 0;
 
 const STATES = [
-  { code:'AP', name:'Andhra Pradesh' }, { code:'TS', name:'Telangana' },
-  { code:'TN', name:'Tamil Nadu' },     { code:'KA', name:'Karnataka' },
-  { code:'KL', name:'Kerala' },         { code:'PY', name:'Puducherry' },
-  { code:'AN', name:'Andaman & Nicobar'},{ code:'LD', name:'Lakshadweep' }
+  {code:'AP',name:'Andhra Pradesh'},{code:'AR',name:'Arunachal Pradesh'},{code:'AS',name:'Assam'},
+  {code:'BR',name:'Bihar'},{code:'CG',name:'Chhattisgarh'},{code:'GA',name:'Goa'},
+  {code:'GJ',name:'Gujarat'},{code:'HR',name:'Haryana'},{code:'HP',name:'Himachal Pradesh'},
+  {code:'JH',name:'Jharkhand'},{code:'KA',name:'Karnataka'},{code:'KL',name:'Kerala'},
+  {code:'MP',name:'Madhya Pradesh'},{code:'MH',name:'Maharashtra'},{code:'MN',name:'Manipur'},
+  {code:'ML',name:'Meghalaya'},{code:'MZ',name:'Mizoram'},{code:'NL',name:'Nagaland'},
+  {code:'OD',name:'Odisha'},{code:'PB',name:'Punjab'},{code:'RJ',name:'Rajasthan'},
+  {code:'SK',name:'Sikkim'},{code:'TN',name:'Tamil Nadu'},{code:'TS',name:'Telangana'},
+  {code:'TR',name:'Tripura'},{code:'UP',name:'Uttar Pradesh'},{code:'UK',name:'Uttarakhand'},
+  {code:'WB',name:'West Bengal'},
+  {code:'AN',name:'Andaman & Nicobar'},{code:'CH',name:'Chandigarh'},
+  {code:'DH',name:'Dadra & Nagar Haveli and Daman & Diu'},{code:'DL',name:'Delhi'},
+  {code:'JK',name:'Jammu & Kashmir'},{code:'LA',name:'Ladakh'},{code:'LD',name:'Lakshadweep'},
+  {code:'PY',name:'Puducherry'},
+  {code:'ALL',name:'Central / Multi-State'}
 ];
 
 const DEFAULT_SOURCES = [
-  { id:'cppp',    name:'CPPP (Central Public Procurement Portal)', url:'https://eprocure.gov.in',    stateCode:'ALL', type:'Central',   enabled:true,  official:true },
-  { id:'gem',     name:'GeM (Government e-Marketplace)',           url:'https://gem.gov.in',         stateCode:'ALL', type:'Central',   enabled:true,  official:true },
-  { id:'etenders',name:'E-tenders Portal',                         url:'https://etenders.gov.in',    stateCode:'ALL', type:'Central',   enabled:true,  official:true },
-  { id:'enivida', name:'eNivida',                                  url:'https://enivida.com',        stateCode:'ALL', type:'Aggregator',enabled:true,  official:false },
-  { id:'ap',  name:'AP e-Procurement',              url:'https://tender.apeprocurement.gov.in', stateCode:'AP', type:'State', enabled:true, official:true },
-  { id:'ts',  name:'Telangana e-Procurement',       url:'https://tender.telangana.gov.in',      stateCode:'TS', type:'State', enabled:true, official:true },
-  { id:'tn',  name:'TN e-Procurement (TNTenders)',  url:'https://tntenders.gov.in',             stateCode:'TN', type:'State', enabled:true, official:true },
-  { id:'ka',  name:'Karnataka e-Procurement',       url:'https://eproc.karnataka.gov.in',       stateCode:'KA', type:'State', enabled:true, official:true },
-  { id:'kl',  name:'Kerala e-Procurement',          url:'https://etenders.kerala.gov.in',       stateCode:'KL', type:'State', enabled:true, official:true },
-  { id:'py',  name:'Puducherry e-Procurement',      url:'https://tenders.py.gov.in',            stateCode:'PY', type:'State', enabled:true, official:true },
-  { id:'an',  name:'A&N Islands e-Procurement',     url:'https://tenders.andaman.gov.in',       stateCode:'AN', type:'State', enabled:true, official:true },
-  { id:'ld',  name:'Lakshadweep e-Procurement',     url:'https://tenders.lakshadweep.gov.in',   stateCode:'LD', type:'State', enabled:true, official:true }
+  {id:'cppp',name:'CPPP (Central Public Procurement)',url:'https://eprocure.gov.in',stateCode:'ALL',type:'Central',enabled:true,official:true,status:'ready'},
+  {id:'gem',name:'GeM (Govt e-Marketplace)',url:'https://gem.gov.in',stateCode:'ALL',type:'Central',enabled:true,official:true,status:'ready'},
+  {id:'etenders',name:'E-tenders Portal',url:'https://etenders.gov.in',stateCode:'ALL',type:'Central',enabled:true,official:true,status:'ready'},
+  {id:'ap',name:'AP e-Procurement',url:'https://tender.apeprocurement.gov.in',stateCode:'AP',type:'State',enabled:true,official:true,status:'ready'},
+  {id:'ts',name:'Telangana e-Procurement',url:'https://tender.telangana.gov.in',stateCode:'TS',type:'State',enabled:true,official:true,status:'ready'},
+  {id:'tn',name:'TN e-Procurement',url:'https://tntenders.gov.in',stateCode:'TN',type:'State',enabled:true,official:true,status:'ready'},
+  {id:'ka',name:'Karnataka e-Procurement',url:'https://eproc.karnataka.gov.in',stateCode:'KA',type:'State',enabled:true,official:true,status:'ready'},
+  {id:'kl',name:'Kerala e-Procurement',url:'https://etenders.kerala.gov.in',stateCode:'KL',type:'State',enabled:true,official:true,status:'ready'},
+  {id:'py',name:'Puducherry e-Procurement',url:'https://tenders.py.gov.in',stateCode:'PY',type:'State',enabled:true,official:true,status:'ready'},
+  {id:'an',name:'A&N Islands e-Procurement',url:'https://tenders.andaman.gov.in',stateCode:'AN',type:'State',enabled:true,official:true,status:'ready'},
+  {id:'ld',name:'Lakshadweep e-Procurement',url:'https://tenders.lakshadweep.gov.in',stateCode:'LD',type:'State',enabled:true,official:true,status:'ready'}
 ];
 
-/* ---- Demo dataset (auto-replaced by live Apps Script data if configured) ---- */
-const DEMO_TENDERS = [
-  { id:"2026_EB_711587_1", title:"Appointment of AMISP for Smart Prepaid Metering to All LT consumers except Government Buildings, Agri and Hut in Chennai Metropolitan Area covering 2 circles of TNPDCL viz., Chennai South-1 and Chennai South-2 (Package-3) under RDSS", stateCode:"TN", district:"Chennai", portal:"TN e-Procurement (TNTenders)", department:"TNEB Limited | TANGEDCO | CE-IT and RAPDRP", emd:500000, boq:50000000, published:"2026-10-07", closing:"2026-11-27", fit:88, extended:false, corrigendum:null, tags:["amisp","smart metering","prepaid","rdss","tangedco"] },
-  { id:"2026_EB_711549_1", title:"Appointment of AMISP for Smart Distribution Transformer Metering in all Districts of Tamil Nadu except T-Nagar in Chennai (Package-1) under RDSS", stateCode:"TN", district:"Chennai", portal:"TN e-Procurement (TNTenders)", department:"TNEB Limited | TANGEDCO | CE-IT and RAPDRP", emd:500000, boq:50000000, published:"2026-10-07", closing:"2026-11-27", fit:86, extended:false, corrigendum:null, tags:["amisp","smart metering","dt metering","rdss","tangedco"] },
-  { id:"2026_EB_711571_1", title:"Appointment of AMISP for Smart Prepaid Metering to all LT consumers except Govt Buildings, Agri and Hut in Chn Metropolitan Area covering 3 circles of TNPDCL viz., Chn Central except TNagar, ChnNorth, ChnWest including Avadi Municipal Corp (Pkg-2) RDSS", stateCode:"TN", district:"Chennai", portal:"TN e-Procurement (TNTenders)", department:"TNEB Limited | TANGEDCO | CE-IT and RAPDRP", emd:500000, boq:50000000, published:"2026-10-07", closing:"2026-11-27", fit:85, extended:false, corrigendum:null, tags:["amisp","smart metering","prepaid","rdss","tangedco"] },
-  { id:"2026_TN_682714_2", title:"Annual Maintenance of OFC Network — Southern Railway Zone", stateCode:"TN", district:"Coimbatore", portal:"CPPP", department:"Southern Railway", emd:120000, boq:2400000, published:"2026-09-20", closing:"2026-10-02", fit:88, extended:false, corrigendum:null, tags:["ofc","network","maintenance"] },
-  { id:"2026_TN_682717_5", title:"Cloud Hosting Services for State Portal", stateCode:"TN", district:"Chennai", portal:"eNivida", department:"IT Department", emd:300000, boq:6000000, published:"2026-09-18", closing:"2026-10-04", fit:91, extended:false, corrigendum:null, tags:["cloud","hosting","portal"] },
-  { id:"2026_TN_682728_16", title:"Cyber Security Audit & Penetration Testing", stateCode:"TN", district:"Chennai", portal:"GeM", department:"TNeGA", emd:250000, boq:5000000, published:"2026-09-21", closing:"2026-10-07", fit:89, extended:false, corrigendum:null, tags:["cyber","security","audit"] },
-  { id:"2026_AP_770101_1", title:"Supply of Network Equipment for AP State Data Center", stateCode:"AP", district:"Amaravati", portal:"AP e-Procurement", department:"AP Technology Services", emd:520000, boq:10400000, published:"2026-09-16", closing:"2026-10-06", fit:90, extended:false, corrigendum:null, tags:["network","datacenter"] },
-  { id:"2026_AP_770102_2", title:"OFC Laying for AP Fiber Grid Phase IV", stateCode:"AP", district:"Visakhapatnam", portal:"AP e-Procurement", department:"AP Fibernet", emd:750000, boq:15000000, published:"2026-09-12", closing:"2026-10-03", fit:93, extended:true, corrigendum:"C1", tags:["ofc","fiber","network"] },
-  { id:"2026_TS_880201_1", title:"Data Center Expansion for TS Government Cloud", stateCode:"TS", district:"Hyderabad", portal:"Telangana e-Procurement", department:"TS IT Dept", emd:950000, boq:19000000, published:"2026-09-11", closing:"2026-10-02", fit:92, extended:true, corrigendum:"C2", tags:["datacenter","cloud"] },
-  { id:"2026_TS_880202_2", title:"OFC Network for T-Fiber Rural Connectivity", stateCode:"TS", district:"Warangal", portal:"Telangana e-Procurement", department:"T-Fiber", emd:680000, boq:13600000, published:"2026-09-14", closing:"2026-10-05", fit:89, extended:false, corrigendum:null, tags:["ofc","fiber","rural"] },
-  { id:"2026_KA_990301_1", title:"Cloud Infrastructure for Karnataka State Data Center", stateCode:"KA", district:"Bengaluru", portal:"Karnataka e-Procurement", department:"Karnataka IT Dept", emd:850000, boq:17000000, published:"2026-09-13", closing:"2026-10-04", fit:90, extended:false, corrigendum:null, tags:["cloud","datacenter"] },
-  { id:"2026_KA_990302_2", title:"OFC Network for Bengaluru Smart City", stateCode:"KA", district:"Bengaluru", portal:"Karnataka e-Procurement", department:"BBMP", emd:620000, boq:12400000, published:"2026-09-17", closing:"2026-10-06", fit:88, extended:true, corrigendum:"C1", tags:["ofc","network","smartcity"] },
-  { id:"2026_KL_660401_1", title:"Cloud Hosting for Kerala State Portal", stateCode:"KL", district:"Thiruvananthapuram", portal:"Kerala e-Procurement", department:"Kerala IT Mission", emd:420000, boq:8400000, published:"2026-09-14", closing:"2026-10-03", fit:91, extended:false, corrigendum:null, tags:["cloud","hosting"] },
-  { id:"2026_KL_660402_2", title:"OFC Network for Kerala Fibre Optic Network (KFON)", stateCode:"KL", district:"Kochi", portal:"Kerala e-Procurement", department:"KFON", emd:880000, boq:17600000, published:"2026-09-10", closing:"2026-10-01", fit:94, extended:true, corrigendum:"C2", tags:["ofc","fiber","kfon"] },
-  { id:"2026_PY_550501_1", title:"Supply of Network Equipment for Puducherry Secretariat", stateCode:"PY", district:"Puducherry", portal:"Puducherry e-Procurement", department:"Puducherry IT Dept", emd:180000, boq:3600000, published:"2026-09-17", closing:"2026-10-05", fit:84, extended:false, corrigendum:null, tags:["network","equipment"] },
-  { id:"2026_AN_440601_1", title:"Satellite Connectivity for A&N Islands", stateCode:"AN", district:"Port Blair", portal:"A&N Islands e-Procurement", department:"A&N Administration", emd:480000, boq:9600000, published:"2026-09-16", closing:"2026-10-07", fit:87, extended:false, corrigendum:null, tags:["satellite","connectivity"] },
-  { id:"2026_LD_330701_1", title:"Submarine OFC Connectivity for Lakshadweep", stateCode:"LD", district:"Kavaratti", portal:"Lakshadweep e-Procurement", department:"Lakshadweep Administration", emd:1100000, boq:22000000, published:"2026-09-12", closing:"2026-10-04", fit:93, extended:false, corrigendum:null, tags:["ofc","submarine"] }
+const DEMO = [
+  {id:"2026_EB_711587_1",title:"Appointment of AMISP for Smart Prepaid Metering to All LT consumers except Government Buildings, Agri and Hut in Chennai Metropolitan Area covering 2 circles of TNPDCL viz., Chennai South-1 and Chennai South-2 (Package-3) under RDSS",stateCode:"TN",district:"Chennai",portal:"TN e-Procurement",department:"TNEB Limited | TANGEDCO | CE-IT and RAPDRP",emd:500000,boq:50000000,published:"2026-10-07",closing:"2026-11-27",fit:88,extended:false,corrigendum:null,tags:["amisp","smart metering","prepaid","rdss","tangedco"]},
+  {id:"2026_EB_711549_1",title:"Appointment of AMISP for Smart Distribution Transformer Metering in all Districts of Tamil Nadu except T-Nagar in Chennai (Package-1) under RDSS",stateCode:"TN",district:"Chennai",portal:"TN e-Procurement",department:"TNEB Limited | TANGEDCO | CE-IT and RAPDRP",emd:500000,boq:50000000,published:"2026-10-07",closing:"2026-11-27",fit:86,extended:false,corrigendum:null,tags:["amisp","smart metering","dt metering","rdss"]},
+  {id:"2026_EB_711571_1",title:"Appointment of AMISP for Smart Prepaid Metering to all LT consumers except Govt Buildings, Agri and Hut in Chn Metropolitan Area covering 3 circles of TNPDCL (Package-2) under RDSS",stateCode:"TN",district:"Chennai",portal:"TN e-Procurement",department:"TNEB Limited | TANGEDCO | CE-IT and RAPDRP",emd:500000,boq:50000000,published:"2026-10-07",closing:"2026-11-27",fit:85,extended:false,corrigendum:null,tags:["amisp","smart metering","rdss"]},
+  {id:"2026_TN_682714_2",title:"Annual Maintenance of OFC Network — Southern Railway Zone",stateCode:"TN",district:"Coimbatore",portal:"CPPP",department:"Southern Railway",emd:120000,boq:2400000,published:"2026-09-20",closing:"2026-10-02",fit:88,extended:false,corrigendum:null,tags:["ofc","network","maintenance"]},
+  {id:"2026_TN_682717_5",title:"Cloud Hosting Services for State Portal",stateCode:"TN",district:"Chennai",portal:"eNivida",department:"IT Department",emd:300000,boq:6000000,published:"2026-09-18",closing:"2026-10-04",fit:91,extended:false,corrigendum:null,tags:["cloud","hosting"]},
+  {id:"2026_TN_682728_16",title:"Cyber Security Audit & Penetration Testing",stateCode:"TN",district:"Chennai",portal:"GeM",department:"TNeGA",emd:250000,boq:5000000,published:"2026-09-21",closing:"2026-10-07",fit:89,extended:false,corrigendum:null,tags:["cyber","security","audit"]},
+  {id:"2026_AP_770101_1",title:"Supply of Network Equipment for AP State Data Center",stateCode:"AP",district:"Amaravati",portal:"AP e-Procurement",department:"AP Technology Services",emd:520000,boq:10400000,published:"2026-09-16",closing:"2026-10-06",fit:90,extended:false,corrigendum:null,tags:["network","datacenter"]},
+  {id:"2026_AP_770102_2",title:"OFC Laying for AP Fiber Grid Phase IV",stateCode:"AP",district:"Visakhapatnam",portal:"AP e-Procurement",department:"AP Fibernet",emd:750000,boq:15000000,published:"2026-09-12",closing:"2026-10-03",fit:93,extended:true,corrigendum:"C1",tags:["ofc","fiber","network"]},
+  {id:"2026_TS_880201_1",title:"Data Center Expansion for TS Government Cloud",stateCode:"TS",district:"Hyderabad",portal:"Telangana e-Procurement",department:"TS IT Dept",emd:950000,boq:19000000,published:"2026-09-11",closing:"2026-10-02",fit:92,extended:true,corrigendum:"C2",tags:["datacenter","cloud"]},
+  {id:"2026_TS_880202_2",title:"OFC Network for T-Fiber Rural Connectivity",stateCode:"TS",district:"Warangal",portal:"Telangana e-Procurement",department:"T-Fiber",emd:680000,boq:13600000,published:"2026-09-14",closing:"2026-10-05",fit:89,extended:false,corrigendum:null,tags:["ofc","fiber","rural"]},
+  {id:"2026_KA_990301_1",title:"Cloud Infrastructure for Karnataka State Data Center",stateCode:"KA",district:"Bengaluru",portal:"Karnataka e-Procurement",department:"Karnataka IT Dept",emd:850000,boq:17000000,published:"2026-09-13",closing:"2026-10-04",fit:90,extended:false,corrigendum:null,tags:["cloud","datacenter"]},
+  {id:"2026_KA_990302_2",title:"OFC Network for Bengaluru Smart City",stateCode:"KA",district:"Bengaluru",portal:"Karnataka e-Procurement",department:"BBMP",emd:620000,boq:12400000,published:"2026-09-17",closing:"2026-10-06",fit:88,extended:true,corrigendum:"C1",tags:["ofc","network","smartcity"]},
+  {id:"2026_KL_660401_1",title:"Cloud Hosting for Kerala State Portal",stateCode:"KL",district:"Thiruvananthapuram",portal:"Kerala e-Procurement",department:"Kerala IT Mission",emd:420000,boq:8400000,published:"2026-09-14",closing:"2026-10-03",fit:91,extended:false,corrigendum:null,tags:["cloud","hosting"]},
+  {id:"2026_KL_660402_2",title:"OFC Network for Kerala Fibre Optic Network (KFON)",stateCode:"KL",district:"Kochi",portal:"Kerala e-Procurement",department:"KFON",emd:880000,boq:17600000,published:"2026-09-10",closing:"2026-10-01",fit:94,extended:true,corrigendum:"C2",tags:["ofc","fiber","kfon"]},
+  {id:"2026_PY_550501_1",title:"Supply of Network Equipment for Puducherry Secretariat",stateCode:"PY",district:"Puducherry",portal:"Puducherry e-Procurement",department:"Puducherry IT Dept",emd:180000,boq:3600000,published:"2026-09-17",closing:"2026-10-05",fit:84,extended:false,corrigendum:null,tags:["network","equipment"]},
+  {id:"2026_AN_440601_1",title:"Satellite Connectivity for A&N Islands",stateCode:"AN",district:"Port Blair",portal:"A&N Islands e-Procurement",department:"A&N Administration",emd:480000,boq:9600000,published:"2026-09-16",closing:"2026-10-07",fit:87,extended:false,corrigendum:null,tags:["satellite","connectivity"]},
+  {id:"2026_LD_330701_1",title:"Submarine OFC Connectivity for Lakshadweep",stateCode:"LD",district:"Kavaratti",portal:"Lakshadweep e-Procurement",department:"Lakshadweep Administration",emd:1100000,boq:22000000,published:"2026-09-12",closing:"2026-10-04",fit:93,extended:false,corrigendum:null,tags:["ofc","submarine"]}
 ];
 
-const DEFAULT_KEYWORDS = [
-  "AMISP", "smart metering", "OFC", "servers", "cyber security",
-  "cloud", "CCTV", "ERP", "data centre", "network switches",
-  "RDSS", "TANGEDCO", "BharatNet"
-];
+const DEFAULT_KW = ["Leased Line", "ILL (Internet Leased Line)", "MPLS VPN", "Point-to-Point Connectivity", "Bandwidth Services", "Last Mile Connectivity", "WAN Connectivity", "SD-WAN", "Data Center Services", "Cloud Hosting", "Virtual Machine", "WAF", "Cloud Storage", "Co-location Services", "IaaS", "Government Cloud", "Disaster Recovery Site", "DR-BCP", "Cloud Migration", "Managed Cloud Services", "ICT Infrastructure", "Turnkey ICT Solution", "System Integration", "IT Infrastructure Services", "Network Infrastructure Setup", "Structured Cabling", "LAN-WAN Setup", "OFC (Optical Fibre Cable)", "Telecom Infrastructure", "IP-MPLS Network", "Network Operations Center (NOC)", "Bandwidth", "Managed Network Services", "Command and Control Centre", "Video Wall", "Video Conferencing Solution", "Surveillance/CCTV Integration", "Hospital Management Information System", "HMIS Implementation", "e-Health Services", "Digital Health Infrastructure", "Firewall/UTM Services", "Security Operations Center (SOC)", "Managed Security Services", "VAPT (Vulnerability Assessment & Penetration Testing)", "Microsoft", "Microsoft Products", "Amazon Azure", "Microsoft Office", "Office 365", "AMISP"];
 
-/* ================================================================
-   PERSISTENCE KEYS
-   ================================================================ */
-const K_SOURCES  = 'tsp_sources_v1';
-const K_KEYWORDS = 'tsp_keywords_v1';
-const K_TENDERS  = 'tsp_tenders_v1';
+/* ═══════════════════════════════════════════════════════════════
+   PERSIST
+   ═══════════════════════════════════════════════════════════════ */
+const K_SRC='tsp_src_v4', K_KW='tsp_kw_v5', K_T='tsp_t_v4', K_KWONLY='tsp_kwonly_v1';
+function load(k,f){try{const v=localStorage.getItem(k);return v?JSON.parse(v):JSON.parse(JSON.stringify(f));}catch{return JSON.parse(JSON.stringify(f));}}
+function save(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch{}}
 
-/* ================================================================
+/* ═══════════════════════════════════════════════════════════════
    STATE
-   ================================================================ */
-const state = {
-  query: '',
-  stateCode: '',
-  portal: '',
-  department: '',
-  fit: '',
-  emd: '',
-  sort: 'fit',
-  sources: load(K_SOURCES, DEFAULT_SOURCES),
-  keywords: load(K_KEYWORDS, DEFAULT_KEYWORDS),
-  tenders: load(K_TENDERS, DEMO_TENDERS)
+   ═══════════════════════════════════════════════════════════════ */
+const S = {
+  q:'', stateCode:'', stateSel:[], portal:'', department:'', fit:'', emd:'', sort:'fit',
+  kwOnly: load(K_KWONLY, true),
+  sources: load(K_SRC, DEFAULT_SOURCES),
+  keywords: load(K_KW, DEFAULT_KW),
+  tenders: load(K_T, DEMO)
 };
 
-function load(key, fallback) {
-  try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : [...fallback]; }
-  catch { return [...fallback]; }
-}
-function save(key, value) {
-  try { localStorage.setItem(key, JSON.stringify(value)); } catch {}
-}
-
-/* ================================================================
-   UTILITIES
-   ================================================================ */
+/* ═══════════════════════════════════════════════════════════════
+   HELPERS
+   ═══════════════════════════════════════════════════════════════ */
 const $ = id => document.getElementById(id);
-const fmt = n => n>=1e7?`₹${(n/1e7).toFixed(2)} Cr`:n>=1e5?`₹${(n/1e5).toFixed(2)} L`:n>=1000?`₹${(n/1000).toFixed(0)}K`:`₹${n}`;
-const daysUntil = d => Math.ceil((new Date(d+'T23:59:59') - new Date())/(864e5));
-const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const stateName = c => (STATES.find(s=>s.code===c)||{}).name || c;
+const esc = s => String(s??'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmtAmt = n => {n=Number(n)||0; return n>=1e7?`₹${(n/1e7).toFixed(2)} Cr`:n>=1e5?`₹${(n/1e5).toFixed(2)} L`:n>=1000?`₹${(n/1000).toFixed(0)}K`:`₹${n}`;};
+const daysUntil = d => {if(!d)return 999; const t=new Date(d+'T23:59:59'); return Math.ceil((t-new Date())/864e5);};
+const stateName = c => (STATES.find(s=>s.code===c)||{}).name||c;
+const normalise = s => String(s??'').toLowerCase().trim();
 
-function highlight(text, q) {
-  if (!q) return esc(text);
-  const terms = q.split(/\s+/).filter(t => t.length>1);
-  let html = esc(text);
-  terms.forEach(t => {
-    const re = new RegExp(`(${t.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`,'gi');
-    html = html.replace(re,'<mark>$1</mark>');
+/* Keyword matching: "ILL (Internet Leased Line)" matches "ILL" OR "Internet Leased Line";
+   "Surveillance/CCTV Integration" matches either side; hyphen/space/underscore and
+   centre/center, fibre/fiber spellings are treated alike; whole-word only (so "ILL" ≠ "skill"). */
+const _kwCache = new Map();
+function kwRegexes(k){
+  if(_kwCache.has(k)) return _kwCache.get(k);
+  const base = String(k).trim();
+  let terms = [base];
+  const inner = [...base.matchAll(/\(([^)]+)\)/g)].map(m=>m[1].trim());
+  if(inner.length){ terms.push(base.replace(/\([^)]*\)/g,'').trim(), ...inner); }
+  terms.slice().forEach(t => { if(t.includes('/')) terms.push(...t.split('/').map(s=>s.trim())); });
+  terms = [...new Set(terms.filter(t => t.length>=2))];
+  const res = terms.map(t => {
+    const parts = t.split(/[\s\-_]+/).filter(Boolean).map(w => {
+      const l = w.toLowerCase();
+      if(l==='centre'||l==='center') return 'cent(?:re|er)';
+      if(l==='fibre'||l==='fiber')   return 'fib(?:re|er)';
+      return w.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+    });
+    return new RegExp('(?<![a-z0-9])'+parts.join('[\\s\\-_]+')+'(?![a-z0-9])','i');
   });
-  return html;
+  _kwCache.set(k,res); return res;
+}
+const kwMatch = (text, k) => kwRegexes(k).some(r => r.test(text));
+
+/* Junk rows that slipped past the crawler (menus, forms, dropdown dumps) */
+const JUNK_TITLE_RE = /(-select-|search tender category|download\s*&?\s*fill|activation form|forg[eo]t user|new user id|necessary details|related proofs|product category|tenders by closing date)/i;
+function isJunkTitle(title){
+  const s = String(title||'').trim();
+  if(s.length < 12 || !/[a-z]{3,}/i.test(s)) return true;
+  if(JUNK_TITLE_RE.test(s)) return true;
+  if(s.length > 300 && (s.match(/\b[A-Z][a-z]{3,}\b/g)||[]).length >= 20) return true;
+  return false;
+}
+/* A tender 'matches' when a saved keyword appears in its TITLE */
+function scoreTender(t){
+  const hits = S.keywords.filter(k => kwMatch(t.title||'', k));
+  t.tags = hits;
+  t.fit  = hits.length ? Math.min(98, 55 + 12*hits.length) : 40;
+}
+const scoreAll = () => S.tenders.forEach(scoreTender);
+const eligible = t => sourceEnabled(t.portal) && !isJunkTitle(t.title) &&
+                      (!S.kwOnly || (t.tags && t.tags.length));
+
+/* ═══════════════════════════════════════════════════════════════
+   SEARCH — PHRASE-AWARE
+   ═══════════════════════════════════════════════════════════════ */
+function matchesQuery(t, rawQ){
+  if(!rawQ) return true;
+  const clauses = rawQ.split(',').map(s=>s.trim()).filter(Boolean);
+  if(!clauses.length) return true;
+
+  const hay = [
+    t.title, t.department, t.district, t.portal, t.id,
+    stateName(t.stateCode), ...(t.tags||[])
+  ].map(normalise).join(' • ');
+
+  return clauses.every(clause => {
+    const saved = S.keywords.find(k => normalise(k)===normalise(clause));
+    if(saved) return kwMatch(t.title||'', saved);
+    const words = clause.toLowerCase().split(/\s+/).filter(w=>w.length>1);
+    if(!words.length) return true;
+    const phrase = words.map(w=>w.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('[\\s\\-_,/]+');
+    if(new RegExp(phrase,'i').test(hay)) return true;
+    return words.every(w => hay.includes(w));
+  });
 }
 
-function toast(msg, icon='✓') {
-  const t = $('toast');
-  t.innerHTML = `<span>${icon}</span><span>${msg}</span>`;
-  t.classList.add('show');
-  clearTimeout(t._tm);
-  t._tm = setTimeout(()=>t.classList.remove('show'),2600);
-}
-
-function scrollToResults() {
-  const el = $('tenderList');
-  if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.pageYOffset - 110, behavior:'smooth' });
-}
-
-/* ================================================================
-   LIVE DATA LOAD (if Apps Script configured)
-   ================================================================ */
-async function loadLiveData() {
-  if (!USE_LIVE_DATA) return;
-  try {
-    const r = await fetch(APPS_SCRIPT_URL);
-    const rows = await r.json();
-    if (!Array.isArray(rows) || !rows.length) return;
-    state.tenders = rows
-      .filter(t => !['railtel','rail tel'].some(k =>
-        (t.title+' '+t.department+' '+t.portal).toLowerCase().includes(k)))
-      .map(t => ({
-        id: t.id, title: t.title, stateCode: t.stateCode,
-        district: t.district, portal: t.portal, department: t.department,
-        emd: Number(t.emd)||0, boq: Number(t.boq)||0,
-        published: t.published, closing: t.closing,
-        fit: Number(t.fit)||60, extended: t.extended==='Yes',
-        corrigendum: t.corrigendum||null,
-        tags: typeof t.tags==='string' ? t.tags.split(',').map(s=>s.trim()).filter(Boolean) : (t.tags||[])
-      }));
-    save(K_TENDERS, state.tenders);
-    toast(`Loaded ${state.tenders.length} live tenders`, '☁');
-    renderAll();
-  } catch (e) { console.warn('Live data fetch failed:', e); }
-}
-
-/* ================================================================
-   SEARCH / FILTER
-   ================================================================ */
-function isSourceEnabled(portalName) {
-  const s = state.sources.find(x => x.name === portalName);
+/* ═══════════════════════════════════════════════════════════════
+   FILTER / SORT
+   ═══════════════════════════════════════════════════════════════ */
+function sourceEnabled(name){
+  const s = S.sources.find(x => x.name === name);
   return s ? s.enabled : true;
 }
 
-function getFiltered() {
-  const q = state.query.toLowerCase().trim();
-  const kw = q ? q.split(/\s+/).filter(t => t.length>1 && !['in','of','the','and','for','under','to','all','high','emd','closing','days','soon'].includes(t)) : [];
-  const flags = {
-    highEmd: /high\s+emd/.test(q),
-    closingSoon: /closing\s+(3|7)\s+days|closing\s+soon/.test(q),
-    extended: /\bextended\b|\bcorrigendum\b/.test(q)
-  };
-
-  let list = state.tenders.filter(t => {
-    if (!isSourceEnabled(t.portal)) return false;
-    if (kw.length) {
-      const hay = [t.title,t.department,t.district,t.portal,t.id,stateName(t.stateCode),...(t.tags||[])].join(' ').toLowerCase();
-      if (!kw.every(k => hay.includes(k))) return false;
-    }
-    if (state.stateCode && t.stateCode !== state.stateCode) return false;
-    if (state.portal && t.portal !== state.portal) return false;
-    if (state.department && t.department !== state.department) return false;
-    if (state.fit==='high' && t.fit<75) return false;
-    if (state.fit==='mid' && (t.fit<50||t.fit>=75)) return false;
-    if (state.fit==='low' && t.fit>=50) return false;
-    if (state.emd==='low' && t.emd>=100000) return false;
-    if (state.emd==='mid' && (t.emd<100000||t.emd>500000)) return false;
-    if (state.emd==='high' && t.emd<=500000) return false;
-    if (flags.highEmd && t.emd<300000) return false;
-    if (flags.closingSoon && daysUntil(t.closing)>7) return false;
-    if (flags.extended && !t.extended) return false;
+function getFiltered(){
+  const q = S.q.trim();
+  let list = S.tenders.filter(t => {
+    if(!eligible(t)) return false;
+    if(!matchesQuery(t, q)) return false;
+    if(S.stateSel.length && !S.stateSel.includes(t.stateCode)) return false;
+    if(S.portal && t.portal !== S.portal) return false;
+    if(S.department && t.department !== S.department) return false;
+    if(S.fit==='h' && t.fit<75) return false;
+    if(S.fit==='m' && (t.fit<50||t.fit>=75)) return false;
+    if(S.fit==='l' && t.fit>=50) return false;
+    if(S.emd==='low' && t.emd>=100000) return false;
+    if(S.emd==='mid' && (t.emd<100000||t.emd>500000)) return false;
+    if(S.emd==='high' && t.emd<=500000) return false;
     return true;
   });
 
-  const s = state.sort;
-  if (s==='fit') list.sort((a,b)=>b.fit-a.fit);
-  else if (s==='closing') list.sort((a,b)=>new Date(a.closing)-new Date(b.closing));
-  else if (s==='emd') list.sort((a,b)=>b.emd-a.emd);
-  else if (s==='boq') list.sort((a,b)=>b.boq-a.boq);
-  else if (s==='recent') list.sort((a,b)=>new Date(b.published)-new Date(a.published));
-
+  const s = S.sort;
+  if(s==='fit') list.sort((a,b)=>b.fit-a.fit);
+  else if(s==='closing') list.sort((a,b)=>daysUntil(a.closing)-daysUntil(b.closing));
+  else if(s==='emd') list.sort((a,b)=>b.emd-a.emd);
+  else if(s==='boq') list.sort((a,b)=>b.boq-a.boq);
+  else if(s==='recent') list.sort((a,b)=>new Date(b.published)-new Date(a.published));
   return list;
 }
 
-/* ================================================================
-   RENDER
-   ================================================================ */
-function renderChips() {
-  $('quickChips').innerHTML = state.keywords.map(k => `
-    <span class="chip ${state.query===k?'active':''}" data-k="${esc(k)}">
+/* ═══════════════════════════════════════════════════════════════
+   RENDER — CHIPS
+   ═══════════════════════════════════════════════════════════════ */
+const CHIP_LIMIT = 12;
+function renderChips(){
+  const el = $('chips');
+  const all = S.keywords;
+  let shown = S.chipsOpen ? all : all.slice(0, CHIP_LIMIT);
+  const act = all.find(k => normalise(S.q)===normalise(k));
+  if(act && !shown.includes(act)) shown = [...shown, act];
+  const hidden = all.length - shown.length;
+  el.innerHTML = shown.map(k => {
+    const active = normalise(S.q) === normalise(k);
+    return `<span class="chip ${active?'active':''}" data-kw="${esc(k)}">
       ${esc(k)}
-      <span class="del" onclick="event.stopPropagation();removeKeyword('${esc(k).replace(/'/g,"\\'")}')" title="Remove keyword">×</span>
-    </span>
-  `).join('');
+      <span class="x" data-rm="${esc(k)}" title="Remove">×</span>
+    </span>`;
+  }).join('')
+  + (all.length>CHIP_LIMIT ? `<span class="chip chip-more" id="chipMore">${S.chipsOpen?'Show less ▴':`+${hidden} more ▾`}</span>` : '')
+  + `<span class="chip chip-add" id="chipAdd">＋ Add keyword</span>`;
+  $('chipMore')?.addEventListener('click', () => { S.chipsOpen = !S.chipsOpen; renderChips(); });
 
-  document.querySelectorAll('#quickChips .chip').forEach(c => {
-    c.addEventListener('click', () => {
-      const k = c.dataset.k;
-      $('searchInput').value = k;
-      state.query = k;
-      render();
-      scrollToResults();
+  el.querySelectorAll('.chip[data-kw]').forEach(c => {
+    c.addEventListener('click', e => {
+      if(e.target.dataset.rm) return;
+      const k = c.dataset.kw;
+      // Toggle: click active chip → clear; click inactive → activate
+      if(normalise(S.q) === normalise(k)){
+        S.q = '';
+        $('q').value = '';
+      } else {
+        S.q = k;
+        $('q').value = k;
+      }
+      renderChips(); render(); scrollToResults();
     });
   });
+  el.querySelectorAll('.x[data-rm]').forEach(x => {
+    x.addEventListener('click', e => {
+      e.stopPropagation();
+      removeKeyword(x.dataset.rm);
+    });
+  });
+  $('chipAdd')?.addEventListener('click', openKeywordManager);
 }
 
-function renderStateTiles() {
+/* ═══════════════════════════════════════════════════════════════
+   RENDER — STATES
+   ═══════════════════════════════════════════════════════════════ */
+const UT_CODES = new Set(['AN','CH','DH','DL','JK','LA','LD','PY']);
+
+function renderStates(){
   const counts = {};
-  state.tenders.filter(t => isSourceEnabled(t.portal)).forEach(t => counts[t.stateCode]=(counts[t.stateCode]||0)+1);
-  $('stateTiles').innerHTML = STATES.map(s => `
-    <div class="state-tile ${state.stateCode===s.code?'active':''}" onclick="toggleState('${s.code}')">
-      <div class="st-head"><span class="st-code">${s.code}</span><span class="st-name">${esc(s.name)}</span></div>
-      <span class="st-count">${counts[s.code]||0} tenders</span>
-    </div>
-  `).join('');
+  S.tenders.filter(eligible).forEach(t=>{
+    counts[t.stateCode]=(counts[t.stateCode]||0)+1;
+  });
+  const q = normalise(($('stSearch')||{}).value||'');
+  const match = s => !q || normalise(s.name+' '+s.code).includes(q);
+  const tile = s => `
+    <button class="stile ${S.stateSel.includes(s.code)?'active':''}" data-code="${s.code}">
+      <span class="code">${s.code}</span>
+      <span class="sn">${esc(s.name)}</span>
+      <span class="sc">${counts[s.code]||0} tenders</span>
+    </button>`;
+  const grp = (title, arr) => arr.length
+    ? `<div class="st-grp"><h4>${title} <span class="count">${arr.length}</span></h4>
+         <div class="state-grid">${arr.map(tile).join('')}</div></div>` : '';
+  const states  = STATES.filter(s=>s.code!=='ALL' && !UT_CODES.has(s.code) && match(s));
+  const uts     = STATES.filter(s=>UT_CODES.has(s.code) && match(s));
+  const central = STATES.filter(s=>s.code==='ALL' && match(s));
+  $('stateGrid').innerHTML = (grp('States',states)+grp('Union Territories',uts)+grp('Central / Multi-State',central))
+    || '<p class="st-none">No state matches your search.</p>';
+
+  $('stateGrid').querySelectorAll('.stile').forEach(b => {
+    b.addEventListener('click', () => {
+      const c = b.dataset.code;
+      S.stateSel = S.stateSel.includes(c) ? S.stateSel.filter(x=>x!==c) : [...S.stateSel, c];
+      renderStates(); render();
+    });
+  });
+
+  const n = S.stateSel.length;
+  $('stateCount').textContent = n ? n : STATES.length;
+  $('stSelInfo').textContent = n ? 'selected — click “View tenders” to see them' : 'states & UTs available · none selected (showing all)';
+  $('tabStBadge').textContent = n ? n : 'All';
+  $('tabStBadge').classList.toggle('on', n>0);
+
+  // dashboard banner
+  const bn = $('stateBanner');
+  if(n){
+    bn.style.display = '';
+    bn.innerHTML = `<span class="lbl">State / UT</span>` +
+      S.stateSel.map(c=>`<span class="sb-chip">${esc(stateName(c))}<button data-rm="${c}" aria-label="Remove">✕</button></span>`).join('') +
+      `<button class="sb-link" id="sbChange">Change</button><button class="sb-link" id="sbClear">Clear</button>`;
+    bn.querySelectorAll('[data-rm]').forEach(x => x.addEventListener('click', () => {
+      S.stateSel = S.stateSel.filter(c=>c!==x.dataset.rm); renderStates(); render();
+    }));
+    $('sbChange').addEventListener('click', () => showTab('States'));
+    $('sbClear').addEventListener('click', () => { S.stateSel=[]; renderStates(); render(); });
+  } else { bn.style.display = 'none'; bn.innerHTML = ''; }
 }
 
-function toggleState(code) {
-  state.stateCode = state.stateCode===code ? '' : code;
-  $('stateFilter').value = state.stateCode;
-  renderStateTiles(); render(); scrollToResults();
+function showTab(name){
+  ['Dash','States'].forEach(n => { $('view'+n).style.display = (n===name ? '' : 'none'); });
+  document.querySelectorAll('.tab').forEach(b => b.classList.toggle('active', b.dataset.tab===name));
+  window.scrollTo({top:0, behavior:'smooth'});
 }
 
-function renderSources() {
-  const enabled = state.sources.filter(s=>s.enabled).length;
-  $('sourceCount').textContent = `(${enabled} of ${state.sources.length} active)`;
+/* ═══════════════════════════════════════════════════════════════
+   RENDER — SOURCES  (with flash + pending badge)
+   ═══════════════════════════════════════════════════════════════ */
+function renderSources(){
+  const enabled = S.sources.filter(s=>s.enabled).length;
+  if($('srcCount')) $('srcCount').textContent = `${enabled}/${S.sources.length}`;
   $('hSources').textContent = enabled;
+  if(!$('srcGrid')) return;
 
-  const sorted = [...state.sources].sort((a,b)=>{
-    if (a.enabled!==b.enabled) return a.enabled ? -1 : 1;
-    if (a.stateCode!==b.stateCode) {
-      if (a.stateCode==='ALL') return -1;
-      if (b.stateCode==='ALL') return 1;
+  const sorted = [...S.sources].sort((a,b)=>{
+    if(a.custom && !b.custom) return -1;
+    if(!a.custom && b.custom) return 1;
+    if(a.enabled!==b.enabled) return a.enabled?-1:1;
+    if(a.stateCode!==b.stateCode){
+      if(a.stateCode==='ALL') return -1;
+      if(b.stateCode==='ALL') return 1;
       return a.stateCode.localeCompare(b.stateCode);
     }
     return a.name.localeCompare(b.name);
   });
 
-  $('sourceList').innerHTML = sorted.map(s => `
-    <div class="source ${s.enabled?'':'disabled'}">
-      <div class="source-info">
+  $('srcGrid').innerHTML = sorted.map(s => `
+    <div class="src ${s.enabled?'':'off'}" data-src-card="${esc(s.id)}">
+      <div class="si">
         <div class="sn">${esc(s.name)}</div>
         <div class="su">${esc(s.url)}</div>
-        <div class="stags">
-          <span class="t ${s.stateCode!=='ALL'?'state':''}">${s.stateCode==='ALL'?'Multi-State':s.stateCode}</span>
+        <div class="st">
+          <span class="t ${s.stateCode!=='ALL'?'st':''}">${s.stateCode==='ALL'?'Multi':s.stateCode}</span>
           <span class="t">${esc(s.type)}</span>
-          ${s.official?'<span class="t" style="background:#dcfce7;color:#166534">Official</span>':'<span class="t" style="background:#fef3c7;color:#92400e">Aggregator</span>'}
-          ${s.custom?'<span class="t" style="background:#fce7f3;color:#9d174d">Custom</span>':''}
+          ${s.official?'<span class="t of">Official</span>':'<span class="t ag">Aggregator</span>'}
+          ${s.custom?'<span class="t cu">Custom</span>':''}
+          ${s.status==='pending'?'<span class="t pd">⏳ Pending first crawl</span>':''}
         </div>
       </div>
-      <div class="source-toggle ${s.enabled?'on':''}" onclick="toggleSource('${s.id}')"></div>
-      ${s.custom?`<button class="source-remove" onclick="removeSource('${s.id}')">✕</button>`:''}
+      <div class="toggle ${s.enabled?'on':''}" data-tog="${s.id}"></div>
+      ${s.custom?`<button class="rm" data-rm="${s.id}">✕</button>`:''}
     </div>
   `).join('');
+
+  $('srcGrid').querySelectorAll('[data-tog]').forEach(t => {
+    t.addEventListener('click', () => toggleSource(t.dataset.tog));
+  });
+  $('srcGrid').querySelectorAll('[data-rm]').forEach(b => {
+    b.addEventListener('click', () => removeSource(b.dataset.rm));
+  });
 }
 
-function toggleSource(id) {
-  const s = state.sources.find(x=>x.id===id); if (!s) return;
+function toggleSource(id){
+  const s = S.sources.find(x=>x.id===id); if(!s) return;
   s.enabled = !s.enabled;
-  save(K_SOURCES, state.sources);
-  renderSources(); renderStateTiles(); render();
+  save(K_SRC, S.sources);
+  renderSources(); renderStates(); renderFilters(); render();
   toast(`${s.name} ${s.enabled?'enabled':'disabled'}`, s.enabled?'✓':'⊘');
 }
 
-function removeSource(id) {
-  const s = state.sources.find(x=>x.id===id); if (!s) return;
-  if (!confirm(`Remove source "${s.name}"?`)) return;
-  state.sources = state.sources.filter(x=>x.id!==id);
-  save(K_SOURCES, state.sources);
-  renderSources(); renderStateTiles(); renderFilterOptions(); render();
-  toast(`Removed ${s.name}`, '🗑');
+function removeSource(id){
+  const s = S.sources.find(x=>x.id===id); if(!s) return;
+  if(!confirm(`Remove "${s.name}"?`)) return;
+  S.sources = S.sources.filter(x=>x.id!==id);
+  save(K_SRC, S.sources);
+  if(S.portal === s.name){ S.portal=''; $('fPortal').value=''; }
+  renderSources(); renderStates(); renderFilters(); render();
+  toast(`Removed ${s.name}`,'🗑');
 }
 
-function render() {
+/* ═══════════════════════════════════════════════════════════════
+   RENDER — MAIN
+   ═══════════════════════════════════════════════════════════════ */
+function render(){
   const list = getFiltered();
-  const total = state.tenders.filter(t=>isSourceEnabled(t.portal)).length;
+  const pool = S.tenders.filter(t=>sourceEnabled(t.portal) && !isJunkTitle(t.title));
+  const total = pool.length;
+  const shown = S.tenders.filter(eligible).length;
+  const hiddenN = total - shown;
 
   $('kpiTotal').textContent = list.length;
-  $('kpiTotalSub').textContent = list.length===total ? 'matching all sources' : `of ${total} available`;
+  $('kpiTotalSub').textContent = S.kwOnly ? (hiddenN ? `${hiddenN} non-matching hidden` : 'all match your keywords') : (list.length===total ? 'matching all sources' : `of ${total} available`);
   $('kpiClosing').textContent = list.filter(t=>{const d=daysUntil(t.closing);return d>=0&&d<=7;}).length;
   $('kpiEmd').textContent = list.filter(t=>t.emd>=300000).length;
   $('kpiFit').textContent = list.filter(t=>t.fit>=75).length;
-  $('hLive').textContent = total;
-  $('hKeywords').textContent = state.keywords.length;
+  $('hLive').textContent = shown;
+  $('kwOnly').checked = S.kwOnly;
+  $('kwHidden').textContent = (S.kwOnly && hiddenN) ? `(${hiddenN} hidden)` : '';
+  $('hKw').textContent = S.keywords.length;
 
-  $('resultCount').textContent = `(${list.length})`;
-  const sortLabels = { fit:'AI Fit ↓', closing:'Closing soonest', emd:'EMD ↓', boq:'BoQ ↓', recent:'Most recent' };
-  $('sortHint').textContent = 'Sorted by: ' + sortLabels[state.sort];
+  $('resultCount').textContent = list.length;
+  const sortLabels = {fit:'Fit ↓',closing:'Closing soonest',emd:'EMD ↓',boq:'BoQ ↓',recent:'Most recent'};
+  $('sortHint').textContent = 'Sorted by ' + sortLabels[S.sort];
 
-  const container = $('tenderList'), empty = $('emptyState');
-  if (list.length===0) { container.innerHTML=''; empty.style.display='block'; return; }
-  empty.style.display='none';
+  const cards = $('cards'), empty = $('empty');
+  if(!list.length){
+    cards.innerHTML = '';
+    renderEmpty();
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
 
-  container.innerHTML = list.map(t => {
-    const days = daysUntil(t.closing);
-    const cls = days<0?'danger':days<=3?'danger':days<=7?'warn':'';
-    const lbl = days<0?'Closed':days===0?'Closes today':`${days} day${days===1?'':'s'} left`;
-    const fitCls = t.fit>=75?'fit-high':t.fit>=50?'fit-mid':'fit-low';
-    const fitLbl = t.fit>=75?'High Fit':t.fit>=50?'Medium':'Low';
-    const isNew = (new Date()-new Date(t.published))/(864e5) <= 7;
-    const isCustom = !DEFAULT_SOURCES.some(s=>s.name===t.portal);
-    const matchedKw = state.keywords.filter(k => (t.title+' '+(t.tags||[]).join(' ')).toLowerCase().includes(k.toLowerCase())).slice(0,3);
+  cards.innerHTML = list.map(t => {
+    const d = daysUntil(t.closing);
+    const cls = d<0?'danger':d<=3?'danger':d<=7?'warn':'';
+    const lbl = d<0?'Closed':d===0?'Closes today':`${d}d left`;
+    const fCls = t.fit>=75?'h':t.fit>=50?'m':'l';
+    const fLbl = t.fit>=75?'High':t.fit>=50?'Medium':'Low';
+    const isNew = t.published && (new Date()-new Date(t.published))/864e5 <= 7;
+    const matchedKw = (t.tags||[]).slice(0,3);
 
     return `
-      <div class="tender">
-        <div class="tender-head">
-          <div style="flex:1;min-width:250px">
-            <div class="tender-id">ID: ${esc(t.id)}</div>
-            <div class="tender-title">${highlight(t.title, state.query)}</div>
+      <article class="tcard ${isNew?'new':''}">
+        <div class="tcard-head">
+          <div class="left">
+            <div class="tmeta-id">
+              <span>${esc(t.id)}</span>
+              <span class="pin">${esc(t.stateCode)}</span>
+              ${t.extended?`<span class="pin" style="background:#fef3c7;color:#92400e">EXT ${esc(t.corrigendum||'')}</span>`:''}
+            </div>
+            <h3 class="ttitle">${highlight(t.title, S.q)}</h3>
           </div>
-          <div class="fit-badge ${fitCls}"><div class="pct">${t.fit}%</div><div class="lbl">${fitLbl}</div></div>
+          <div class="fit ${fCls}">
+            <div class="p">${t.fit}%</div>
+            <div class="l">${fLbl}</div>
+          </div>
         </div>
-        <div class="tender-meta">
-          <div class="m"><span class="k">State</span><span class="v">🌏 ${esc(stateName(t.stateCode))}</span></div>
-          <div class="m"><span class="k">District</span><span class="v">📍 ${esc(t.district||'—')}</span></div>
-          <div class="m"><span class="k">Department</span><span class="v">${esc(t.department||'—')}</span></div>
-          <div class="m"><span class="k">Portal</span><span class="v">🌐 ${esc(t.portal)}</span></div>
-          <div class="m"><span class="k">EMD</span><span class="v">${fmt(t.emd)}</span></div>
-          <div class="m"><span class="k">BoQ Value</span><span class="v">${fmt(t.boq)}</span></div>
-          <div class="m"><span class="k">Published</span><span class="v">${esc(t.published||'—')}</span></div>
-          <div class="m"><span class="k">Closing</span><span class="v ${cls}">${esc(t.closing||'—')} · ${lbl}</span></div>
+        <div class="tgrid">
+          <div class="f"><span class="k">State / UT</span><span class="v">${esc(stateName(t.stateCode))}</span></div>
+          <div class="f"><span class="k">District</span><span class="v">${esc(t.district||'—')}</span></div>
+          <div class="f"><span class="k">Department</span><span class="v" title="${esc(t.department||'')}">${esc(t.department||'—')}</span></div>
+          <div class="f"><span class="k">Portal</span><span class="v">${esc(t.portal)}</span></div>
+          <div class="f"><span class="k">EMD</span><span class="v">${fmtAmt(t.emd)}</span></div>
+          <div class="f"><span class="k">BoQ Value</span><span class="v">${fmtAmt(t.boq)}</span></div>
+          <div class="f"><span class="k">Published</span><span class="v">${esc(t.published||'—')}</span></div>
+          <div class="f"><span class="k">Closing</span><span class="v ${cls}">${esc(t.closing||'—')} · ${lbl}</span></div>
         </div>
-        <div class="badges">
-          ${t.extended?`<span class="badge badge-extended">⏱ EXTENDED ${esc(t.corrigendum||'')}</span>`:''}
-          ${t.emd>=300000?'<span class="badge badge-emd">💎 High EMD</span>':''}
-          ${isNew?'<span class="badge badge-new">✦ NEW</span>':''}
-          <span class="badge badge-state">🌏 ${esc(stateName(t.stateCode))}</span>
-          ${t.district?`<span class="badge badge-district">📍 ${esc(t.district)}</span>`:''}
-          <span class="badge badge-portal">🌐 ${esc(t.portal)}</span>
-          ${isCustom?'<span class="badge badge-custom">✦ Custom Source</span>':''}
-          ${matchedKw.map(k=>`<span class="badge badge-keyword">🏷 ${esc(k)}</span>`).join('')}
+        <div class="tbadges">
+          ${isNew?'<span class="tb new">✦ New</span>':''}
+          ${t.extended?'<span class="tb ext">⏱ Extended</span>':''}
+          ${t.emd>=300000?'<span class="tb emd">◆ High EMD</span>':''}
+          <span class="tb state">${esc(stateName(t.stateCode))}</span>
+          <span class="tb portal">${esc(t.portal)}</span>
+          ${!DEFAULT_SOURCES.some(s=>s.name===t.portal)?'<span class="tb custom">Custom source</span>':''}
+          ${matchedKw.map(k=>`<span class="tb kw">${esc(k)}</span>`).join('')}
         </div>
-        <div class="tender-actions">
-          <button class="btn btn-primary" onclick="openDoc('${t.id}')">↗ Go to Document</button>
-          <button class="btn btn-outline" onclick="deepResearch('${t.id}')">🔍 Deep Research</button>
-          <button class="btn btn-outline" onclick="aiSummary('${t.id}')">📄 AI Summary</button>
-          <button class="btn btn-ghost" onclick="copyTender('${t.id}')">⧉ Copy ID</button>
+        <div class="tacts">
+          <button class="btn primary" data-act="doc" data-id="${esc(t.id)}">Open document ↗</button>
+          <button class="btn ghost" data-act="research" data-id="${esc(t.id)}">Deep research</button>
+          <button class="btn ghost" data-act="summary" data-id="${esc(t.id)}">AI summary</button>
+          <button class="btn text" data-act="copy" data-id="${esc(t.id)}">Copy ID</button>
         </div>
-      </div>`;
+      </article>`;
   }).join('');
+
+  cards.querySelectorAll('[data-act]').forEach(b => {
+    b.addEventListener('click', () => {
+      const id = b.dataset.id;
+      ({doc:openDoc,research:deepResearch,summary:aiSummary,copy:copyTender}[b.dataset.act])(id);
+    });
+  });
 }
 
-function renderFilterOptions() {
-  const ss = $('stateFilter');
-  ss.innerHTML = '<option value="">All Southern States</option>' + STATES.map(s=>`<option value="${s.code}">${esc(s.name)}</option>`).join('');
-  ss.value = state.stateCode;
+/* ═══════════════════════════════════════════════════════════════
+   EMPTY STATE — contextual
+   ═══════════════════════════════════════════════════════════════ */
+function renderEmpty(){
+  const empty = $('empty');
+  const reasons = [];
+  if(S.q) reasons.push(`keyword “${esc(S.q)}”`);
+  if(S.kwOnly) reasons.push('“Only keyword matches” is on');
+  if(S.stateSel.length) reasons.push(`state ${esc(S.stateSel.map(stateName).join(', '))}`);
+  if(S.portal) reasons.push(`portal “${esc(S.portal)}”`);
+  if(S.department) reasons.push(`department “${esc(S.department)}”`);
+  if(S.fit) reasons.push(`AI fit “${esc(S.fit)}”`);
+  if(S.emd) reasons.push(`EMD “${esc(S.emd)}”`);
 
-  const enabledPortals = state.sources.filter(s=>s.enabled).map(s=>s.name);
-  const portals = [...new Set(state.tenders.map(t=>t.portal))].filter(p=>enabledPortals.includes(p)).sort();
-  const ps = $('portalFilter');
-  ps.innerHTML = '<option value="">All Portals</option>' + portals.map(p=>`<option value="${esc(p)}">${esc(p)}</option>`).join('');
-  ps.value = state.portal;
+  // Special-case: user filtered by a newly-added source that has no data yet
+  if(S.portal){
+    const src = S.sources.find(s=>s.name===S.portal);
+    const hasData = S.tenders.some(t=>t.portal===S.portal);
+    if(src && !hasData){
+      empty.innerHTML = `
+        <div class="ico">🌐</div>
+        <h4>“${esc(S.portal)}” has no tenders yet</h4>
+        <p>This source is registered but hasn't been crawled. Run <code>scheduler.py</code> to fetch tenders, or wait for the next scheduled cycle. Meanwhile, the source is stored in the <b>Sources</b> sheet and will be picked up automatically.</p>
+        <button class="btn primary" id="emptyClear" style="margin-top:.9rem">Show all tenders</button>`;
+      $('emptyClear').addEventListener('click', () => {
+        S.portal = ''; $('fPortal').value = '';
+        render(); toast('Filter cleared','↺');
+      });
+      return;
+    }
+  }
 
-  const depts = [...new Set(state.tenders.map(t=>t.department).filter(Boolean))].sort();
-  const ds = $('deptFilter');
-  ds.innerHTML = '<option value="">All Departments</option>' + depts.map(d=>`<option value="${esc(d)}">${esc(d)}</option>`).join('');
-  ds.value = state.department;
+  empty.innerHTML = `
+    <div class="ico">🔍</div>
+    <h4>No tenders match</h4>
+    <p>${reasons.length ? 'Active filters: ' + reasons.join(' · ') : 'No sources are enabled.'}</p>
+    <button class="btn primary" id="emptyReset" style="margin-top:.9rem">↺ Clear all filters</button>`;
+  $('emptyReset').addEventListener('click', () => {
+    Object.assign(S, {q:'', stateCode:'', stateSel:[], portal:'', department:'', fit:'', emd:'', sort:'fit'});
+    ['q','fState','fPortal','fDept','fFit','fEmd'].forEach(id => { const el=$(id); if(el) el.value=''; });
+    $('fSort').value = 'fit';
+    renderChips(); renderStates(); renderFilters(); render();
+    toast('Filters cleared','↺');
+  });
 }
 
-/* ================================================================
+function highlight(text, q){
+  const safe = esc(text);
+  if(!q) return safe;
+  const parts = q.split(',').flatMap(c=>c.trim().split(/\s+/))
+    .filter(w=>w.length>1)
+    .sort((a,b)=>b.length-a.length)
+    .slice(0,8);
+  let html = safe;
+  parts.forEach(w => {
+    const re = new RegExp(`(${w.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`,'gi');
+    html = html.replace(re,'<mark>$1</mark>');
+  });
+  return html;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   RENDER — FILTERS  (union of sources + data portals)
+   ═══════════════════════════════════════════════════════════════ */
+function renderFilters(){
+  const fs = $('fState');
+  fs.innerHTML = '<option value="">All States</option>' +
+    STATES.map(s=>`<option value="${s.code}">${esc(s.name)}</option>`).join('');
+  fs.value = S.stateCode;
+
+  const enabledPortals = S.sources.filter(s=>s.enabled).map(s=>s.name);
+  const dataPortals = S.tenders.map(t=>t.portal);
+  const portals = [...new Set([...enabledPortals, ...dataPortals])].sort();
+  const fp = $('fPortal');
+  fp.innerHTML = '<option value="">All Portals</option>' +
+    portals.map(p=>`<option value="${esc(p)}">${esc(p)}</option>`).join('');
+  fp.value = S.portal;
+
+  const depts = [...new Set(S.tenders.map(t=>t.department).filter(Boolean))].sort();
+  const fd = $('fDept');
+  fd.innerHTML = '<option value="">All Departments</option>' +
+    depts.map(d=>`<option value="${esc(d)}">${esc(d)}</option>`).join('');
+  fd.value = S.department;
+}
+
+/* ═══════════════════════════════════════════════════════════════
    ACTIONS
-   ================================================================ */
-function runSearch() { state.query = $('searchInput').value; render(); scrollToResults(); }
-
-function resetFilters() {
-  Object.assign(state, { query:'', stateCode:'', portal:'', department:'', fit:'', emd:'', sort:'fit' });
-  ['searchInput'].forEach(id => $(id).value='');
-  ['stateFilter','portalFilter','deptFilter','fitFilter','emdFilter'].forEach(id => $(id).value='');
-  $('sortFilter').value='fit';
-  renderStateTiles(); render();
-  toast('Filters reset','↺'); scrollToResults();
+   ═══════════════════════════════════════════════════════════════ */
+function scrollToResults(){
+  const el = $('cards');
+  window.scrollTo({top: el.getBoundingClientRect().top + window.pageYOffset - 100, behavior:'smooth'});
 }
 
-function kpiClick(type) {
-  resetFilters();
-  if (type==='closing') { state.query='closing soon'; $('searchInput').value=state.query; }
-  else if (type==='emd') { state.fit='high'; $('fitFilter').value='high'; state.emd='high'; $('emdFilter').value='high'; }
-  else if (type==='fit') { state.fit='high'; $('fitFilter').value='high'; }
-  render(); toast(`Filtered by ${type}`,'⚡'); scrollToResults();
+function openDoc(id){
+  const t = S.tenders.find(x=>x.id===id); if(!t) return;
+  const s = S.sources.find(x=>x.name===t.portal);
+  const url = (t.url && t.url.startsWith('http')) ? t.url : (s?s.url:'');
+  if(!url){ toast('No source URL available','⚠'); return; }
+  toast(`Opening ${t.portal}…`,'↗');
+  window.open(url,'_blank','noopener');
 }
 
-function openDoc(id) {
-  const t = state.tenders.find(x=>x.id===id); if (!t) return;
-  const s = state.sources.find(x=>x.name===t.portal);
-  const url = (t.url && t.url.startsWith('http')) ? t.url : (s?s.url:'about:blank');
-  toast(`Opening source for ${id}…`,'↗');
-  setTimeout(()=>window.open(url,'_blank'), 350);
-}
-
-function deepResearch(id) {
-  const t = state.tenders.find(x=>x.id===id); if (!t) return;
-  const days = daysUntil(t.closing);
+function deepResearch(id){
+  const t = S.tenders.find(x=>x.id===id); if(!t) return;
+  const d = daysUntil(t.closing);
   openModal(`
-    <div class="modal-head"><h3>🔍 AI Deep Research — ${esc(t.id)}</h3><button class="close" onclick="closeModal()">✕</button></div>
-    <div class="modal-body">
-      <h4>Executive Summary</h4>
-      <p>${esc(t.title)} issued by <strong>${esc(t.department||'—')}</strong> via <strong>${esc(t.portal)}</strong> in <strong>${esc(stateName(t.stateCode))}</strong>. Strategic fit: <strong>${t.fit}%</strong>.</p>
-      <h4>Key Parameters</h4>
+    <div class="mhead"><h3>Deep research · ${esc(t.id)}</h3><button class="x" data-close>✕</button></div>
+    <div class="mbody">
+      <h4>Summary</h4>
+      <p>${esc(t.title)} — issued by <b>${esc(t.department||'—')}</b> via <b>${esc(t.portal)}</b> in <b>${esc(stateName(t.stateCode))}</b>.</p>
+      <h4>Parameters</h4>
       <div class="kv">
         <span class="k">Tender ID</span><span>${esc(t.id)}</span>
         <span class="k">State / UT</span><span>${esc(stateName(t.stateCode))}</span>
         <span class="k">District</span><span>${esc(t.district||'—')}</span>
-        <span class="k">EMD</span><span>${fmt(t.emd)}</span>
-        <span class="k">BoQ</span><span>${fmt(t.boq)}</span>
+        <span class="k">EMD</span><span>${fmtAmt(t.emd)}</span>
+        <span class="k">BoQ value</span><span>${fmtAmt(t.boq)}</span>
         <span class="k">Published</span><span>${esc(t.published||'—')}</span>
-        <span class="k">Closing</span><span>${esc(t.closing)} (${days} days left)</span>
-        ${t.extended?`<span class="k">Corrigendum</span><span>${esc(t.corrigendum||'')} — Extended</span>`:''}
+        <span class="k">Closing</span><span>${esc(t.closing)} · ${d} days left</span>
+        ${t.extended?`<span class="k">Corrigendum</span><span>${esc(t.corrigendum||'')} · Extended</span>`:''}
       </div>
-      <h4>AI Assessment</h4>
+      <h4>AI assessment</h4>
       <ul>
-        <li><strong>Strategic fit:</strong> ${t.fit}% — ${t.fit>=75?'High priority':t.fit>=50?'Moderate priority':'Low priority'}</li>
-        <li><strong>Competition risk:</strong> ${t.emd>=500000?'Moderate — high EMD filters bidders':'High — low EMD attracts many'}</li>
-        <li><strong>Preparation window:</strong> ${days} days ${days<5?'⚠ Urgent':days<10?'Adequate':'Comfortable'}</li>
-        <li><strong>Recommendation:</strong> ${t.fit>=75&&days>=5?'Proceed with bid preparation':t.fit>=75?'Fast-track bid — deadline critical':'Evaluate feasibility'}</li>
+        <li><b>Strategic fit:</b> ${t.fit}% — ${t.fit>=75?'high priority':t.fit>=50?'moderate':'low'}</li>
+        <li><b>Competition risk:</b> ${t.emd>=500000?'moderate — high EMD filters bidders':'high — low EMD attracts many'}</li>
+        <li><b>Preparation window:</b> ${d} days ${d<5?'⚠ urgent':d<10?'adequate':'comfortable'}</li>
+        <li><b>Recommendation:</b> ${t.fit>=75&&d>=5?'proceed with bid preparation':t.fit>=75?'fast-track bid — deadline critical':'evaluate feasibility'}</li>
       </ul>
-      <h4>Next Steps</h4>
+      <h4>Next steps</h4>
       <ul>
-        <li>Download full tender document from ${esc(t.portal)}</li>
-        <li>Verify eligibility criteria & qualification requirements</li>
-        <li>Assess EMD & performance security</li>
-        <li>Prepare technical & financial bid submissions</li>
+        <li>Download the full tender document from ${esc(t.portal)}.</li>
+        <li>Verify eligibility and qualification criteria.</li>
+        <li>Assess EMD and performance security.</li>
+        <li>Prepare technical and financial bid submissions.</li>
       </ul>
     </div>`);
 }
 
-function aiSummary(id) {
-  const t = state.tenders.find(x=>x.id===id); if (!t) return;
-  const days = daysUntil(t.closing);
+function aiSummary(id){
+  const t = S.tenders.find(x=>x.id===id); if(!t) return;
+  const d = daysUntil(t.closing);
   openModal(`
-    <div class="modal-head"><h3>📄 AI 1-Page Summary — ${esc(t.id)}</h3><button class="close" onclick="closeModal()">✕</button></div>
-    <div class="modal-body">
+    <div class="mhead"><h3>AI summary · ${esc(t.id)}</h3><button class="x" data-close>✕</button></div>
+    <div class="mbody">
       <h4>What is being procured</h4><p>${esc(t.title)}</p>
-      <h4>Who is issuing</h4><p><strong>${esc(t.department||'—')}</strong> through <strong>${esc(t.portal)}</strong> in ${esc(t.district||'—')}, ${esc(stateName(t.stateCode))}.</p>
-      <h4>Commercials at a glance</h4>
+      <h4>Issuing authority</h4><p><b>${esc(t.department||'—')}</b> through <b>${esc(t.portal)}</b> in ${esc(t.district||'—')}, ${esc(stateName(t.stateCode))}.</p>
+      <h4>Commercials</h4>
       <ul>
-        <li>EMD: <strong>${fmt(t.emd)}</strong></li>
-        <li>BoQ value: <strong>${fmt(t.boq)}</strong></li>
+        <li>EMD: <b>${fmtAmt(t.emd)}</b></li>
+        <li>BoQ value: <b>${fmtAmt(t.boq)}</b></li>
         <li>Published: ${esc(t.published||'—')}</li>
-        <li>Closing: <strong>${esc(t.closing)}</strong> — ${days} day${days===1?'':'s'} remaining</li>
+        <li>Closing: <b>${esc(t.closing)}</b> — ${d} day${d===1?'':'s'} remaining</li>
       </ul>
-      <h4>Eligibility highlights (AI-extracted)</h4>
+      <h4>Eligibility highlights</h4>
       <ul>
-        <li>Prior experience in similar ${esc((t.tags||[])[0]||'technology')} projects</li>
-        <li>Minimum turnover & net worth as per tender document</li>
-        <li>Valid registration on ${esc(t.portal)}</li>
-        <li>State-specific registration for ${esc(stateName(t.stateCode))}</li>
+        <li>Prior experience in similar ${esc((t.tags||[])[0]||'technology')} projects.</li>
+        <li>Minimum turnover and net worth as per tender document.</li>
+        <li>Valid registration on ${esc(t.portal)}.</li>
+        <li>State-specific registration for ${esc(stateName(t.stateCode))}.</li>
       </ul>
-      <h4>AI Recommendation</h4>
-      <p>${t.fit>=75?'✅ <strong>High fit</strong> — recommend bid participation.':t.fit>=50?'⚠️ <strong>Moderate fit</strong> — evaluate resources first.':'❌ <strong>Low fit</strong> — consider skipping.'}</p>
+      <h4>Recommendation</h4>
+      <p>${t.fit>=75?'✅ <b>High fit</b> — recommend bid participation.':t.fit>=50?'⚠️ <b>Moderate fit</b> — evaluate resources first.':'❌ <b>Low fit</b> — consider skipping.'}</p>
     </div>`);
 }
 
-function copyTender(id) {
-  const t = state.tenders.find(x=>x.id===id); if (!t) return;
-  const txt = `${t.title}\nID: ${t.id}\nState: ${stateName(t.stateCode)}\nDept: ${t.department}\nEMD: ${fmt(t.emd)}\nClosing: ${t.closing}`;
-  navigator.clipboard?.writeText(txt).then(()=>toast('Tender details copied','⧉'));
+function copyTender(id){
+  const t = S.tenders.find(x=>x.id===id); if(!t) return;
+  const txt = `${t.title}\nID: ${t.id}\nState: ${stateName(t.stateCode)}\nDept: ${t.department}\nEMD: ${fmtAmt(t.emd)}\nClosing: ${t.closing}`;
+  navigator.clipboard?.writeText(txt).then(()=>toast('Tender details copied','⧉')).catch(()=>toast('Copy failed','⚠'));
 }
 
-/* ================================================================
-   KEYWORD MANAGER
-   ================================================================ */
-function openKeywordManager() {
+/* ═══════════════════════════════════════════════════════════════
+   KEYWORDS
+   ═══════════════════════════════════════════════════════════════ */
+function openKeywordManager(){
   openModal(`
-    <div class="modal-head"><h3>🏷 Saved Keywords (${state.keywords.length})</h3><button class="close" onclick="closeModal()">✕</button></div>
-    <div class="modal-body">
-      <p style="margin-bottom:.8rem;color:var(--muted);font-size:.84rem">These keywords are searched across all enabled portals. Click any chip on the dashboard to run a search instantly.</p>
-      <div style="display:flex;gap:.4rem;margin-bottom:.9rem">
-        <input type="text" id="newKeyword" placeholder="Add a new keyword…" style="flex:1;padding:.6rem .8rem;border:1px solid var(--border);border-radius:8px;font-size:.88rem" onkeydown="if(event.key==='Enter')addKeyword()">
-        <button class="btn btn-primary" onclick="addKeyword()">+ Add</button>
+    <div class="mhead"><h3>Keywords · ${S.keywords.length} saved</h3><button class="x" data-close>✕</button></div>
+    <div class="mbody">
+      <p style="color:var(--muted);font-size:.83rem;margin-bottom:.9rem">These run across every enabled portal. Click any keyword on the dashboard to search instantly.</p>
+      <div style="display:flex;gap:.4rem;margin-bottom:1rem">
+        <input type="text" id="kwInput" placeholder="Add a keyword…" style="flex:1;padding:.6rem .8rem;border:1.5px solid var(--line);border-radius:8px;font-size:.85rem" autocomplete="off">
+        <button class="btn primary" id="kwAdd">＋ Add</button>
       </div>
-      <div id="keywordList"></div>
-      <h4 style="margin-top:1.4rem">Bulk Actions</h4>
-      <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.5rem">
-        <button class="btn btn-outline" onclick="resetKeywords()">↺ Reset to Defaults</button>
-        <button class="btn btn-danger" onclick="clearKeywords()">🗑 Clear All</button>
+      <div class="kwlist" id="kwList"></div>
+      <h4>Bulk actions</h4>
+      <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+        <button class="btn ghost" id="kwReset">↺ Reset to defaults</button>
+        <button class="btn text" id="kwClear" style="color:var(--red)">🗑 Clear all</button>
       </div>
     </div>`);
-  renderKeywordList();
+  renderKwList();
+  $('kwAdd').addEventListener('click', addKeyword);
+  $('kwInput').addEventListener('keydown', e => { if(e.key==='Enter') addKeyword(); });
+  $('kwReset').addEventListener('click', resetKeywords);
+  $('kwClear').addEventListener('click', clearKeywords);
+  setTimeout(()=>$('kwInput')?.focus(), 80);
 }
 
-function renderKeywordList() {
-  const el = $('keywordList'); if (!el) return;
-  if (!state.keywords.length) { el.innerHTML = '<p style="color:var(--muted);font-size:.85rem;text-align:center;padding:1rem">No saved keywords yet.</p>'; return; }
-  el.innerHTML = `<div style="display:flex;flex-wrap:wrap;gap:.4rem">${state.keywords.map(k => `
-    <span class="chip" style="background:#f1f5f9">${esc(k)}
-      <span class="del" onclick="removeKeyword('${esc(k).replace(/'/g,"\\'")}')">×</span>
-    </span>`).join('')}</div>`;
+function renderKwList(){
+  const el = $('kwList'); if(!el) return;
+  if(!S.keywords.length){
+    el.innerHTML = '<p style="color:var(--muted);font-size:.83rem;text-align:center;padding:.8rem">No keywords saved yet.</p>';
+    return;
+  }
+  el.innerHTML = S.keywords.map(k => `
+    <span class="chip">${esc(k)}<span class="x" data-rm="${esc(k)}">×</span></span>
+  `).join('');
+  el.querySelectorAll('.x[data-rm]').forEach(x => {
+    x.addEventListener('click', () => removeKeyword(x.dataset.rm));
+  });
 }
 
-function addKeyword() {
-  const v = $('newKeyword').value.trim(); if (!v) return;
-  if (state.keywords.includes(v)) { toast('Keyword already exists','⚠'); return; }
-  state.keywords.push(v);
-  save(K_KEYWORDS, state.keywords);
-  $('newKeyword').value = '';
-  renderKeywordList(); renderChips(); render();
-  toast(`Added keyword: ${v}`,'✓');
+function addKeyword(){
+  const inp = $('kwInput'); if(!inp) return;
+  const v = inp.value.trim(); if(!v) return;
+  if(S.keywords.some(k => normalise(k)===normalise(v))){ toast('Already saved','⚠'); return; }
+  S.keywords.push(v);
+  save(K_KW, S.keywords);
+  postBackend({action:'add_keyword', keyword:v});
+  rescore(); 
+
+  // Immediately search by the new keyword
+  S.q = v;
+  $('q').value = v;
+
+  inp.value = '';
+  renderKwList(); renderChips(); render();
+  toast(`Added & searching: ${v}`, '✓');
 }
 
-function removeKeyword(k) {
-  state.keywords = state.keywords.filter(x=>x!==k);
-  save(K_KEYWORDS, state.keywords);
-  renderKeywordList(); renderChips(); render();
-  toast(`Removed keyword: ${k}`,'🗑');
+function removeKeyword(k){
+  S.keywords = S.keywords.filter(x => x!==k);
+  save(K_KW, S.keywords);
+  postBackend({action:'remove_keyword', keyword:k});
+  rescore();
+
+  // If the removed keyword was the active query, clear it
+  if(normalise(S.q) === normalise(k)){
+    S.q = '';
+    $('q').value = '';
+  } else if(S.q && normalise(S.q).includes(normalise(k))){
+    // Query contains the keyword as a phrase — strip it out
+    const re = new RegExp(k.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'), 'gi');
+    S.q = S.q.replace(re, '')
+      .replace(/\s*,\s*/g, ', ')
+      .replace(/^[,\s]+|[,\s]+$/g, '')
+      .trim();
+    $('q').value = S.q;
+  }
+
+  renderKwList(); renderChips(); render();
+  toast(`Removed: ${k}`,'🗑');
 }
 
-function resetKeywords() {
-  if (!confirm('Reset keywords to defaults?')) return;
-  state.keywords = [...DEFAULT_KEYWORDS];
-  save(K_KEYWORDS, state.keywords);
-  renderKeywordList(); renderChips(); render();
-  toast('Keywords reset to defaults','↺');
+function resetKeywords(){
+  if(!confirm('Reset keywords to defaults?')) return;
+  S.keywords = [...DEFAULT_KW];
+  save(K_KW, S.keywords);
+  renderKwList(); renderChips(); render();
+  toast('Keywords reset','↺');
 }
 
-function clearKeywords() {
-  if (!confirm('Remove all saved keywords?')) return;
-  state.keywords = [];
-  save(K_KEYWORDS, state.keywords);
-  renderKeywordList(); renderChips(); render();
+function clearKeywords(){
+  if(!confirm('Remove all keywords?')) return;
+  S.keywords = [];
+  save(K_KW, S.keywords);
+  S.q = ''; $('q').value = '';
+  renderKwList(); renderChips(); render();
   toast('All keywords cleared','🗑');
 }
 
-/* ================================================================
-   ADD WEBSITE MODAL
-   ================================================================ */
-function openAddWebsite() {
+/* ═══════════════════════════════════════════════════════════════
+   ADD SOURCE  (persists + scrolls + flashes + pending badge)
+   ═══════════════════════════════════════════════════════════════ */
+function openAddWebsite(pane='add'){
   openModal(`
-    <div class="modal-head"><h3>➕ Add Tender Website / Source</h3><button class="close" onclick="closeModal()">✕</button></div>
-    <div class="modal-body">
-      <p style="margin-bottom:1rem;color:var(--muted);font-size:.84rem">Add any government or private tender portal. The Python crawler will fetch it on the next cycle and sync results to the dashboard.</p>
-      <div class="form-grid">
-        <div class="form-field">
-          <label>Source Name *</label>
-          <input type="text" id="newSrcName" placeholder="e.g. Kerala State Electronics Development Corp">
-          <span class="form-error" id="errName">Source name is required</span>
+    <div class="mhead"><h3>Sources</h3><button class="x" data-close>✕</button></div>
+    <div class="mtabs">
+      <button data-mt="add" class="${pane==='add'?'on':''}">＋ Add new source</button>
+      <button data-mt="list" class="${pane==='list'?'on':''}">Existing sources <span class="count" id="srcCount">0</span></button>
+    </div>
+    <div id="paneAdd" style="display:${pane==='add'?'block':'none'}">
+    <div class="mbody">
+      <p style="color:var(--muted);font-size:.83rem;margin-bottom:1rem">The source is stored locally and pushed to the <b>Sources</b> sheet. The Python scheduler (run with <code>--watch</code>) crawls it automatically.</p>
+      <div class="fgrid">
+        <div class="ff">
+          <label>Source name *</label>
+          <input type="text" id="asName" placeholder="e.g. Kerala State Electronics Dev Corp">
+          <span class="ferr" id="asNameErr">Source name is required</span>
         </div>
-        <div class="form-field">
+        <div class="ff">
           <label>Website URL *</label>
-          <input type="url" id="newSrcUrl" placeholder="https://example.gov.in/tenders">
-          <span class="form-error" id="errUrl">A valid URL (https://...) is required</span>
+          <input type="url" id="asUrl" placeholder="https://example.gov.in/tenders">
+          <span class="ferr" id="asUrlErr">A valid https:// URL is required</span>
         </div>
-        <div class="form-row">
-          <div class="form-field">
-            <label>State / UT</label>
-            <select id="newSrcState">
-              <option value="ALL">Multi-State / Central</option>
-              ${STATES.map(s=>`<option value="${s.code}">${esc(s.name)}</option>`).join('')}
+        <div class="frow">
+          <div class="ff"><label>State / UT</label>
+            <select id="asState"><option value="ALL">Multi-State / Central</option>
+              ${STATES.filter(s=>s.code!=='ALL').map(s=>`<option value="${s.code}">${esc(s.name)}</option>`).join('')}
             </select>
           </div>
-          <div class="form-field">
-            <label>Source Type</label>
-            <select id="newSrcType">
-              <option>State</option><option>Central</option><option>Aggregator</option>
-              <option>PSU</option><option>Other</option>
-            </select>
+          <div class="ff"><label>Type</label>
+            <select id="asType"><option>State</option><option>Central</option>
+              <option>Aggregator</option><option>PSU</option><option>Other</option></select>
           </div>
         </div>
-        <div class="form-field">
-          <label>Notes (optional)</label>
-          <textarea id="newSrcNotes" rows="2" placeholder="e.g. Requires login, focus on IT tenders"></textarea>
+        <div class="ff"><label>Notes (optional)</label>
+          <textarea id="asNotes" rows="2" placeholder="e.g. Requires login, focus on IT tenders"></textarea>
         </div>
       </div>
     </div>
-    <div class="modal-footer">
-      <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
-      <button class="btn btn-primary" onclick="saveNewSource()">+ Add Source</button>
+    <div class="mfoot">
+      <button class="btn ghost" data-close>Cancel</button>
+      <button class="btn primary" id="asSave">＋ Add source</button>
+    </div>
+    </div>
+    <div id="paneList" style="display:${pane==='list'?'block':'none'}">
+    <div class="mbody">
+      <div class="srcbar">
+        <button class="btn primary" id="msEnable">Enable all</button>
+        <button class="btn ghost" id="msDisable">Disable all</button>
+        <button class="btn text" id="msReset" style="color:var(--red)">Reset to defaults</button>
+      </div>
+      <p class="srcnote">Toggle a source to include or exclude it. Tenders published by <b>RailTel</b> are always excluded.</p>
+      <div class="srcs in-modal" id="srcGrid"></div>
+    </div>
+    <div class="mfoot"><button class="btn ghost" data-close>Close</button></div>
     </div>`);
-  setTimeout(()=>$('newSrcName')?.focus(), 100);
+
+  const fullRefresh = () => { renderSources(); renderStates(); renderFilters(); render(); };
+  $('asSave').addEventListener('click', saveNewSource);
+  $('msEnable').addEventListener('click', ()=>{ S.sources.forEach(s=>s.enabled=true);  save(K_SRC,S.sources); fullRefresh(); toast('All enabled','✓'); });
+  $('msDisable').addEventListener('click',()=>{ S.sources.forEach(s=>s.enabled=false); save(K_SRC,S.sources); fullRefresh(); toast('All disabled','⊘'); });
+  $('msReset').addEventListener('click', ()=>{
+    if(!confirm('Reset sources to defaults? Custom sources will be removed.')) return;
+    S.sources = JSON.parse(JSON.stringify(DEFAULT_SOURCES));
+    save(K_SRC,S.sources); fullRefresh(); toast('Sources reset','↺');
+  });
+  document.querySelectorAll('.mtabs [data-mt]').forEach(b => b.addEventListener('click', () => {
+    const p = b.dataset.mt;
+    document.querySelectorAll('.mtabs [data-mt]').forEach(x => x.classList.toggle('on', x===b));
+    $('paneAdd').style.display  = p==='add'  ? 'block' : 'none';
+    $('paneList').style.display = p==='list' ? 'block' : 'none';
+    if(p==='add') setTimeout(()=>$('asName')?.focus(), 50);
+  }));
+  renderSources();
+  if(pane==='add') setTimeout(()=>$('asName')?.focus(), 80);
 }
 
-function saveNewSource() {
-  const name = $('newSrcName').value.trim();
-  const url = $('newSrcUrl').value.trim();
-  const stateCode = $('newSrcState').value;
-  const type = $('newSrcType').value;
-  const notes = $('newSrcNotes').value.trim();
+function saveNewSource(){
+  const name = $('asName').value.trim();
+  const url = $('asUrl').value.trim();
+  const stateCode = $('asState').value;
+  const type = $('asType').value;
+  const notes = $('asNotes').value.trim();
 
-  let hasErr = false;
-  $('errName').classList.remove('show'); $('errUrl').classList.remove('show');
-  if (!name) { $('errName').classList.add('show'); hasErr = true; }
-  if (!url || !/^https?:\/\/.+/.test(url)) { $('errUrl').classList.add('show'); hasErr = true; }
-  if (hasErr) return;
-  if (state.sources.some(s=>s.url.toLowerCase()===url.toLowerCase())) { toast('URL already added','⚠'); return; }
+  $('asNameErr').classList.remove('show');
+  $('asUrlErr').classList.remove('show');
+  let bad = false;
+  if(!name){ $('asNameErr').classList.add('show'); bad = true; }
+  if(!url || !/^https?:\/\/.+\..+/.test(url)){ $('asUrlErr').classList.add('show'); bad = true; }
+  if(bad) return;
+
+  if(S.sources.some(s => normalise(s.url)===normalise(url))){
+    toast('URL already added','⚠'); return;
+  }
 
   const id = 'custom_'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
-  state.sources.push({ id, name, url, stateCode, type, enabled:true, official:false, custom:true, notes });
-  save(K_SOURCES, state.sources);
-  renderSources(); renderStateTiles(); renderFilterOptions(); render();
-  closeModal();
-  toast(`Added source: ${name}`,'✓');
+  const src = {
+    id, name, url, stateCode, type,
+    enabled:true, official:false, custom:true,
+    status:'pending', notes,
+    addedAt: new Date().toISOString(),
+  };
+  S.sources.push(src);
+  save(K_SRC, S.sources);
+
+  renderStates(); renderFilters(); render();
+  openAddWebsite('list');
+
+  // Push to Apps Script (if configured) so scheduler can pick it up
+  pushSourceToBackend(src).catch(()=>{});
+
+  // Scroll the new card into view and flash it
+  setTimeout(() => {
+    const card = document.querySelector(`[data-src-card="${id}"]`);
+    if(card){
+      card.scrollIntoView({behavior:'smooth', block:'center'});
+      card.classList.add('flash');
+      setTimeout(()=>card.classList.remove('flash'), 1600);
+    }
+  }, 60);
+
+  toast(`Added “${name}” — will be crawled on next cycle`, '✓');
 }
 
-/* ================================================================
-   MANAGE SOURCES MODAL
-   ================================================================ */
-function openManageSources() {
-  const enabled = state.sources.filter(s=>s.enabled).length;
-  const custom = state.sources.filter(s=>s.custom).length;
+async function pushSourceToBackend(src){
+  if(!USE_LIVE) return;
+  try {
+    await fetch(APPS_SCRIPT_URL, {
+      method:'POST',
+      mode:'no-cors',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({action:'add_source', source: src}),
+    });
+  } catch(e){ console.warn('Could not push source to backend', e); }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   MANAGE SOURCES
+   ═══════════════════════════════════════════════════════════════ */
+function openManageSources(){
+  const enabled = S.sources.filter(s=>s.enabled).length;
+  const custom = S.sources.filter(s=>s.custom).length;
+  const pending = S.sources.filter(s=>s.status==='pending').length;
   openModal(`
-    <div class="modal-head"><h3>⚙ Manage Sources (${state.sources.length} total)</h3><button class="close" onclick="closeModal()">✕</button></div>
-    <div class="modal-body">
+    <div class="mhead"><h3>Manage sources</h3><button class="x" data-close>✕</button></div>
+    <div class="mbody">
       <div class="kv" style="margin-bottom:1rem">
-        <span class="k">Total sources</span><span>${state.sources.length}</span>
+        <span class="k">Total sources</span><span>${S.sources.length}</span>
         <span class="k">Enabled</span><span>${enabled}</span>
         <span class="k">Custom added</span><span>${custom}</span>
+        <span class="k">Pending first crawl</span><span>${pending}</span>
       </div>
-      <h4>Bulk Actions</h4>
-      <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin:.5rem 0 1rem">
-        <button class="btn btn-green" onclick="enableAll()">✓ Enable All</button>
-        <button class="btn btn-outline" onclick="disableAll()">⊘ Disable All</button>
-        <button class="btn btn-danger" onclick="resetSources()">↺ Reset to Defaults</button>
+      <h4>Bulk actions</h4>
+      <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.5rem">
+        <button class="btn primary" id="msEnable">Enable all</button>
+        <button class="btn ghost" id="msDisable">Disable all</button>
+        <button class="btn text" id="msReset" style="color:var(--red)">Reset to defaults</button>
       </div>
-      <h4>Excluded Publishers</h4>
-      <p style="font-size:.82rem;color:var(--muted)">Tenders published by <strong>RailTel</strong> are automatically excluded from results, KPIs, and exports.</p>
+      <h4>Excluded publishers</h4>
+      <p style="font-size:.82rem;color:var(--muted)">Tenders published by <b>RailTel</b> are automatically excluded.</p>
     </div>
-    <div class="modal-footer">
-      <button class="btn btn-outline" onclick="closeModal()">Close</button>
-      <button class="btn btn-primary" onclick="closeModal();openAddWebsite()">+ Add New Source</button>
+    <div class="mfoot">
+      <button class="btn ghost" data-close>Close</button>
+      <button class="btn primary" id="msAdd">＋ Add source</button>
     </div>`);
+  $('msEnable').addEventListener('click', ()=>{S.sources.forEach(s=>s.enabled=true);save(K_SRC,S.sources);renderSources();renderStates();renderFilters();render();toast('All enabled','✓');});
+  $('msDisable').addEventListener('click',()=>{S.sources.forEach(s=>s.enabled=false);save(K_SRC,S.sources);renderSources();renderStates();renderFilters();render();toast('All disabled','⊘');});
+  $('msReset').addEventListener('click',()=>{
+    if(!confirm('Reset sources to defaults? Custom sources will be removed.')) return;
+    S.sources = JSON.parse(JSON.stringify(DEFAULT_SOURCES));
+    save(K_SRC,S.sources);
+    renderSources();renderStates();renderFilters();render();
+    toast('Sources reset','↺');
+  });
+  $('msAdd').addEventListener('click', ()=>{ closeModal(); openAddWebsite(); });
 }
 
-function enableAll() { state.sources.forEach(s=>s.enabled=true); save(K_SOURCES,state.sources); renderSources(); renderStateTiles(); renderFilterOptions(); render(); toast('All sources enabled','✓'); }
-function disableAll() { state.sources.forEach(s=>s.enabled=false); save(K_SOURCES,state.sources); renderSources(); renderStateTiles(); renderFilterOptions(); render(); toast('All sources disabled','⊘'); }
-function resetSources() {
-  if (!confirm('Reset sources to defaults? Custom sources will be removed.')) return;
-  state.sources = DEFAULT_SOURCES.map(s=>({...s}));
-  save(K_SOURCES, state.sources);
-  renderSources(); renderStateTiles(); renderFilterOptions(); render();
-  toast('Sources reset','↺');
+/* ═══════════════════════════════════════════════════════════════
+   MODAL
+   ═══════════════════════════════════════════════════════════════ */
+function openModal(html){
+  $('modal').innerHTML = html;
+  $('mbk').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  $('modal').querySelectorAll('[data-close]').forEach(b => {
+    b.addEventListener('click', closeModal);
+  });
 }
+function closeModal(){
+  $('mbk').classList.remove('open');
+  document.body.style.overflow = '';
+}
+$('mbk').addEventListener('click', e => { if(e.target === $('mbk')) closeModal(); });
+document.addEventListener('keydown', e => { if(e.key==='Escape') closeModal(); });
 
-/* ================================================================
-   MODAL HELPERS
-   ================================================================ */
-function openModal(html) { $('modalContent').innerHTML = html; $('modalBackdrop').classList.add('open'); document.body.style.overflow='hidden'; }
-function closeModal() { $('modalBackdrop').classList.remove('open'); document.body.style.overflow=''; }
-document.addEventListener('keydown', e => { if (e.key==='Escape') closeModal(); });
-
-/* ================================================================
-   CSV EXPORT
-   ================================================================ */
-function exportCSV() {
+/* ═══════════════════════════════════════════════════════════════
+   EXPORT
+   ═══════════════════════════════════════════════════════════════ */
+function exportCSV(){
   const list = getFiltered();
-  if (!list.length) { toast('No data to export','⚠'); return; }
-  const headers = ['ID','Title','State','District','Department','Portal','EMD','BoQ','Published','Closing','Fit %','Extended','Corrigendum','Tags'];
+  if(!list.length){ toast('Nothing to export','⚠'); return; }
+  const head = ['ID','Title','State','District','Department','Portal','EMD','BoQ','Published','Closing','Fit %','Extended','Corrigendum','Tags'];
   const rows = list.map(t => [
-    t.id, `"${t.title.replace(/"/g,'""')}"`, stateName(t.stateCode), t.district||'',
+    t.id, `"${(t.title||'').replace(/"/g,'""')}"`, stateName(t.stateCode), t.district||'',
     `"${(t.department||'').replace(/"/g,'""')}"`, t.portal,
     t.emd, t.boq, t.published||'', t.closing||'', t.fit,
     t.extended?'Yes':'No', t.corrigendum||'', `"${(t.tags||[]).join(', ')}"`
   ]);
-  const csv = [headers.join(','), ...rows.map(r=>r.join(','))].join('\n');
-  const blob = new Blob([csv], { type:'text/csv;charset=utf-8;' });
+  const csv = [head.join(','), ...rows.map(r=>r.join(','))].join('\n');
+  const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
-  a.download = `tender-search-portal-${new Date().toISOString().slice(0,10)}.csv`;
+  a.download = `tenders-${new Date().toISOString().slice(0,10)}.csv`;
   a.click(); URL.revokeObjectURL(a.href);
   toast(`Exported ${list.length} tenders`,'⬇');
 }
 
-/* ================================================================
+/* ═══════════════════════════════════════════════════════════════
+   TOAST
+   ═══════════════════════════════════════════════════════════════ */
+let toastTimer;
+function toast(msg, icon='✓'){
+  const t = $('toast');
+  t.innerHTML = `<span>${esc(icon)}</span><span>${esc(msg)}</span>`;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>t.classList.remove('show'), 2400);
+}
+
+/* ═══════════════════════════════════════════════════════════════
    EVENT BINDINGS
-   ================================================================ */
-$('searchInput').addEventListener('input', e => { state.query = e.target.value; render(); });
-$('searchInput').addEventListener('keydown', e => { if (e.key==='Enter') runSearch(); });
-['stateFilter','portalFilter','deptFilter','fitFilter','emdFilter','sortFilter'].forEach(id => {
-  $(id).addEventListener('change', e => {
-    const map = { stateFilter:'stateCode', portalFilter:'portal', deptFilter:'department', fitFilter:'fit', emdFilter:'emd', sortFilter:'sort' };
-    state[map[id]] = e.target.value;
-    if (id==='stateFilter') renderStateTiles();
-    render(); scrollToResults();
+   ═══════════════════════════════════════════════════════════════ */
+$('q').addEventListener('input', e => { S.q = e.target.value; render(); });
+$('q').addEventListener('keydown', e => { if(e.key==='Enter') scrollToResults(); });
+$('btnGo').addEventListener('click', scrollToResults);
+
+$('fState').addEventListener('change', e => { S.stateCode = e.target.value; renderStates(); render(); scrollToResults(); });
+$('fPortal').addEventListener('change', e => { S.portal = e.target.value; render(); scrollToResults(); });
+$('fDept').addEventListener('change', e => { S.department = e.target.value; render(); scrollToResults(); });
+$('fFit').addEventListener('change', e => { S.fit = e.target.value; render(); scrollToResults(); });
+$('fEmd').addEventListener('change', e => { S.emd = e.target.value; render(); scrollToResults(); });
+$('fSort').addEventListener('change', e => { S.sort = e.target.value; render(); scrollToResults(); });
+
+$('btnReset').addEventListener('click', () => {
+  Object.assign(S, {q:'', stateCode:'', stateSel:[], portal:'', department:'', fit:'', emd:'', sort:'fit'});
+  ['q','fState','fPortal','fDept','fFit','fEmd'].forEach(id => { const el=$(id); if(el) el.value=''; });
+  $('fSort').value='fit';
+  renderChips(); renderStates(); renderFilters(); render();
+  toast('Filters reset','↺'); scrollToResults();
+});
+
+$('btnExport').addEventListener('click', exportCSV);
+$('btnAddSrc').addEventListener('click', () => openAddWebsite('add'));
+$('statSrc').addEventListener('click', () => openAddWebsite('list'));
+$('btnKw').addEventListener('click', openKeywordManager);
+document.querySelectorAll('.tab').forEach(b => b.addEventListener('click', () => showTab(b.dataset.tab)));
+$('stSearch').addEventListener('input', renderStates);
+$('kwOnly').addEventListener('change', e => { S.kwOnly = e.target.checked; save(K_KWONLY, S.kwOnly); renderStates(); render(); });
+$('stAll').addEventListener('click', () => { S.stateSel = STATES.filter(s=>s.code!=='ALL').map(s=>s.code); renderStates(); render(); });
+$('stClear').addEventListener('click', () => { S.stateSel = []; renderStates(); render(); });
+$('stGo').addEventListener('click', () => { showTab('Dash'); setTimeout(scrollToResults, 150); });
+
+document.querySelectorAll('.kpi[data-kpi]').forEach(k => {
+  k.addEventListener('click', () => {
+    const type = k.dataset.kpi;
+    Object.assign(S, {q:'', stateCode:'', stateSel:[], portal:'', department:'', fit:'', emd:'', sort:'fit'});
+    ['q','fState','fPortal','fDept','fFit','fEmd'].forEach(id => { const el=$(id); if(el) el.value=''; });
+    if(type==='closing'){ S.sort='closing'; $('fSort').value='closing'; }
+    else if(type==='emd'){ S.fit='h'; S.emd='high'; $('fFit').value='h'; $('fEmd').value='high'; }
+    else if(type==='fit'){ S.fit='h'; $('fFit').value='h'; }
+    else { $('fSort').value='fit'; }
+    renderChips(); renderStates(); renderFilters(); render();
+    toast(`Filtered: ${type}`,'⚡'); scrollToResults();
   });
 });
 
-/* ================================================================
-   INIT
-   ================================================================ */
-function renderAll() {
-  renderChips(); renderStateTiles(); renderSources(); renderFilterOptions(); render();
+/* ═══════════════════════════════════════════════════════════════
+   LIVE DATA
+   ═══════════════════════════════════════════════════════════════ */
+/* ── Backend POST + instant re-scoring against the saved keywords ── */
+async function postBackend(body){
+  if(!USE_LIVE) return;
+  try {
+    await fetch(APPS_SCRIPT_URL, {method:'POST', mode:'no-cors',
+      headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)});
+  } catch(e){ console.warn('Backend POST failed', e); }
 }
-renderAll();
-loadLiveData();
+
+// Tags + fit% are recomputed in the browser from the CURRENT keyword list,
+// so a new keyword applies to every tender immediately (no re-crawl needed).
+function rescore(){
+  scoreAll();
+  save(K_T, S.tenders);
+  renderChips(); renderStates(); renderFilters(); render();
+}
+
+let _lastLiveCount = -1;
+async function loadLive(){
+  if(!USE_LIVE) return;
+  try {
+    const r = await fetch(APPS_SCRIPT_URL);
+    const payload = await r.json();
+
+    // Backend can return either a bare array (tenders) or {tenders, sources}
+    const tenders = Array.isArray(payload) ? payload : (payload.tenders || []);
+    const sources = Array.isArray(payload) ? null : (payload.sources || null);
+    const remoteKw = Array.isArray(payload) ? null : (payload.keywords || null);
+    if(remoteKw && remoteKw.length){
+      const have = new Set(S.keywords.map(normalise));
+      remoteKw.forEach(k => { if(!have.has(normalise(k))){ S.keywords.push(k); have.add(normalise(k)); } });
+      save(K_KW, S.keywords);
+    }
+
+    if(sources && sources.length){
+      // Merge remote sources into local (keep local custom additions)
+      const byId = new Map(S.sources.map(s => [s.id, s]));
+      sources.forEach(rs => {
+        if(rs.id) byId.set(rs.id, {...(byId.get(rs.id)||{}), ...rs});
+      });
+      S.sources = [...byId.values()];
+      save(K_SRC, S.sources);
+    }
+
+    if(tenders.length){
+      S.tenders = tenders
+        .filter(t => !['railtel','rail tel'].some(k =>
+          ((t.title||'')+' '+(t.department||'')+' '+(t.portal||'')).toLowerCase().includes(k)))
+        .map(t => ({
+          id:t.id, title:String(t.title||'').replace(/^\s*\[|\]\s*$/g,'').replace(/\s+/g,' ').trim(), stateCode:t.stateCode, url:t.url,
+          district:t.district, portal:t.portal, department:t.department,
+          emd:Number(t.emd)||0, boq:Number(t.boq)||0,
+          published:t.published, closing:t.closing,
+          fit:Number(t.fit)||60, extended:t.extended==='Yes'||t.extended===true,
+          corrigendum:t.corrigendum||null,
+          tags: typeof t.tags==='string' ? t.tags.split(',').map(s=>s.trim()).filter(Boolean) : (t.tags||[])
+        }));
+      rescore();
+      if(S.tenders.length !== _lastLiveCount){ toast(`Loaded ${S.tenders.length} live tenders`,'☁'); _lastLiveCount = S.tenders.length; }
+    }
+
+    renderChips(); renderStates(); renderSources(); renderFilters(); render();
+  } catch(e){ console.warn('Live fetch failed', e); }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   INIT
+   ═══════════════════════════════════════════════════════════════ */
+scoreAll();
+renderChips(); renderStates(); renderSources(); renderFilters(); render();
+loadLive();
+setInterval(loadLive, 60000);   // pick up new tenders / keywords / sources every minute
 </script>
 </body>
 </html>
